@@ -1,0 +1,3629 @@
+{
+  "contractVersion": 1,
+  "packageName": "com.jenn.blindboxworld",
+  "components": [
+    {
+      "contractId": "entity:c54d8122b471b4e1",
+      "semanticAnchor": "c54d8122b471b4e1",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/CollectibleAccessibility.kt",
+        "line": 12,
+        "endLine": 12,
+        "symbol": "registerPlacedCollectible"
+      },
+      "semanticId": "room.collectible.niu-lai",
+      "label": "Room collectible",
+      "runtimeSelector": {
+        "semanticId": "room.collectible.niu-lai"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "model",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect collectible\", inspect)",
+            "symbols": [
+              "registerPlacedCollectible"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:899d0233c3dd4b29",
+      "semanticAnchor": "899d0233c3dd4b29",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/CollectibleAccessibility.kt",
+        "line": 13,
+        "endLine": 13,
+        "symbol": "registerPlacedCollectible"
+      },
+      "semanticId": "room.collectible.strawberlina",
+      "label": "Room collectible",
+      "runtimeSelector": {
+        "semanticId": "room.collectible.strawberlina"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "model",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect collectible\", inspect)",
+            "symbols": [
+              "registerPlacedCollectible"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:8c7eb7796e9ae6fa",
+      "semanticAnchor": "8c7eb7796e9ae6fa",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/CollectibleAccessibility.kt",
+        "line": 14,
+        "endLine": 14,
+        "symbol": "registerPlacedCollectible"
+      },
+      "semanticId": "room.collectible.bananito",
+      "label": "Room collectible",
+      "runtimeSelector": {
+        "semanticId": "room.collectible.bananito"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "model",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect collectible\", inspect)",
+            "symbols": [
+              "registerPlacedCollectible"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:00a2441de127edac",
+      "semanticAnchor": "00a2441de127edac",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/CollectibleAccessibility.kt",
+        "line": 15,
+        "endLine": 15,
+        "symbol": "registerPlacedCollectible"
+      },
+      "semanticId": "room.collectible.tung-tung-tung",
+      "label": "Room collectible",
+      "runtimeSelector": {
+        "semanticId": "room.collectible.tung-tung-tung"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "model",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect collectible\", inspect)",
+            "symbols": [
+              "registerPlacedCollectible"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:73edde952b95dc1e",
+      "semanticAnchor": "73edde952b95dc1e",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/CollectibleAccessibility.kt",
+        "line": 16,
+        "endLine": 16,
+        "symbol": "registerPlacedCollectible"
+      },
+      "semanticId": "room.collectible.tralalero-tralala",
+      "label": "Room collectible",
+      "runtimeSelector": {
+        "semanticId": "room.collectible.tralalero-tralala"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "model",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect collectible\", inspect)",
+            "symbols": [
+              "registerPlacedCollectible"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:2d13ff749245a391",
+      "semanticAnchor": "2d13ff749245a391",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/CollectibleAccessibility.kt",
+        "line": 17,
+        "endLine": 17,
+        "symbol": "registerPlacedCollectible"
+      },
+      "semanticId": "room.collectible.ballerina-capuccina",
+      "label": "Room collectible",
+      "runtimeSelector": {
+        "semanticId": "room.collectible.ballerina-capuccina"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "model",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect collectible\", inspect)",
+            "symbols": [
+              "registerPlacedCollectible"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:94f0116800005181",
+      "semanticAnchor": "94f0116800005181",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/CollectibleAccessibility.kt",
+        "line": 18,
+        "endLine": 18,
+        "symbol": "registerPlacedCollectible"
+      },
+      "semanticId": "room.collectible.chill-guy",
+      "label": "Room collectible",
+      "runtimeSelector": {
+        "semanticId": "room.collectible.chill-guy"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "model",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect collectible\", inspect)",
+            "symbols": [
+              "registerPlacedCollectible"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:08de8dd1cfccd4cc",
+      "semanticAnchor": "08de8dd1cfccd4cc",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/CollectibleAccessibility.kt",
+        "line": 19,
+        "endLine": 19,
+        "symbol": "registerPlacedCollectible"
+      },
+      "semanticId": "room.collectible.secret-capybara-toilet",
+      "label": "Room collectible",
+      "runtimeSelector": {
+        "semanticId": "room.collectible.secret-capybara-toilet"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "model",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect collectible\", inspect)",
+            "symbols": [
+              "registerPlacedCollectible"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:b8ef6e116f182c19",
+      "semanticAnchor": "b8ef6e116f182c19",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/CollectibleAccessibility.kt",
+        "line": 25,
+        "endLine": 25,
+        "symbol": "registerPlacementPreview"
+      },
+      "semanticId": "room.placement.preview",
+      "label": "Placement preview",
+      "runtimeSelector": {
+        "semanticId": "room.placement.preview"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "model",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Place here\", place)",
+            "symbols": [
+              "registerPlacementPreview"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:151ac6bbc2f6ffa9",
+      "semanticAnchor": "151ac6bbc2f6ffa9",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 15,
+        "endLine": 15,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.display-stand",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.display-stand"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:4a837e7f6e05567c",
+      "semanticAnchor": "4a837e7f6e05567c",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 16,
+        "endLine": 16,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.record-player",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.record-player"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:d3cedbe5a795e195",
+      "semanticAnchor": "d3cedbe5a795e195",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 17,
+        "endLine": 17,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.listening-shelf",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.listening-shelf"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:7b01f76740619feb",
+      "semanticAnchor": "7b01f76740619feb",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 18,
+        "endLine": 18,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.vinyl-rack",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.vinyl-rack"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:99048bb6dabd4415",
+      "semanticAnchor": "99048bb6dabd4415",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 19,
+        "endLine": 19,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.mushroom",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.mushroom"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:9462f198e0394b1c",
+      "semanticAnchor": "9462f198e0394b1c",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 20,
+        "endLine": 20,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.speaker-left",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.speaker-left"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:0b1a052d5be8af78",
+      "semanticAnchor": "0b1a052d5be8af78",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 21,
+        "endLine": 21,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.speaker-right",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.speaker-right"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:f163d44eda5f6da6",
+      "semanticAnchor": "f163d44eda5f6da6",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 22,
+        "endLine": 22,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.arc-lamp",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.arc-lamp"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:fd30457f682cb15a",
+      "semanticAnchor": "fd30457f682cb15a",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 23,
+        "endLine": 23,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.sofa",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.sofa"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:db7fbafbceca08e8",
+      "semanticAnchor": "db7fbafbceca08e8",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 24,
+        "endLine": 24,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.wool-rug",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.wool-rug"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:3778ea6bd8097931",
+      "semanticAnchor": "3778ea6bd8097931",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 25,
+        "endLine": 25,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.coffee-table",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.coffee-table"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:331c3adeb57ffb62",
+      "semanticAnchor": "331c3adeb57ffb62",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 26,
+        "endLine": 26,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.chair",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.chair"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:60caa3d909f27211",
+      "semanticAnchor": "60caa3d909f27211",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 27,
+        "endLine": 27,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.ottoman",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.ottoman"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:4374b6c4487f300b",
+      "semanticAnchor": "4374b6c4487f300b",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 28,
+        "endLine": 28,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.sideboard",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.sideboard"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:744696b798f8068a",
+      "semanticAnchor": "744696b798f8068a",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 29,
+        "endLine": 29,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.table-globe",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.table-globe"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:0d38624adddbd3cc",
+      "semanticAnchor": "0d38624adddbd3cc",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 30,
+        "endLine": 30,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.sofa-lamp",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.sofa-lamp"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:e677b0ea9cc4992f",
+      "semanticAnchor": "e677b0ea9cc4992f",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 31,
+        "endLine": 31,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.orb",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.orb"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:59715851f281196f",
+      "semanticAnchor": "59715851f281196f",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 32,
+        "endLine": 32,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.laurel-left",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.laurel-left"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:15bd95474842e592",
+      "semanticAnchor": "15bd95474842e592",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 33,
+        "endLine": 33,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.laurel-right",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.laurel-right"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:e97099fec00a5f90",
+      "semanticAnchor": "e97099fec00a5f90",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 34,
+        "endLine": 34,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.dining-table",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.dining-table"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:a97fc46c97e35a5d",
+      "semanticAnchor": "a97fc46c97e35a5d",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 35,
+        "endLine": 35,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.chair-a",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.chair-a"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:05fb88bcda3db188",
+      "semanticAnchor": "05fb88bcda3db188",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 36,
+        "endLine": 36,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.chair-b",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.chair-b"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:da43e9ef10707564",
+      "semanticAnchor": "da43e9ef10707564",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 37,
+        "endLine": 37,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.chair-c",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.chair-c"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:58ec8bb0dfad79ee",
+      "semanticAnchor": "58ec8bb0dfad79ee",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 38,
+        "endLine": 38,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.chair-d",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.chair-d"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:f4931ac30cccf18d",
+      "semanticAnchor": "f4931ac30cccf18d",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 39,
+        "endLine": 39,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.ochre-canvas",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.ochre-canvas"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:ea209f39ebbdf8fe",
+      "semanticAnchor": "ea209f39ebbdf8fe",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 40,
+        "endLine": 40,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.unboxing-print",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.unboxing-print"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:7c9551c22284db2d",
+      "semanticAnchor": "7c9551c22284db2d",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 41,
+        "endLine": 41,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.slop-print",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.slop-print"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:368c975771f4e9b3",
+      "semanticAnchor": "368c975771f4e9b3",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 42,
+        "endLine": 42,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.capybara-print",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.capybara-print"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:162c0b2034feaef7",
+      "semanticAnchor": "162c0b2034feaef7",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 43,
+        "endLine": 43,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.calendar",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.calendar"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:222635ad5e0b674a",
+      "semanticAnchor": "222635ad5e0b674a",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 44,
+        "endLine": 44,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.convex-mirror",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.convex-mirror"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:0dbdae2733ec3082",
+      "semanticAnchor": "0dbdae2733ec3082",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 45,
+        "endLine": 45,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.lotus_lounge",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.lotus_lounge"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:4bd080e30480d133",
+      "semanticAnchor": "4bd080e30480d133",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 46,
+        "endLine": 46,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.sage_reader",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.sage_reader"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:c13ca6477849d7c5",
+      "semanticAnchor": "c13ca6477849d7c5",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 47,
+        "endLine": 47,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.tangerine_club",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.tangerine_club"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:419b3aa761128f72",
+      "semanticAnchor": "419b3aa761128f72",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 48,
+        "endLine": 48,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.matcha_table",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.matcha_table"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:59071f894711b16f",
+      "semanticAnchor": "59071f894711b16f",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 49,
+        "endLine": 49,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.onyx_nightstand",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.onyx_nightstand"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:57b341e800fd2d43",
+      "semanticAnchor": "57b341e800fd2d43",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 50,
+        "endLine": 50,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.coral_sidecar",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.coral_sidecar"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:cc9b7e9dc27e04ec",
+      "semanticAnchor": "cc9b7e9dc27e04ec",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 51,
+        "endLine": 51,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.opal_saucer",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.opal_saucer"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:0db812707014c854",
+      "semanticAnchor": "0db812707014c854",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 52,
+        "endLine": 52,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.mint_beacon",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.mint_beacon"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:d15360e4b0d0f18f",
+      "semanticAnchor": "d15360e4b0d0f18f",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 53,
+        "endLine": 53,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.blush_lantern",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.blush_lantern"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:6f62a72555d24ee9",
+      "semanticAnchor": "6f62a72555d24ee9",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 54,
+        "endLine": 54,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.marigold_pouf",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.marigold_pouf"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:fe9cda727b66a258",
+      "semanticAnchor": "fe9cda727b66a258",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 55,
+        "endLine": 55,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.plum_pouf",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.plum_pouf"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:44a31b5b39fe4c94",
+      "semanticAnchor": "44a31b5b39fe4c94",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 56,
+        "endLine": 56,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.cloud_pouf",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.cloud_pouf"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:fe48402070873ac5",
+      "semanticAnchor": "fe48402070873ac5",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 57,
+        "endLine": 57,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.fern_bowl",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.fern_bowl"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:e3825551f5f103b0",
+      "semanticAnchor": "e3825551f5f103b0",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 58,
+        "endLine": 58,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.olive_tree",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.olive_tree"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:11f22cc97099f052",
+      "semanticAnchor": "11f22cc97099f052",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 59,
+        "endLine": 59,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.rose_agave",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.rose_agave"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:8d97786b0e6cb704",
+      "semanticAnchor": "8d97786b0e6cb704",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 60,
+        "endLine": 60,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.kiln_vase",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.kiln_vase"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:6f4f9544d6d1af48",
+      "semanticAnchor": "6f4f9544d6d1af48",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 61,
+        "endLine": 61,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.celadon_vase",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.celadon_vase"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:122db30c784bbbec",
+      "semanticAnchor": "122db30c784bbbec",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 62,
+        "endLine": 62,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.cobalt_pitcher",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.cobalt_pitcher"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:e1c9ede627ad24b3",
+      "semanticAnchor": "e1c9ede627ad24b3",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 63,
+        "endLine": 63,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.linen_rack",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.linen_rack"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:0012d9b739dc8d22",
+      "semanticAnchor": "0012d9b739dc8d22",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 64,
+        "endLine": 64,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.moss_cabinet",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.moss_cabinet"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:5992f2c9ce16e9e6",
+      "semanticAnchor": "5992f2c9ce16e9e6",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 65,
+        "endLine": 65,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.berry_credenza",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.berry_credenza"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:6083618140ff1664",
+      "semanticAnchor": "6083618140ff1664",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 66,
+        "endLine": 66,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.oculus",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.oculus"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:04841324b9d64328",
+      "semanticAnchor": "04841324b9d64328",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 67,
+        "endLine": 67,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.pebble_stack",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.pebble_stack"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:5aebf3ee8e98039b",
+      "semanticAnchor": "5aebf3ee8e98039b",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 68,
+        "endLine": 68,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.arch_pair",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.arch_pair"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:bcd2988e5a6448be",
+      "semanticAnchor": "bcd2988e5a6448be",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 69,
+        "endLine": 69,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.petite_maple_frame",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.petite_maple_frame"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:cadf97d11c20fdbb",
+      "semanticAnchor": "cadf97d11c20fdbb",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 70,
+        "endLine": 70,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.gallery_oak_frame",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.gallery_oak_frame"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:ba1b63213951c1c7",
+      "semanticAnchor": "ba1b63213951c1c7",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 71,
+        "endLine": 71,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.salon_gilt_frame",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.salon_gilt_frame"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:ab026ea4fb295343",
+      "semanticAnchor": "ab026ea4fb295343",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 72,
+        "endLine": 72,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.art-ballerina-capuccina",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.art-ballerina-capuccina"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:1eefc2c78c8cb8f5",
+      "semanticAnchor": "1eefc2c78c8cb8f5",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 73,
+        "endLine": 73,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.art-bananito",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.art-bananito"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:96087896e9968acf",
+      "semanticAnchor": "96087896e9968acf",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 74,
+        "endLine": 74,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.art-chill-guy",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.art-chill-guy"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:de0ae5dadbcb5b8f",
+      "semanticAnchor": "de0ae5dadbcb5b8f",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 75,
+        "endLine": 75,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.art-niu-lai",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.art-niu-lai"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:ad98ee27e177968a",
+      "semanticAnchor": "ad98ee27e177968a",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 76,
+        "endLine": 76,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.art-secret-capybara-toilet",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.art-secret-capybara-toilet"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:9a95e344f6ac9034",
+      "semanticAnchor": "9a95e344f6ac9034",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 77,
+        "endLine": 77,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.art-strawberlina",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.art-strawberlina"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:f559e2352cf68836",
+      "semanticAnchor": "f559e2352cf68836",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 78,
+        "endLine": 78,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.art-tralalero-tralala",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.art-tralalero-tralala"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:eb366a817d9a262c",
+      "semanticAnchor": "eb366a817d9a262c",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/FurnitureAccessibility.kt",
+        "line": 79,
+        "endLine": 79,
+        "symbol": "registerFurnitureAction"
+      },
+      "semanticId": "room.decor.art-tung-tung-tung",
+      "label": "Room item",
+      "runtimeSelector": {
+        "semanticId": "room.decor.art-tung-tung-tung"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "target",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "onClick(\"Inspect item\", inspect)",
+            "symbols": [
+              "registerFurnitureAction"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:ad48e280d5fbd407",
+      "semanticAnchor": "ad48e280d5fbd407",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/HomeStage.kt",
+        "line": 593,
+        "endLine": 598,
+        "symbol": "registerDispensedPrize"
+      },
+      "semanticId": "machine.tray-object",
+      "label": "Dispensed prize",
+      "runtimeSelector": {
+        "semanticId": "machine.tray-object"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "parcel",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "{\n                if (step != Step.BOX || room != Room.MACHINE || refs.box != parcel) false\n                else { openBox(); true }\n            }",
+            "symbols": [
+              "openBox"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:93d6787494dd50cb",
+      "semanticAnchor": "93d6787494dd50cb",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/HomeStage.kt",
+        "line": 1216,
+        "endLine": 1216,
+        "symbol": "openingSequence"
+      },
+      "semanticId": "world.back-to-room",
+      "label": "Return to room",
+      "runtimeSelector": {
+        "semanticId": "world.back-to-room"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "back",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true
+      }
+    },
+    {
+      "contractId": "entity:ce5f940ed62a14ab",
+      "semanticAnchor": "ce5f940ed62a14ab",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/HomeStage.kt",
+        "line": 1241,
+        "endLine": 1241,
+        "symbol": "openingSequence"
+      },
+      "semanticId": "room.controls",
+      "label": "Room controls",
+      "runtimeSelector": {
+        "semanticId": "room.controls"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "it",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true
+      }
+    },
+    {
+      "contractId": "entity:73c2ccc5a797e0ff",
+      "semanticAnchor": "73c2ccc5a797e0ff",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/LoftEntry.kt",
+        "line": 133,
+        "endLine": 135,
+        "symbol": "DoorLanding"
+      },
+      "semanticId": "landing.front-door",
+      "label": "Door 404",
+      "runtimeSelector": {
+        "semanticId": "landing.front-door"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "door",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "{ enterDoor() }",
+            "symbols": [
+              "enterDoor"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:4edd17b24d3d67fe",
+      "semanticAnchor": "4edd17b24d3d67fe",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/LoftEntry.kt",
+        "line": 143,
+        "endLine": 143,
+        "symbol": "DoorLanding"
+      },
+      "semanticId": "landing.entry-controls",
+      "label": "Entry controls",
+      "runtimeSelector": {
+        "semanticId": "landing.entry-controls"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "button",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true
+      }
+    },
+    {
+      "contractId": "entity:987a16c5d5855164",
+      "semanticAnchor": "987a16c5d5855164",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/MachineCrank.kt",
+        "line": 23,
+        "endLine": 25,
+        "symbol": "publishMachineCrank"
+      },
+      "semanticId": "machine.crank-handle",
+      "label": "Crank",
+      "runtimeSelector": {
+        "semanticId": "machine.crank-handle"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "crank",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "{ stop() }",
+            "symbols": [
+              "publishMachineCrank"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:70e6c635d4a2355a",
+      "semanticAnchor": "70e6c635d4a2355a",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/MachineCrank.kt",
+        "line": 27,
+        "endLine": 29,
+        "symbol": "publishMachineCrank"
+      },
+      "semanticId": "machine.crank",
+      "label": "Press to stop",
+      "runtimeSelector": {
+        "semanticId": "machine.crank"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "cue",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "{ stop() }",
+            "symbols": [
+              "publishMachineCrank"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:749dc64e2ad60e51",
+      "semanticAnchor": "749dc64e2ad60e51",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/MachineCrank.kt",
+        "line": 34,
+        "endLine": 36,
+        "symbol": "publishTrayCue"
+      },
+      "semanticId": "machine.dispensed-prize",
+      "label": "Tap to open",
+      "runtimeSelector": {
+        "semanticId": "machine.dispensed-prize"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "cue",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "{ openPrize() }",
+            "symbols": [
+              "publishTrayCue"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:529862b5a1232f68",
+      "semanticAnchor": "529862b5a1232f68",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/RoomFloorTarget.kt",
+        "line": 31,
+        "endLine": 38,
+        "symbol": "roomFloorTarget"
+      },
+      "semanticId": "room.floor",
+      "label": "Room floor",
+      "runtimeSelector": {
+        "semanticId": "room.floor"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        },
+        {
+          "key": "walk_to_the_gumball_machine",
+          "parameters": []
+        },
+        {
+          "key": "walk_to_the_entrance",
+          "parameters": []
+        },
+        {
+          "key": "walk_to_the_shelf",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "floor",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "{ spot(\"stand\").let { walk(it.x, it.z) } }",
+            "symbols": [
+              "roomFloorTarget"
+            ]
+          },
+          {
+            "key": "walk_to_the_gumball_machine",
+            "body": "{ spot(\"machine\").let { walk(it.x, it.z) } }",
+            "symbols": [
+              "roomFloorTarget"
+            ]
+          },
+          {
+            "key": "walk_to_the_entrance",
+            "body": "{ walk(doorwayView.x, doorwayView.z) }",
+            "symbols": [
+              "roomFloorTarget"
+            ]
+          },
+          {
+            "key": "walk_to_the_shelf",
+            "body": "{ spot(\"console\").let { walk(it.x - 0.85f, it.z + 0.78f) } }",
+            "symbols": [
+              "roomFloorTarget"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:ac40b492264d13e9",
+      "semanticAnchor": "ac40b492264d13e9",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/WorldHudAccessibility.kt",
+        "line": 12,
+        "endLine": 12,
+        "symbol": "publishWorldWelcome"
+      },
+      "semanticId": "world.welcome",
+      "label": "World introduction",
+      "runtimeSelector": {
+        "semanticId": "world.welcome"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "welcome",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true
+      }
+    },
+    {
+      "contractId": "entity:98e2f299058edda8",
+      "semanticAnchor": "98e2f299058edda8",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/WorldHudAccessibility.kt",
+        "line": 29,
+        "endLine": 35,
+        "symbol": "publishWorldWalk"
+      },
+      "semanticId": "world.walk",
+      "label": "Walk",
+      "runtimeSelector": {
+        "semanticId": "world.walk"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        },
+        {
+          "key": "step_backward",
+          "parameters": []
+        },
+        {
+          "key": "step_left",
+          "parameters": []
+        },
+        {
+          "key": "step_right",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "pad",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "dynamicActions": true,
+        "dynamicActionsDigest": "03d071c9cd6f81fbc261e3f6765d7059f5e49a3b522d2b964db332c26810c7ad",
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "{ move(StickAxes(forward = 1f)); true }",
+            "symbols": [
+              "publishWorldWalk"
+            ]
+          },
+          {
+            "key": "step_backward",
+            "body": "{ move(StickAxes(forward = -1f)); true }",
+            "symbols": [
+              "publishWorldWalk"
+            ]
+          },
+          {
+            "key": "step_left",
+            "body": "{ move(StickAxes(x = -1f)); true }",
+            "symbols": [
+              "publishWorldWalk"
+            ]
+          },
+          {
+            "key": "step_right",
+            "body": "{ move(StickAxes(x = 1f)); true }",
+            "symbols": [
+              "publishWorldWalk"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:37e969b32aa30078",
+      "semanticAnchor": "37e969b32aa30078",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/WorldHudAccessibility.kt",
+        "line": 40,
+        "endLine": 43,
+        "symbol": "publishWorldTurn"
+      },
+      "semanticId": "world.turn",
+      "label": "Turn",
+      "runtimeSelector": {
+        "semanticId": "world.turn"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        },
+        {
+          "key": "turn_left",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "pad",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "dynamicActions": true,
+        "dynamicActionsDigest": "a7cbdffc7fd4f36ed8be1605c37c7f8677876181db40b7a1d19f9f765f1a98ba",
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "{ move(StickAxes(turn = 1f)); true }",
+            "symbols": [
+              "publishWorldTurn"
+            ]
+          },
+          {
+            "key": "turn_left",
+            "body": "{ move(StickAxes(turn = -1f)); true }",
+            "symbols": [
+              "publishWorldTurn"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:cbeca8c9a397ecba",
+      "semanticAnchor": "cbeca8c9a397ecba",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/WorldHudAccessibility.kt",
+        "line": 48,
+        "endLine": 50,
+        "symbol": "publishWorldJump"
+      },
+      "semanticId": "world.jump",
+      "label": "Jump",
+      "runtimeSelector": {
+        "semanticId": "world.jump"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "pad",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "{ jump(); true }",
+            "symbols": [
+              "publishWorldJump"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contractId": "entity:e38a98a1bb3734f6",
+      "semanticAnchor": "e38a98a1bb3734f6",
+      "kind": "entity",
+      "source": {
+        "file": "app/src/main/java/com/jenn/blindboxworld/content/WorldHudAccessibility.kt",
+        "line": 56,
+        "endLine": 66,
+        "symbol": "publishWorldMenu"
+      },
+      "semanticId": "world.controls",
+      "label": "World controls",
+      "runtimeSelector": {
+        "semanticId": "world.controls"
+      },
+      "stateSources": [
+        "value"
+      ],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        },
+        {
+          "key": "step_forward",
+          "parameters": []
+        },
+        {
+          "key": "step_backward",
+          "parameters": []
+        },
+        {
+          "key": "step_left",
+          "parameters": []
+        },
+        {
+          "key": "step_right",
+          "parameters": []
+        },
+        {
+          "key": "turn_left",
+          "parameters": []
+        },
+        {
+          "key": "turn_right",
+          "parameters": []
+        },
+        {
+          "key": "jump",
+          "parameters": []
+        }
+      ],
+      "binding": {
+        "kind": "spatial",
+        "ownerExpression": "menu",
+        "sdkComponentDeclaration": true,
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "{ step(StickAxes(forward = 1f)); true }",
+            "symbols": [
+              "publishWorldMenu"
+            ]
+          },
+          {
+            "key": "step_forward",
+            "body": "{ step(StickAxes(forward = 1f)); true }",
+            "symbols": [
+              "publishWorldMenu"
+            ]
+          },
+          {
+            "key": "step_backward",
+            "body": "{ step(StickAxes(forward = -1f)); true }",
+            "symbols": [
+              "publishWorldMenu"
+            ]
+          },
+          {
+            "key": "step_left",
+            "body": "{ step(StickAxes(x = -1f)); true }",
+            "symbols": [
+              "publishWorldMenu"
+            ]
+          },
+          {
+            "key": "step_right",
+            "body": "{ step(StickAxes(x = 1f)); true }",
+            "symbols": [
+              "publishWorldMenu"
+            ]
+          },
+          {
+            "key": "turn_left",
+            "body": "{ step(StickAxes(turn = -1f)); true }",
+            "symbols": [
+              "publishWorldMenu"
+            ]
+          },
+          {
+            "key": "turn_right",
+            "body": "{ step(StickAxes(turn = 1f)); true }",
+            "symbols": [
+              "publishWorldMenu"
+            ]
+          },
+          {
+            "key": "jump",
+            "body": "{ jump(); true }",
+            "symbols": [
+              "publishWorldMenu"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "unresolved": []
+}

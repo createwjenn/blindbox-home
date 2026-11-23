@@ -1,0 +1,60 @@
+{
+ "gachapon": {
+  "room_position": [
+   -3.62,
+   0,
+   -3.7
+  ],
+  "face_towards": [
+   0,
+   0,
+   0
+  ],
+  "local": {
+   "crank_axle": [
+    0,
+    0.574,
+    0.332
+   ],
+   "coin_slot": [
+    0,
+    0.729,
+    0.332
+   ],
+   "chute_mouth": [
+    0,
+    0.236,
+    0.2
+   ],
+   "tray_rest": [
+    0,
+    0.122,
+    0.268
+   ],
+   "globe_centre": [
+    0,
+    1.2582,
+    0
+   ],
+   "sign": [
+    0,
+    2.06,
+    0.08
+   ]
+  }
+ },
+ "vitrine": {
+  "room_position": [
+   0,
+   0.677,
+   -1.7
+  ],
+  "size": [
+   0.48,
+   0.58,
+   0.48
+  ],
+  "lifted_offset_y": 0.75
+ },
+ "plinth_top_y": 0.677
+}

@@ -1,0 +1,272 @@
+[
+ [
+  "lotus_lounge",
+  "Lotus lounge",
+  "chair",
+  "D98796",
+  65,
+  0.77,
+  0.824,
+  0.664
+ ],
+ [
+  "sage_reader",
+  "Sage reading chair",
+  "chair",
+  "98B79F",
+  55,
+  0.725,
+  0.824,
+  0.664
+ ],
+ [
+  "tangerine_club",
+  "Tangerine club chair",
+  "chair",
+  "D8915E",
+  80,
+  0.77,
+  0.824,
+  0.664
+ ],
+ [
+  "matcha_table",
+  "Matcha pedestal",
+  "table",
+  "98AD8C",
+  45,
+  0.642,
+  0.472,
+  0.642
+ ],
+ [
+  "onyx_nightstand",
+  "Onyx nightstand",
+  "table",
+  "62626A",
+  70,
+  0.56,
+  0.475,
+  0.48
+ ],
+ [
+  "coral_sidecar",
+  "Coral side table",
+  "table",
+  "CD8A81",
+  60,
+  0.642,
+  0.472,
+  0.642
+ ],
+ [
+  "opal_saucer",
+  "Opal saucer lamp",
+  "lamp",
+  "E8B56C",
+  40,
+  0.44,
+  0.497,
+  0.44
+ ],
+ [
+  "mint_beacon",
+  "Mint beacon lamp",
+  "lamp",
+  "8DAFA2",
+  45,
+  0.36,
+  0.588,
+  0.36
+ ],
+ [
+  "blush_lantern",
+  "Blush lantern",
+  "lamp",
+  "C88991",
+  50,
+  0.298,
+  0.62,
+  0.298
+ ],
+ [
+  "marigold_pouf",
+  "Marigold pouf",
+  "pouf",
+  "D7AB65",
+  35,
+  0.68,
+  0.375,
+  0.66
+ ],
+ [
+  "plum_pouf",
+  "Plum button stool",
+  "pouf",
+  "927891",
+  30,
+  0.56,
+  0.347,
+  0.56
+ ],
+ [
+  "cloud_pouf",
+  "Cloud ottoman",
+  "pouf",
+  "DFD7BD",
+  50,
+  0.77,
+  0.35,
+  0.48
+ ],
+ [
+  "fern_bowl",
+  "Fern bowl",
+  "plant",
+  "76947D",
+  25,
+  0.328,
+  0.619,
+  0.326
+ ],
+ [
+  "olive_tree",
+  "Dwarf olive",
+  "plant",
+  "84905E",
+  40,
+  0.328,
+  0.839,
+  0.326
+ ],
+ [
+  "rose_agave",
+  "Rose agave",
+  "plant",
+  "AD8088",
+  35,
+  0.517,
+  0.621,
+  0.49
+ ],
+ [
+  "kiln_vase",
+  "Kiln vase",
+  "vase",
+  "BD8168",
+  20,
+  0.22,
+  0.3,
+  0.22
+ ],
+ [
+  "celadon_vase",
+  "Celadon amphora",
+  "vase",
+  "8BB8AA",
+  25,
+  0.332,
+  0.39,
+  0.28
+ ],
+ [
+  "cobalt_pitcher",
+  "Cobalt pitcher",
+  "vase",
+  "657D9F",
+  30,
+  0.264,
+  0.32,
+  0.22
+ ],
+ [
+  "linen_rack",
+  "Linen bookcase",
+  "shelf",
+  "DCC9AB",
+  85,
+  0.7,
+  0.981,
+  0.38
+ ],
+ [
+  "moss_cabinet",
+  "Moss cabinet",
+  "shelf",
+  "829379",
+  100,
+  0.681,
+  0.801,
+  0.418
+ ],
+ [
+  "berry_credenza",
+  "Berry credenza",
+  "shelf",
+  "A37480",
+  110,
+  0.94,
+  0.661,
+  0.418
+ ],
+ [
+  "oculus",
+  "Brass oculus",
+  "sculpt",
+  "DCBC71",
+  30,
+  0.33,
+  0.375,
+  0.16
+ ],
+ [
+  "pebble_stack",
+  "River stones",
+  "sculpt",
+  "97A9A6",
+  25,
+  0.274,
+  0.293,
+  0.16
+ ],
+ [
+  "arch_pair",
+  "Twin terracotta arches",
+  "sculpt",
+  "C18769",
+  40,
+  0.273,
+  0.273,
+  0.16
+ ],
+ [
+  "petite_maple_frame",
+  "Small blank canvas · Maple frame",
+  "frame",
+  "D3AB82",
+  25,
+  0.32,
+  0.41,
+  0.061
+ ],
+ [
+  "gallery_oak_frame",
+  "Medium blank canvas · Oak frame",
+  "frame",
+  "97704D",
+  40,
+  0.61,
+  0.77,
+  0.061
+ ],
+ [
+  "salon_gilt_frame",
+  "Large blank canvas · Gilt frame",
+  "frame",
+  "D7B16C",
+  65,
+  1.05,
+  0.84,
+  0.061
+ ]
+]

@@ -1,0 +1,44 @@
+// The full-ascent section of landscape.js, projected over an immersive dome.
+uniform float2 resolution;
+uniform float seconds;
+float hash3(float3 p) {
+    p = fract(p * .3183099 + float3(.1, .2, .3)) * 17.;
+    return fract(p.x * p.y * p.z * (p.x + p.y + p.z));
+}
+float noise3(float3 p) {
+    float3 i=floor(p), f=fract(p);
+    f=f*f*(3.-2.*f);
+    return mix(
+        mix(mix(hash3(i),hash3(i+float3(1,0,0)),f.x),
+            mix(hash3(i+float3(0,1,0)),hash3(i+float3(1,1,0)),f.x),f.y),
+        mix(mix(hash3(i+float3(0,0,1)),hash3(i+float3(1,0,1)),f.x),
+            mix(hash3(i+float3(0,1,1)),hash3(i+float3(1,1,1)),f.x),f.y), f.z);
+}
+float fbm(float3 p) {
+    float n=0., amplitude=.5;
+    for (int i=0; i<5; ++i) {
+        n += noise3(p)*amplitude;
+        p = p*2.03+13.2;
+        amplitude *= .5;
+    }
+    return n;
+}
+half4 main(float2 pixel) {
+    float2 uv=pixel/resolution;
+    float longitude=(uv.x-.5)*6.2831853;
+    float latitude=(.5-uv.y)*3.14159265;
+    float3 ray=float3(cos(latitude)*sin(longitude),sin(latitude),-cos(latitude)*cos(longitude));
+    // In the unboxing view the web camera looks up from y=3.8 to y=39 over z=42.
+    float pitch=.69755;
+    float3 d=float3(ray.x, ray.y*cos(pitch)-ray.z*sin(pitch), ray.y*sin(pitch)+ray.z*cos(pitch));
+    float2 q=d.xz/(max(d.y,.04)+.45);
+    q.x += seconds*.004;
+    float t=seconds*.077;
+    float warp=fbm(float3(q*2.+float2(.055*sin(t),.070*sin(t*.83)),2.4));
+    float2 flow=float2(q.x+warp*.8,q.y+sin(q.x*2.2)*.3+warp*.4);
+    float sheet=fbm(float3(flow*float2(3.,3.8)+float2(0.,.10*sin(t*.81)),6.+.065*sin(t*.47)));
+    float strands=fbm(float3(flow*float2(11.,13.)+float2(.39*sin(t*1.6),.31*cos(t*1.13)),1.+.13*sin(t*.66)));
+    float veil=smoothstep(.43,.70,sheet)*(.65+strands*.45)*.8;
+    float3 blue=mix(float3(.3961,.6235,.8392),float3(.2549,.4235,.6863),pow(max(d.y,0.),.7));
+    return half4(mix(blue,float3(.955,.969,.986),1.-exp(-3.05*veil)),1.);
+}
