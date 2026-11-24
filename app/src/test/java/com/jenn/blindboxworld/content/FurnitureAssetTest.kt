@@ -24,7 +24,11 @@ class FurnitureAssetTest {
         assertTrue(rows.map { it.asJsonArray }.filter { it[2].asString=="frame" }.map { it[5].asFloat }.distinct().size>=3)
         rows.forEach { entry ->
             val r=entry.asJsonArray;val id=r[0].asString
-            assertTrue(ids.add(id));assertTrue("$id under minimum price",r[4].asInt>=20)
+            assertTrue(ids.add(id))
+            val price=r[4].asInt
+            assertTrue("$id price must be 10–30 in steps of five",price in 10..30 && price%5==0)
+            if (r[2].asString=="frame") assertEquals("$id frame price",10,price)
+            else assertTrue("$id must cost more than a frame",price>10)
             assertTrue((5..7).all { r[it].asFloat>.02f })
             assertTrue(File(source,"res/drawable-nodpi/room_$id.png").isFile)
             assertTrue(header(File(folder,"$id.glb")).getAsJsonArray("meshes").size()>0)

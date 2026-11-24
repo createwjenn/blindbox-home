@@ -228,46 +228,9 @@ def textured_face(name, coords, m, uv=((0,0),(1,0),(1,1),(0,1))):
     layer=mesh.uv_layers.new()
     for i,p in enumerate(uv):layer.data[i].uv=p
     o=bpy.data.objects.new(name,mesh);bpy.context.scene.collection.objects.link(o);return finish(o,name,m)
-gradient=np.zeros((512,16,3),np.uint8)
-for row in range(512):
-    u=row/511
-    gradient[row,:,:]=np.array((155,183,204))*(1-u)+np.array((255,217,167))*u
-sky=mapped_material('Evening sky',Image.fromarray(gradient),emission=.95)
-for coords in [[(-41,-65,-18),(-41,65,-18),(-41,65,28),(-41,-65,28)],
-               [(-52,39,-18),(28,39,-18),(28,39,28),(-52,39,28)],
-               [(-52,-39,-18),(28,-39,-18),(28,-39,28),(-52,-39,28)]]:
-    textured_face('Sky',coords,sky)
-district=random.Random(91)
-facades=[]
-for idx,base in enumerate([(149,130,109),(181,157,130),(158,156,143),(116,122,118)]):
-    im=Image.new('RGB',(256,320),base);draw=ImageDraw.Draw(im)
-    for row in range(10):
-        yy=row*32
-        draw.rectangle((0,yy,255,yy+2),fill=tuple(max(0,b-20) for b in base))
-        for col in range(8):
-            xx=col*32
-            tint=district.choice([(113,124,125),(145,151,146),(98,107,112),(195,174,140),(222,188,138)])
-            draw.rectangle((xx+5,yy+5,xx+26,yy+27),fill=(102,99,91))
-            draw.rectangle((xx+7,yy+6,xx+24,yy+24),fill=tint)
-            draw.line((xx+15,yy+6,xx+15,yy+25),fill=base)
-            draw.line((xx+4,yy+27,xx+27,yy+27),fill=tuple(min(255,b+22) for b in base))
-    # Aerial perspective softens the glazing grid on the distant blocks.
-    im=Image.blend(im,Image.new('RGB',im.size,(186,179,161)),.36)
-    facades.append(mapped_material('City facade '+str(idx),im,emission=.65))
-roof=material('Zinc roof','9C988C')
-def tower(x,y,w,d,top):
-    bottom=-12
-    m=district.choice(facades)
-    corners=[(x-w/2,y-d/2),(x+w/2,y-d/2),(x+w/2,y+d/2),(x-w/2,y+d/2)]
-    for a,b in zip(corners,corners[1:]+corners[:1]):
-        repeat=math.dist(a,b)/4.8
-        textured_face('City elevation', [(*a,bottom),(*b,bottom),(*b,top),(*a,top)],m,
-                      [(0,0),(repeat,0),(repeat,(top-bottom)/6),(0,(top-bottom)/6)])
-    block('City cornice',(x,y,top),(w+.08,d+.08,.12),roof,0)
-for xx in [-25,-17]:
-    for yy in range(-28,32,5):tower(xx+district.uniform(-2,0),yy,district.uniform(3.4,5.8),district.uniform(3.6,5),district.uniform(-.3,6.2))
-for xx in range(-12,13,5):tower(xx,22,3.8,4,district.uniform(.5,6))
-for yy in [-12,-5,4,12]:tower(-10,yy,3,district.uniform(3.3,4.1),district.uniform(-2.8,-.5))
+# Preserve the same scene geometry for every light study.
+from sf_skyline import build_skyline
+sky = build_skyline()
 
 # Deep walnut joists and the soft oak fascia above the sitting area.
 for j in range(12):

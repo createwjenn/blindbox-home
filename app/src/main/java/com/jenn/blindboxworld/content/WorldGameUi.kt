@@ -95,6 +95,7 @@ internal fun GameClock(round: WorldRound, collected: Int, total: Int) {
     }
     Text(clockText(time), color = chalk, fontSize = 46.sp, fontWeight = FontWeight.Bold)
     Text("$collected / $total collected", color = chalk, fontSize = 22.sp)
+    if (total-collected in 1..5) Text("Look for the gold markers", color = chalk, fontSize = 18.sp)
     Spacer(Modifier.fillMaxWidth().height(1.dp).background(Color(0xFF647070)))
 }
 
@@ -104,7 +105,7 @@ internal const val WORLD_PANEL_DP = 800
 
 @Composable
 internal fun WorldResult(round: WorldRound, figure: String, eligible: Boolean, collected: Boolean,
-                         claim: () -> Unit, restart: () -> Unit) {
+                         claim: () -> Unit, restart: () -> Unit, back: () -> Unit) {
     val name = nameOf(figure)
     val dark = Color(0xFF442F32)
     val tint = when (figure) {
@@ -169,7 +170,10 @@ internal fun WorldResult(round: WorldRound, figure: String, eligible: Boolean, c
             }
             if (collected) Text("Find this painting in your furniture collection.", color = resultCream,
                 fontSize = 19.sp, lineHeight = 21.sp)
-            ResultButton("Play again", false, onClick = restart)
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                ResultButton("Play again", false, onClick = restart)
+                ResultButton("Return to room", false, onClick = back)
+            }
         }
     }
 }

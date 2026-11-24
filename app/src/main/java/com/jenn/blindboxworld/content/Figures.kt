@@ -25,7 +25,7 @@ val FIGURES = listOf(
     FigureInfo("tung-tung-tung", Rarity.RARE, 5, .8963f, "wood chunks", .481f),
     FigureInfo("tralalero-tralala", Rarity.RARE, 5, .8729f, "fish", .469f),
     FigureInfo("ballerina-capuccina", Rarity.COMMON, 3, .9792f, "coffee beans"),
-    FigureInfo("chill-guy", Rarity.COMMON, 2, .9791f, "leaves"),
+    FigureInfo("chill-guy", Rarity.COMMON, 2, .9791f, "lotus flowers"),
     FigureInfo("secret-capybara-toilet", Rarity.SECRET, 5, .9769f, "little poops", .613f),
 )
 val FIGURE_IDS = FIGURES.map { it.id }
@@ -53,7 +53,7 @@ val CHUTE_MOUTH = Local(0f, .236f, .200f)
 val TRAY_REST = Local(0f, .122f, .268f)
 val GACHA_SIGN = Local(0f, 2.06f, .08f)
 const val TRAY_BOX_SCALE = .18f
-const val START_COINS = 1
+const val START_COINS = 10
 const val BOX_SCALE = 0.38f
 const val BOX_GLB_HEIGHT = 0.979f
 

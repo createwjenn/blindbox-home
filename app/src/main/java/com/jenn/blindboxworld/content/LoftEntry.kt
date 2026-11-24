@@ -42,6 +42,7 @@ import com.pico.spatial.ui.platform.LengthUnit
 import com.pico.spatial.ui.platform.LocalPhysicalLengthConverter
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
@@ -49,16 +50,52 @@ import kotlinx.coroutines.withContext
 @Composable
 fun BlindboxExperience() {
     var entered by remember { mutableStateOf(false) }
+    var threshold by remember { mutableFloatStateOf(0f) }
+    var roomReady by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
     val tracking = remember { runCatching { HMDTrackingProvider() }.getOrNull() }
     DisposableEffect(tracking) {
         runCatching { tracking?.start() }
         onDispose { runCatching { tracking?.stop() } }
     }
-    if (entered) HomeStage(tracking) else DoorLanding(tracking) { entered = true }
+    if (entered) HomeStage(tracking, threshold, onExitDoor = {
+        roomReady=false
+        threshold=0f
+        entered=false
+    }) { roomReady = true } else DoorLanding(tracking, threshold) {
+        scope.launch {
+            for (step in 1..40) { threshold = step / 40f; delay(16) }
+            delay(80) // Present a fully covered frame before replacing the landing.
+            entered = true
+        }
+    }
+    LaunchedEffect(roomReady) {
+        if (roomReady) {
+            delay(160)
+            for (step in 48 downTo 0) { threshold = step / 48f; delay(16) }
+        }
+    }
 }
 
 @Composable
-private fun DoorLanding(tracking: HMDTrackingProvider?, enter: () -> Unit) {
+private fun DoorLanding(tracking: HMDTrackingProvider?, threshold: Float, enter: () -> Unit) {
+    val scope = rememberCoroutineScope()
+    var transitionAnchor by remember { mutableStateOf<Entity?>(null) }
+    var transitionPanel by remember { mutableStateOf<Entity?>(null) }
+    val maskScale=3f/LocalPhysicalLengthConverter.current.dpToLength(1024.dp,LengthUnit.Meters)
+    LaunchedEffect(transitionAnchor) {
+        while(true) {
+            withFrameNanos { }
+            tracking?.latestData?.hmdPose?.let { pose ->
+                transitionAnchor?.components?.get(TransformComponent::class.java)?.apply {
+                    setPosition(pose.position);setQuaternion(pose.rotation)
+                }
+            }
+        }
+    }
+    LaunchedEffect(threshold,transitionPanel) { transitionPanel?.enabled=threshold>0f }
+    var doorLeaf by remember { mutableStateOf<Entity?>(null) }
+    var doorButton by remember { mutableStateOf<Entity?>(null) }
     var landingRoot by remember { mutableStateOf<Entity?>(null) }
     var ready by remember { mutableStateOf(false) }
     var disposed by remember { mutableStateOf(false) }
@@ -66,6 +103,7 @@ private fun DoorLanding(tracking: HMDTrackingProvider?, enter: () -> Unit) {
         onDispose {
             disposed = true
             ready = false
+            transitionAnchor?.releaseScene()
             landingRoot?.releaseScene()
             landingRoot = null
         }
@@ -85,7 +123,18 @@ private fun DoorLanding(tracking: HMDTrackingProvider?, enter: () -> Unit) {
     fun enterDoor(): Boolean {
         if (!ready || disposed) return false
         ready = false
-        enter()
+        doorButton?.enabled = false
+        scope.launch {
+            val transform = doorLeaf?.components?.get(TransformComponent::class.java)
+            for (step in 0..60) {
+                val t=step/60f
+                val eased=t*t*(3f-2f*t)
+                transform?.setEulerAngles(com.pico.spatial.core.math.EulerAngles(0f,96f*eased,0f))
+                delay(16)
+            }
+            delay(120)
+            enter()
+        }
         return true
     }
     val tapDoor = Modifier.pointerInput(Unit) {
@@ -94,6 +143,7 @@ private fun DoorLanding(tracking: HMDTrackingProvider?, enter: () -> Unit) {
         }
     }
     SpatialView(modifier = tapDoor, attachments = {
+        AttachmentPanel("entryDither") { EntranceDither(threshold) }
         AttachmentPanel("doorButton") {
             Box(Modifier.width(buttonWidth)) {
                 CardAction("Enter room", primary = true) { enterDoor() }
@@ -106,6 +156,11 @@ private fun DoorLanding(tracking: HMDTrackingProvider?, enter: () -> Unit) {
         landingRoot = landing
         try {
             content.addEntity(landing)
+            val mask=Entity().apply { components.set(TransformComponent()) }
+            content.addEntity(mask);transitionAnchor=mask
+            panels.entity("entryDither")?.let {
+                mask.addChild(it);it.place(0f,0f,-.4f,maskScale);it.enabled=false;transitionPanel=it
+            }
             fun ownsLanding() = initContext.isActive && !disposed && landingRoot === landing && landing.valid
             if (!ownsLanding()) return@SpatialView
             // Receive ownership even if a native load completes after the landing is gone.
@@ -125,6 +180,7 @@ private fun DoorLanding(tracking: HMDTrackingProvider?, enter: () -> Unit) {
                     place(0f, .86f, -4.12f)
                     frame.addChild(this)
                 }
+                doorLeaf = scene.namedDescendant("Door leaf")
                 door.setName("entryDoor")
                 door.makeTappable(Vector3(1.42f, 2.52f, .30f), 1.25f)
                 door.components.set(AccessibilityComponent("Door 404", "Entrance").apply {
@@ -134,6 +190,7 @@ private fun DoorLanding(tracking: HMDTrackingProvider?, enter: () -> Unit) {
                     onClick("Enter room") { enterDoor() }
                 }
                 panels.entity("doorButton")?.let { button ->
+                    doorButton = button
                     // Door-local metres. The brass plaque is centered at y=1.87 and faces +Z.
                     button.place(0f, 1.62f, .175f, buttonScale)
                     door.addChild(button)
@@ -192,7 +249,7 @@ private val roomClockGlass = Color(0x33FFFFFF) // design-style: fixed-figma-colo
 private val roomClockShape = RoundedCornerShape(1000.dp)
 
 @Composable
-internal fun GlassPill(label: String, music: RoomRecordPlayer? = null, onClick: (() -> Unit)? = null) {
+internal fun GlassPill(label: String, music: RoomRecordPlayer? = null, onHome: (() -> Unit)? = null, onClick: (() -> Unit)? = null) {
     val shadow = with(LocalDensity.current) {
         Shadow(Color.Black.copy(alpha = .68f), Offset(0f, 1.dp.toPx()), 2.dp.toPx())
     }
@@ -201,6 +258,13 @@ internal fun GlassPill(label: String, music: RoomRecordPlayer? = null, onClick: 
             .06f to Color.Transparent, .93f to Color.Transparent, 1f to Color.White.copy(alpha = .24f))
         onDrawBehind { drawRect(sheen) }
     }, verticalAlignment = Alignment.CenterVertically) {
+        if (onHome != null) androidx.compose.foundation.Image(
+            painter = androidx.compose.ui.res.painterResource(com.jenn.blindboxworld.R.drawable.room_home),
+            contentDescription = "Home — return to entrance",
+            modifier = Modifier.clickable(role=Role.Button,onClick=onHome)
+                .padding(start=18.dp,end=4.dp,top=10.dp,bottom=10.dp)
+                .then(Modifier.width(28.dp)),
+        )
         Text(label, modifier = Modifier
             .then(if (onClick != null) Modifier.clickable(role = Role.Button, onClick = onClick) else Modifier)
             .padding(horizontal = 24.dp, vertical = 10.dp),

@@ -2968,8 +2968,8 @@
       "kind": "entity",
       "source": {
         "file": "app/src/main/java/com/jenn/blindboxworld/content/HomeStage.kt",
-        "line": 593,
-        "endLine": 598,
+        "line": 598,
+        "endLine": 603,
         "symbol": "registerDispensedPrize"
       },
       "semanticId": "machine.tray-object",
@@ -3003,29 +3003,43 @@
       }
     },
     {
-      "contractId": "entity:93d6787494dd50cb",
-      "semanticAnchor": "93d6787494dd50cb",
+      "contractId": "entity:615a5cd5ef125f4e",
+      "semanticAnchor": "615a5cd5ef125f4e",
       "kind": "entity",
       "source": {
         "file": "app/src/main/java/com/jenn/blindboxworld/content/HomeStage.kt",
-        "line": 1216,
-        "endLine": 1216,
+        "line": 1421,
+        "endLine": 1423,
         "symbol": "openingSequence"
       },
       "semanticId": "world.back-to-room",
-      "label": "Return to room",
+      "label": "World exit",
       "runtimeSelector": {
         "semanticId": "world.back-to-room"
       },
       "stateSources": [
         "value"
       ],
-      "actions": [],
+      "actions": [
+        {
+          "key": "click",
+          "parameters": []
+        }
+      ],
       "binding": {
         "kind": "spatial",
         "ownerExpression": "back",
         "sdkComponentDeclaration": true,
-        "sdkActionRegistration": true
+        "sdkActionRegistration": true,
+        "actionHandlers": [
+          {
+            "key": "click",
+            "body": "{ backToRoom(); true }",
+            "symbols": [
+              "backToRoom"
+            ]
+          }
+        ]
       }
     },
     {
@@ -3034,8 +3048,8 @@
       "kind": "entity",
       "source": {
         "file": "app/src/main/java/com/jenn/blindboxworld/content/HomeStage.kt",
-        "line": 1241,
-        "endLine": 1241,
+        "line": 1451,
+        "endLine": 1451,
         "symbol": "openingSequence"
       },
       "semanticId": "room.controls",
@@ -3060,8 +3074,8 @@
       "kind": "entity",
       "source": {
         "file": "app/src/main/java/com/jenn/blindboxworld/content/LoftEntry.kt",
-        "line": 133,
-        "endLine": 135,
+        "line": 189,
+        "endLine": 191,
         "symbol": "DoorLanding"
       },
       "semanticId": "landing.front-door",
@@ -3100,8 +3114,8 @@
       "kind": "entity",
       "source": {
         "file": "app/src/main/java/com/jenn/blindboxworld/content/LoftEntry.kt",
-        "line": 143,
-        "endLine": 143,
+        "line": 200,
+        "endLine": 200,
         "symbol": "DoorLanding"
       },
       "semanticId": "landing.entry-controls",
@@ -3241,76 +3255,29 @@
       }
     },
     {
-      "contractId": "entity:529862b5a1232f68",
-      "semanticAnchor": "529862b5a1232f68",
+      "contractId": "entity:6132950e2845c681",
+      "semanticAnchor": "6132950e2845c681",
       "kind": "entity",
       "source": {
         "file": "app/src/main/java/com/jenn/blindboxworld/content/RoomFloorTarget.kt",
-        "line": 31,
-        "endLine": 38,
+        "line": 32,
+        "endLine": 32,
         "symbol": "roomFloorTarget"
       },
-      "semanticId": "room.floor",
-      "label": "Room floor",
+      "semanticId": "room.placement-floor",
+      "label": "Furniture placement surface",
       "runtimeSelector": {
-        "semanticId": "room.floor"
+        "semanticId": "room.placement-floor"
       },
       "stateSources": [
         "value"
       ],
-      "actions": [
-        {
-          "key": "click",
-          "parameters": []
-        },
-        {
-          "key": "walk_to_the_gumball_machine",
-          "parameters": []
-        },
-        {
-          "key": "walk_to_the_entrance",
-          "parameters": []
-        },
-        {
-          "key": "walk_to_the_shelf",
-          "parameters": []
-        }
-      ],
+      "actions": [],
       "binding": {
         "kind": "spatial",
         "ownerExpression": "floor",
         "sdkComponentDeclaration": true,
-        "sdkActionRegistration": true,
-        "actionHandlers": [
-          {
-            "key": "click",
-            "body": "{ spot(\"stand\").let { walk(it.x, it.z) } }",
-            "symbols": [
-              "roomFloorTarget"
-            ]
-          },
-          {
-            "key": "walk_to_the_gumball_machine",
-            "body": "{ spot(\"machine\").let { walk(it.x, it.z) } }",
-            "symbols": [
-              "roomFloorTarget"
-            ]
-          },
-          {
-            "key": "walk_to_the_entrance",
-            "body": "{ walk(doorwayView.x, doorwayView.z) }",
-            "symbols": [
-              "roomFloorTarget"
-            ]
-          },
-          {
-            "key": "walk_to_the_shelf",
-            "body": "{ spot(\"console\").let { walk(it.x - 0.85f, it.z + 0.78f) } }",
-            "symbols": [
-              "roomFloorTarget"
-            ]
-          }
-        ]
+        "sdkActionRegistration": true
       }
     },
     {

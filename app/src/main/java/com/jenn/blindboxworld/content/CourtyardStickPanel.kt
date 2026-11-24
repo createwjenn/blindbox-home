@@ -43,7 +43,7 @@ internal fun RoomStickPanel(motion: RoomMotion) {
                 CustomAccessibilityAction("Step right") { motion.nudge(x = 1f) },
             )
         }
-        StickPad("Walk", false, walk, tap = { x, y -> motion.nudge(x = x, forward = y) }) { x, y ->
+        StickPad("Walk", false, walk, held = { input.padHeld = it }, tap = { x, y -> motion.nudge(x = x, forward = y) }) { x, y ->
             input.pad = input.pad.copy(x = x, forward = y)
         }
         val turn = Modifier.semantics(mergeDescendants = true) {
@@ -52,7 +52,7 @@ internal fun RoomStickPanel(motion: RoomMotion) {
             onClick(label = "Turn right") { motion.nudge(turn = 1f) }
             customActions = listOf(CustomAccessibilityAction("Turn left") { motion.nudge(turn = -1f) })
         }
-        StickPad("Turn", true, turn, tap = { x, _ -> motion.nudge(turn = x) }) { x, _ ->
+        StickPad("Turn", true, turn, held = { input.padHeld = it }, tap = { x, _ -> motion.nudge(turn = x) }) { x, _ ->
             input.pad = input.pad.copy(turn = x)
         }
     }
@@ -61,7 +61,7 @@ internal fun RoomStickPanel(motion: RoomMotion) {
 @Composable
 private fun StickPad(
     label: String, horizontal: Boolean, modifier: Modifier,
-    tap: (Float, Float) -> Unit, change: (Float, Float) -> Unit,
+    held: (Boolean) -> Unit, tap: (Float, Float) -> Unit, change: (Float, Float) -> Unit,
 ) {
     var thumb by remember { mutableStateOf(Offset.Zero) }
     Column(modifier.pointerInput(label) {
@@ -76,6 +76,7 @@ private fun StickPad(
             awaitEachGesture {
                 val down = awaitFirstDown(requireUnconsumed = false)
                 down.consume()
+                held(true)
                 thumb = point(down.position)
                 // In the room a brief directional tap takes one step. A drag or sustained
                 // deflection drives the same continuous axes as a controller thumbstick.
@@ -108,10 +109,12 @@ private fun StickPad(
                     if (continuous && !dragged && thumb.getDistance() <= .16f) thumb = primary
                     if (continuous) change(thumb.x, -thumb.y)
                 }
+                held(false)
                 thumb = Offset.Zero
                 change(0f, 0f)
             }
         } finally {
+            held(false)
             thumb = Offset.Zero
             change(0f, 0f)
         }

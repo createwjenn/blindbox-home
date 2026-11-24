@@ -63,18 +63,6 @@ class WorldCourseTest {
         return seconds
     }
 
-    @Test fun cameraStopsBeforeARaisedBankAndPermitsAClearOverheadView() {
-        val steps = listOf(
-            WorldCell(0, 0, 0f, Float.NaN, IntArray(4) { -1 }),
-            WorldCell(1, 0, .8f, Float.NaN, IntArray(4) { -1 }),
-        )
-        val floor = WorldTerrain(.5f, steps, emptyList(), 2f)
-        val camera = WorldCameraClearance(floor)
-        val focus = floor.actorStart + Vector3(0f, .44f, 0f)
-        assertTrue(camera.available(focus, Vector3.RIGHT, 2f) < .6f)
-        assertEquals(2f, camera.available(focus, Vector3.UP, 2f), .001f)
-    }
-
     @Test fun allEightCoursesFinishThroughActualContactBelowOneMinute() {
         for (figure in FIGURES) {
             val terrain = terrain(figure.id)

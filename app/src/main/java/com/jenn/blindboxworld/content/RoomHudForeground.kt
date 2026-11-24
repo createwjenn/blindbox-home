@@ -64,6 +64,55 @@ internal class RoomHudForeground(private val head: Entity, private val room: Ent
     private val modalRise = .12f
     private var modalDepth = 0f
 
+    private val stillness = HudStillness()
+    private val iconStillness = HudStillness()
+    private var lastTrackedEye: Vector3? = null
+    private var lastTrackedForward: Vector3? = null
+    private var motionTime = 0L
+    private var lastEye: Vector3? = null
+    private var lastForward: Vector3? = null
+    private var lastUp: Vector3? = null
+
+    /** Room-space tracking also catches locomotion and snap turns, not just HMD movement. */
+    fun quietHud(frame: Long, wallet: Entity?, pads: Entity?, panel: Entity?,
+                 padsAllowed: Boolean, walletAllowed: Boolean, clock: Boolean,
+                 panelAllowed: Boolean, interacting: Boolean, navigating: Boolean = false) {
+        if (motionTime != 0L && frame-motionTime < 80_000_000L) return
+        val dt = if (motionTime == 0L) .08f else ((frame-motionTime)*1e-9f).coerceAtMost(.25f)
+        motionTime = frame
+        val eye = head.convertPositionTo(zero, room)
+        val rotation = head.convertRotationTo(com.pico.spatial.core.math.Quat.identity(), room)
+        val forward = rotation.rotateVector(Vector3(0f,0f,-1f))
+        val up = rotation.rotateVector(Vector3(0f,1f,0f))
+        fun distance(a: Vector3, b: Vector3): Float {
+            val d = a-b
+            return kotlin.math.sqrt(d.x*d.x+d.y*d.y+d.z*d.z)
+        }
+        val trackedEye=head.convertPositionTo(zero,null)
+        val trackedForward=head.convertRotationTo(com.pico.spatial.core.math.Quat.identity(),null).rotateVector(Vector3(0f,0f,-1f))
+        val trackingMoved=lastTrackedEye?.let { distance(trackedEye,it)/dt > .04f } == true ||
+            lastTrackedForward?.let { distance(trackedForward,it)/dt > .07f } == true
+        lastTrackedEye=trackedEye;lastTrackedForward=trackedForward
+        val moving = navigating || trackingMoved || lastEye?.let { distance(eye,it)/dt > .08f } == true ||
+            lastForward?.let { distance(forward,it)/dt > .10f } == true ||
+            lastUp?.let { distance(up,it)/dt > .10f } == true
+        lastEye=eye; lastForward=forward; lastUp=up
+        val alpha = stillness.advance(dt,moving,interacting)
+        val iconAlpha = iconStillness.advance(dt,moving,false)
+        fun apply(entity: Entity?, allowed: Boolean, fade: Boolean) {
+            entity ?: return
+            entity.setOpacity(if (fade) alpha else 1f)
+            // Remove fully invisible hit surfaces as well as their pixels.
+            entity.enabled = allowed && (!fade || alpha > .01f)
+        }
+        apply(pads,padsAllowed,true)
+        wallet?.let {
+            it.setOpacity(iconAlpha)
+            it.enabled=walletAllowed && iconAlpha>.01f
+        }
+        apply(panel,panelAllowed,clock)
+    }
+
     fun fitModal(distance: Float) {
         modalDepth = distance
         modalLayer.place(0f,modalRise,-distance*(1f-modalSize),modalSize)

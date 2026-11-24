@@ -15,7 +15,7 @@ import com.pico.spatial.core.math.Vector3
 import com.pico.spatial.core.math.Color4
 import com.pico.spatial.ui.foundation.content.setAccessibilityActions
 
-internal fun roomFloorTarget(content: SpatialViewContent, walk: (Float, Float) -> Boolean, spot: (String) -> RoomSpot): Entity {
+internal fun roomFloorTarget(content: SpatialViewContent): Entity {
     val floor = Entity().apply {
         setName("loftFloor")
         components.set(TransformComponent())
@@ -25,17 +25,12 @@ internal fun roomFloorTarget(content: SpatialViewContent, walk: (Float, Float) -
         ))
         components.set(InteractableComponent())
     }
-    floor.components.set(AccessibilityComponent("Room floor", "Tap a spot to walk there").apply {
-        isAccessibilityElement = true
+    // Hit surface is retained only for furniture placement, never for locomotion.
+    floor.components.set(AccessibilityComponent("Furniture placement surface", "").apply {
+        isAccessibilityElement = false
     })
-    content.setAccessibilityActions(floor, "room.floor") {
-        onClick("Walk to the display stand") { spot("stand").let { walk(it.x, it.z) } }
-        customActions = listOf(
-            CustomAccessibilityAction("Walk to the gumball machine") { spot("machine").let { walk(it.x, it.z) } },
-            CustomAccessibilityAction("Walk to the entrance") { walk(doorwayView.x, doorwayView.z) },
-            CustomAccessibilityAction("Walk to the shelf") { spot("console").let { walk(it.x - 0.85f, it.z + 0.78f) } }
-        )
-    }
+    content.setAccessibilityActions(floor, "room.placement-floor") { }
+    floor.enabled = false
     return floor
 }
 

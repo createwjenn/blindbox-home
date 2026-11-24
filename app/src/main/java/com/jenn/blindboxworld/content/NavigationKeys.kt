@@ -15,11 +15,28 @@ import androidx.compose.ui.platform.LocalWindowInfo
 
 /** A physical key can be tapped between render frames or held across multiple frames. */
 internal class NavigationKeys {
+    var onExit: (() -> Unit)? = null
+    var onJump: (() -> Unit)? = null
+    private var jumpHeld = false
+    private var exitHeld = false
+
     private val held = mutableSetOf<Int>()
     private val pressedSinceSample = mutableSetOf<Int>()
 
     @Synchronized
     fun handle(code: Int, down: Boolean, repeat: Boolean = false): Boolean {
+        if (code == KeyEvent.KEYCODE_BACK || code == KeyEvent.KEYCODE_ESCAPE || code == KeyEvent.KEYCODE_BUTTON_B) {
+            if (!down && exitHeld) { exitHeld = false; return true }
+            val exit = onExit ?: return false
+            if (down && !repeat && !exitHeld) { exitHeld = true; exit() }
+            return true
+        }
+        if (code == KeyEvent.KEYCODE_SPACE || code == KeyEvent.KEYCODE_BUTTON_A) {
+            if (!down && jumpHeld) { jumpHeld = false; return true }
+            val jump = onJump ?: return false
+            if (down && !repeat && !jumpHeld) { jumpHeld = true; jump() }
+            return true
+        }
         when (code) {
             KeyEvent.KEYCODE_W, KeyEvent.KEYCODE_S, KeyEvent.KEYCODE_A, KeyEvent.KEYCODE_D,
             KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN,
@@ -36,6 +53,7 @@ internal class NavigationKeys {
 
     @Synchronized
     fun clear() {
+        jumpHeld = false
         held.clear()
         pressedSinceSample.clear()
     }

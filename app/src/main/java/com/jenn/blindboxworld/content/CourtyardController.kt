@@ -26,21 +26,28 @@ internal class CourtyardInput : ControllerTrackingProvider.ControllerActionListe
     var orbitPitch = 0f
     private val jump = java.util.concurrent.atomic.AtomicBoolean(false)
     private var aHeld = false
+    private var bHeld = false
+    private val exit = java.util.concurrent.atomic.AtomicBoolean(false)
+    fun takeExit() = exit.getAndSet(false)
     fun requestJump() { jump.set(true) }
     fun takeJump() = jump.getAndSet(false)
     @Volatile private var physical = StickAxes()
     @Volatile var zoomAxis = 0f
         private set
+    var padHeld = false
     var pad = StickAxes()
     override fun onControllerAction(data: ControllerActionData) {
         val a = data.right?.aButtonPressed == true
         if (a && !aHeld) requestJump()
         aHeld = a
+        val b = data.right?.bButtonPressed == true
+        if (b && !bHeld) exit.set(true)
+        bHeld = b
         zoomAxis = data.right?.thumbstickValue?.y ?: 0f
         val left = data.left?.thumbstickValue
         physical = StickAxes(left?.x ?: 0f, left?.y ?: 0f, data.right?.thumbstickValue?.x ?: 0f)
     }
-    fun clear() { keys.clear(); jump.set(false); physical = StickAxes(); pad = StickAxes(); zoomAxis = 0f }
+    fun clear() { keys.clear(); jump.set(false); exit.set(false); physical = StickAxes(); pad = StickAxes(); zoomAxis = 0f }
 
     fun sample(): StickAxes {
         val sticks = physical
@@ -64,14 +71,16 @@ private fun Quat.horizontalHeading(): Float {
 internal suspend fun driveWorldActor(
     input: CourtyardInput, actor: Entity, terrain: WorldTerrain, figure: FigureInfo,
     garden: Entity, wearables: WorldWearables?, wake: SwimWake, headPose: () -> HMDPose?, canDrive: () -> Boolean,
-    onPickup: (Int) -> Unit,
+    onPickup: (Int) -> Unit, onExit: () -> Unit,
 ) {
+    val boundary = WorldBoundary(terrain, garden)
     val playback = mutableListOf<AnimationPlaybackController>()
     val provider = ControllerTrackingProvider()
     val neckDepth = figure.swimNeckHeight?.let { it * ACTOR_HEIGHT / figure.actorRigHeight / WORLD_SCALE }
     val walker = WorldWalker(terrain, neckDepth)
     input.orbitYaw = 0f
     input.orbitPitch = 0f
+    val replay = WorldRouteReplay(terrain)
     var swimTime = 0f
     var footY = walker.support
     var lift = 0f
@@ -107,6 +116,7 @@ internal suspend fun driveWorldActor(
             previous = now
             val axes = if (canDrive()) input.sample() else StickAxes()
             val head = headPose()
+            if (input.takeExit()) onExit()
             if (abs(axes.turn) < .35f) turnReady = true
             val snap = if (turnReady && abs(axes.turn) > .68f) {
                 turnReady = false
@@ -117,7 +127,14 @@ internal suspend fun driveWorldActor(
             val magnitude = hypot(axes.x, axes.forward)
             val strength = ((magnitude - .16f) / .84f).coerceIn(0f, 1f)
             var speed = 0f
-            if (strength > 0f && dt > 0f) {
+            if (WorldVerification.route && canDrive()) {
+                val oldX = walker.x; val oldZ = walker.z
+                replay.advance(walker, dt) { index ->
+                    Log.i("WorldVerification", "contact ${figure.id} index=$index cell=${walker.cellIndex}")
+                    onPickup(index)
+                }
+                speed = hypot(walker.x-oldX,walker.z-oldZ)*WORLD_SCALE/dt.coerceAtLeast(.001f)
+            } else if (strength > 0f && dt > 0f) {
                 val heading = if (head == null) -input.orbitYaw
                     else garden.convertRotationFrom(head.rotation, null).horizontalHeading()
                 val (dx, dz) = rotY(axes.x / magnitude, -axes.forward / magnitude, heading)
@@ -131,6 +148,7 @@ internal suspend fun driveWorldActor(
                     facing = (facing + delta.coerceIn(-500f * dt, 500f * dt)) % 360f
                 }
             }
+            boundary.update(walker.cellIndex, walker.x, walker.z)
             val swimming = walker.swimming
             val immersion = if (swimming && neckDepth != null) (walker.waterDepth / neckDepth).coerceIn(0f, 1f) else 0f
             val support = walker.support
@@ -200,6 +218,7 @@ internal suspend fun driveWorldActor(
             }
         }
     } finally {
+        boundary.close()
         provider.removeControllerActionListener(input)
         provider.stop()
         input.clear()

@@ -21,7 +21,7 @@ private fun Entity.allNamedGroups(groups: MutableMap<String,Entity>) {
     else getChildren().forEach { it.allNamedGroups(groups) }
 }
 
-private fun mountTarget(content: SpatialViewContent, holder: Entity, piece: Furnishing, choose:(String)->Boolean) {
+private fun mountTarget(content: SpatialViewContent, holder: Entity, piece: Furnishing, choose:(String)->Boolean): Entity {
     val target=Entity().apply {
         components.set(TransformComponent())
         setName("decor:${piece.id}")
@@ -46,6 +46,7 @@ private fun mountTarget(content: SpatialViewContent, holder: Entity, piece: Furn
     }
     holder.addChild(target)
     registerFurnitureAction(content,target,piece) { choose(piece.id) }
+    return target
 }
 
 /** Keep the same independent transforms and action targets when the baked daylight shell is replaced. */
@@ -53,22 +54,23 @@ internal suspend fun decorateRoom(shell:Entity, root:Entity, content:SpatialView
                                   record: RoomRecordPlayer, choose:(String)->Boolean) {
     val models=mutableMapOf<String,Entity>();shell.allNamedGroups(models)
     val loose=mutableListOf<Entity>()
+    val targets=mutableListOf<Entity>()
     val last=mutableMapOf<String,DecorPose>()
     val visibility=mutableMapOf<String,Boolean>()
     try {
-        for ((id,holder) in models) state.pieces[id]?.let { mountTarget(content,holder,it,choose) }
-        val deck = models["record-player"]?.getChildren().orEmpty()
-        val label = deck.firstOrNull { it.getName() == "Ivory limewash" }
-        // The label and platter were authored as concentric discs. The printed stripe makes
-        // their rotation visible while the arm and base stay fixed.
-        label?.addChild(Entity().apply {
-            components.set(TransformComponent())
-            components.set(ModelComponent(MeshResource.createBox(Vector3(.038f,.001f,.009f),0f),
-                glowMaterial(Color4(.39f,.12f,.055f,1f))))
-            place(.004f,.0023f,.022f)
-            loose.add(this)
-        })
-        val discs = deck.filter { it == label || it.getName() == "Black vinyl" }
+        // Replace only the authored turntable payload, preserving its placement and controls.
+        val turntable=Entity.loadSuspend("asset://props/reference-turntable.glb")
+        if (!shell.valid || !root.valid) { turntable.releaseScene(); return }
+        models["record-player"]?.let { holder ->
+            holder.getChildren().toList().forEach { it.releaseScene() }
+            holder.addChild(turntable)
+
+        }
+        for ((id,holder) in models) state.pieces[id]?.let { targets.add(mountTarget(content,holder,it,choose)) }
+        val deck=mutableListOf<Entity>()
+        fun descendants(entity: Entity) { deck.add(entity); entity.getChildren().forEach(::descendants) }
+        descendants(turntable)
+        val discs=deck.filter { it.getName() in setOf("Amber vinyl","Ivory limewash") }
         var spin = 180f
         var lastTick = SystemClock.uptimeMillis()
         while (root.valid && shell.valid) {
@@ -88,7 +90,7 @@ internal suspend fun decorateRoom(shell:Entity, root:Entity, content:SpatialView
                     if (!shell.valid || !root.valid) { payload.releaseScene();return }
                     Entity().apply {
                         components.set(TransformComponent())
-                        addChild(payload);mountTarget(content,this,piece,choose)
+                        addChild(payload);targets.add(mountTarget(content,this,piece,choose))
                         root.addChild(this);loose.add(this);models[id]=this
                     }
                 } else continue
@@ -104,6 +106,9 @@ internal suspend fun decorateRoom(shell:Entity, root:Entity, content:SpatialView
             delay(32)
         }
     } finally {
+        // Action proxies belong to this decoration pass, including proxies on imported groups.
+        // Destroying the shell alone does not unregister these independently published targets.
+        targets.forEach { it.releaseScene() }
         loose.forEach { it.releaseScene() }
     }
 }

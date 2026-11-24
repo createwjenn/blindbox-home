@@ -12,9 +12,9 @@ internal data class FloorObstacle(val x: Float, val z: Float, val width: Float, 
 
 /** Loft-local metres. Imported Blender (x, y) on the ground plane becomes runtime (x, -y). */
 internal object RoomFloor {
-    private const val CLEARANCE = .18f
+    private const val CLEARANCE = .30f
     private const val GAP = .003f
-    private val walls = Rect(-4.05f, 3.98f, -4.12f, 4.04f)
+    private val walls = Rect(-3.90f, 3.90f, -3.98f, 3.98f)
     private val doorway = FloorPoint(-1.88f, 3.83f)
 
     private data class Rect(val left: Float, val right: Float, val back: Float, val front: Float) {

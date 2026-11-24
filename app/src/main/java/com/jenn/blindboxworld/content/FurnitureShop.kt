@@ -34,14 +34,13 @@ private val brass = Color(0xFFECC78C) // design-style: fixed-figma-color room li
 private val controlGlass = Color(0xA5404848) // design-style: fixed-figma-color room library screenshot, tab fill
 private val darkInk = Color(0xFF373834) // design-style: fixed-figma-color room library screenshot, selected tab
 private val panelColors = listOf(Color(0xEE494C47), Color(0xF02A2F31)) // design-style: fixed-figma-color room library screenshot, panel gradient
-private val swatches = listOf(Color(0xFF92766F), Color(0xFF718B83), Color(0xFF827890), Color(0xFF9C876B)) // design-style: fixed-figma-color room library screenshot, display cards
-private val cardBase = Color(0xFF414546) // design-style: fixed-figma-color room library screenshot, card shadow
+private val itemBackground = Color(0xFFFFFFFF).copy(alpha = .1f) // design-style: fixed-figma-color user-approved 10% white item surface.
 private val lockedBadge = Color(0xC7393C3C) // design-style: fixed-figma-color room library screenshot, locked caption
 private val actionBadge = Color(0xF6222828) // design-style: fixed-figma-color room library screenshot, action caption
 
 @Composable
 internal fun RoomShopIcon(onClick: () -> Unit) {
-    Image(painterResource(R.drawable.room_shop), "Open library",
+    Image(painterResource(R.drawable.room_shop), "Open shop",
         modifier=Modifier.size(92.dp).spatialHoverEffect().clickable(role=Role.Button,onClick=onClick),
         contentScale=ContentScale.Fit)
 }
@@ -72,11 +71,13 @@ internal fun RoomLibrary(
     balance: Int,
     unlockedAccessories: Set<String>,
     onTryAccessory: ((Accessory) -> Unit)?,
+    onClose: () -> Unit,
     onBuy: (String) -> Unit,
 ) {
     val swapping = furnishing.swapSource != null
     var section by remember(swapping) { mutableStateOf(if (swapping) LibrarySection.ART else LibrarySection.FURNITURE) }
     var swapError by remember(furnishing.swapSource) { mutableStateOf(false) }
+    var itemNotice by remember { mutableStateOf<String?>(null) }
     var page by remember(section) { mutableIntStateOf(0) }
     val decor = remember(furnishing, section, swapping, furnishing.storedArtwork) {
         when (section) {
@@ -97,9 +98,14 @@ internal fun RoomLibrary(
     Column(Modifier.width(PICKER_WIDTH_DP.dp).clip(shape)
         .background(Brush.verticalGradient(panelColors)).padding(20.dp)) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text(if (swapping) "Swap artwork" else "Room library", color = paper, fontWeight = FontWeight.Bold, fontSize = 28.sp, modifier = Modifier.weight(1f))
-            Text("$balance coins", color = brass, fontSize = 18.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(end = 15.dp))
-            ShopControl("Close") { furnishing.closeShop() }
+            Text(if (swapping) "Swap artwork" else "Shop", color = paper, fontWeight = FontWeight.Bold, fontSize = 28.sp, modifier = Modifier.weight(1f))
+            Row(Modifier.padding(end = 15.dp).semantics(mergeDescendants = true) {
+                contentDescription = "$balance ${if (balance == 1) "coin" else "coins"}"
+            }, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                Text("$balance", color = paper, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                Image(painterResource(R.drawable.shop_coin), null, modifier = Modifier.size(30.dp))
+            }
+            ShopControl("Close", click = onClose)
         }
         Spacer(Modifier.height(10.dp))
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -112,6 +118,7 @@ internal fun RoomLibrary(
             Text("${page + 1} / $pages", fontSize = 16.sp, color = paper)
             ShopControl("Next", enabled = page + 1 < pages) { page++ }
         }
+        itemNotice?.let { Text(it, color = paper, fontSize = 16.sp, modifier = Modifier.padding(top = 8.dp)) }
         Spacer(Modifier.height(14.dp))
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             repeat(LIBRARY_ROWS) { row ->
@@ -130,7 +137,7 @@ internal fun RoomLibrary(
                                 action != null -> "Owned · Try on"
                                 else -> "Owned"
                             }
-                            LibraryTile(accessory.name, accessory.thumbnail, label, swatches[column], !owned, cell,
+                            LibraryTile(accessory.name, accessory.thumbnail, label, !owned, cell,
                                 onClick = action?.let { open -> { open(accessory) } })
                         } else {
                             val item = decor[index]
@@ -147,8 +154,12 @@ internal fun RoomLibrary(
                                 owned -> "Place item"
                                 else -> "Buy · ${item.price} coins"
                             }
-                            LibraryTile(item.title, item.thumbnail, label, swatches[column], locked, cell,
-                                onClick = if (locked) null else { { if (swapping) swapError = !furnishing.swapArt(item.id) else onBuy(item.id) } })
+                            LibraryTile(item.title, item.thumbnail, label, locked, cell,
+                                onClick = {
+                                    if (locked) itemNotice = if (painting) "Win this world to unlock its painting."
+                                        else "${item.title}: needs ${item.price} coins. You have $balance (${item.price - balance} more needed)."
+                                    else { itemNotice = null; if (swapping) swapError = !furnishing.swapArt(item.id) else onBuy(item.id) }
+                                })
                         }
                     }
                 }
@@ -162,13 +173,12 @@ private fun LibraryTile(
     title: String,
     thumbnail: Int,
     label: String,
-    tint: Color,
     locked: Boolean,
     modifier: Modifier,
     onClick: (() -> Unit)?,
 ) {
     val shape = RoundedCornerShape(18.dp)
-    Column(modifier.clip(shape).background(Brush.verticalGradient(listOf(tint, cardBase)))
+    Column(modifier.clip(shape).background(itemBackground)
         .then(if (onClick != null) Modifier.spatialHoverEffect() else Modifier)
         .clickable(enabled = onClick != null, role = Role.Button) { onClick?.invoke() }
         .semantics(mergeDescendants = true) { contentDescription = "$title, $label" }

@@ -1,0 +1,938 @@
+[
+  {
+    "id": "ref01_01",
+    "triangles": 1452,
+    "dimensions": [
+      0.47,
+      0.505,
+      0.46
+    ]
+  },
+  {
+    "id": "ref01_02",
+    "triangles": 23998,
+    "dimensions": [
+      0.525,
+      0.514,
+      0.409
+    ]
+  },
+  {
+    "id": "ref01_03",
+    "triangles": 24000,
+    "dimensions": [
+      1.597,
+      0.036,
+      2.126
+    ]
+  },
+  {
+    "id": "ref01_04",
+    "triangles": 19384,
+    "dimensions": [
+      0.945,
+      0.934,
+      0.813
+    ]
+  },
+  {
+    "id": "ref01_05",
+    "triangles": 15392,
+    "dimensions": [
+      0.782,
+      0.902,
+      0.785
+    ]
+  },
+  {
+    "id": "ref01_06",
+    "triangles": 3952,
+    "dimensions": [
+      0.38,
+      1.4,
+      0.342
+    ]
+  },
+  {
+    "id": "ref01_07",
+    "triangles": 15392,
+    "dimensions": [
+      0.782,
+      0.902,
+      0.785
+    ]
+  },
+  {
+    "id": "ref01_08",
+    "triangles": 9900,
+    "dimensions": [
+      0.461,
+      0.469,
+      0.461
+    ]
+  },
+  {
+    "id": "ref01_09",
+    "triangles": 8932,
+    "dimensions": [
+      0.503,
+      1.633,
+      0.25
+    ]
+  },
+  {
+    "id": "ref01_10",
+    "triangles": 2216,
+    "dimensions": [
+      0.44,
+      0.53,
+      0.402
+    ]
+  },
+  {
+    "id": "ref02_01",
+    "triangles": 960,
+    "dimensions": [
+      0.44,
+      0.44,
+      0.44
+    ]
+  },
+  {
+    "id": "ref02_02",
+    "triangles": 24000,
+    "dimensions": [
+      0.698,
+      1.078,
+      0.03
+    ]
+  },
+  {
+    "id": "ref02_03",
+    "triangles": 2108,
+    "dimensions": [
+      0.5,
+      0.52,
+      0.5
+    ]
+  },
+  {
+    "id": "ref02_04",
+    "triangles": 2216,
+    "dimensions": [
+      0.44,
+      0.53,
+      0.402
+    ]
+  },
+  {
+    "id": "ref02_05",
+    "triangles": 3384,
+    "dimensions": [
+      0.921,
+      0.778,
+      0.82
+    ]
+  },
+  {
+    "id": "ref02_06",
+    "triangles": 1164,
+    "dimensions": [
+      0.436,
+      0.461,
+      0.117
+    ]
+  },
+  {
+    "id": "ref02_07",
+    "triangles": 1164,
+    "dimensions": [
+      0.335,
+      0.348,
+      0.09
+    ]
+  },
+  {
+    "id": "ref02_08",
+    "triangles": 1164,
+    "dimensions": [
+      0.233,
+      0.235,
+      0.063
+    ]
+  },
+  {
+    "id": "ref02_09",
+    "triangles": 6244,
+    "dimensions": [
+      0.74,
+      1.083,
+      0.898
+    ]
+  },
+  {
+    "id": "ref02_10",
+    "triangles": 672,
+    "dimensions": [
+      0.28,
+      0.37,
+      0.28
+    ]
+  },
+  {
+    "id": "ref03_01",
+    "triangles": 3404,
+    "dimensions": [
+      0.956,
+      1.014,
+      0.665
+    ]
+  },
+  {
+    "id": "ref03_02",
+    "triangles": 3404,
+    "dimensions": [
+      0.956,
+      1.014,
+      0.665
+    ]
+  },
+  {
+    "id": "ref03_03",
+    "triangles": 2792,
+    "dimensions": [
+      0.42,
+      0.505,
+      0.382
+    ]
+  },
+  {
+    "id": "ref03_04",
+    "triangles": 24000,
+    "dimensions": [
+      0.462,
+      0.722,
+      0.443
+    ]
+  },
+  {
+    "id": "ref03_05",
+    "triangles": 900,
+    "dimensions": [
+      1.018,
+      0.409,
+      0.55
+    ]
+  },
+  {
+    "id": "ref03_06",
+    "triangles": 1200,
+    "dimensions": [
+      0.448,
+      0.489,
+      0.4
+    ]
+  },
+  {
+    "id": "ref03_07",
+    "triangles": 900,
+    "dimensions": [
+      0.448,
+      0.489,
+      0.4
+    ]
+  },
+  {
+    "id": "ref03_08",
+    "triangles": 672,
+    "dimensions": [
+      0.28,
+      0.37,
+      0.28
+    ]
+  },
+  {
+    "id": "ref04_01",
+    "triangles": 3572,
+    "dimensions": [
+      0.984,
+      1.025,
+      0.773
+    ]
+  },
+  {
+    "id": "ref04_02",
+    "triangles": 3408,
+    "dimensions": [
+      0.921,
+      0.856,
+      0.735
+    ]
+  },
+  {
+    "id": "ref04_03",
+    "triangles": 19832,
+    "dimensions": [
+      0.837,
+      0.902,
+      0.785
+    ]
+  },
+  {
+    "id": "ref04_04",
+    "triangles": 3384,
+    "dimensions": [
+      0.921,
+      0.778,
+      0.82
+    ]
+  },
+  {
+    "id": "ref04_05",
+    "triangles": 4188,
+    "dimensions": [
+      0.74,
+      0.944,
+      0.76
+    ]
+  },
+  {
+    "id": "ref04_06",
+    "triangles": 7036,
+    "dimensions": [
+      0.74,
+      1.1,
+      0.701
+    ]
+  },
+  {
+    "id": "ref04_07",
+    "triangles": 24000,
+    "dimensions": [
+      0.945,
+      0.934,
+      0.813
+    ]
+  },
+  {
+    "id": "ref04_08",
+    "triangles": 24000,
+    "dimensions": [
+      0.946,
+      0.934,
+      0.812
+    ]
+  },
+  {
+    "id": "ref04_09",
+    "triangles": 656,
+    "dimensions": [
+      0.5,
+      0.981,
+      0.706
+    ]
+  },
+  {
+    "id": "ref04_10",
+    "triangles": 3348,
+    "dimensions": [
+      0.86,
+      1.115,
+      0.969
+    ]
+  },
+  {
+    "id": "ref04_11",
+    "triangles": 9412,
+    "dimensions": [
+      0.92,
+      1.192,
+      0.815
+    ]
+  },
+  {
+    "id": "ref04_12",
+    "triangles": 7208,
+    "dimensions": [
+      0.92,
+      0.845,
+      0.783
+    ]
+  },
+  {
+    "id": "ref04_13",
+    "triangles": 15392,
+    "dimensions": [
+      0.782,
+      0.902,
+      0.785
+    ]
+  },
+  {
+    "id": "ref04_14",
+    "triangles": 2856,
+    "dimensions": [
+      0.77,
+      0.845,
+      0.8
+    ]
+  },
+  {
+    "id": "ref05_01",
+    "triangles": 4816,
+    "dimensions": [
+      0.74,
+      0.98,
+      0.701
+    ]
+  },
+  {
+    "id": "ref05_02",
+    "triangles": 24000,
+    "dimensions": [
+      0.945,
+      0.934,
+      0.813
+    ]
+  },
+  {
+    "id": "ref05_03",
+    "triangles": 7192,
+    "dimensions": [
+      0.92,
+      1.332,
+      0.815
+    ]
+  },
+  {
+    "id": "ref05_04",
+    "triangles": 17752,
+    "dimensions": [
+      0.795,
+      0.876,
+      0.879
+    ]
+  },
+  {
+    "id": "ref05_05",
+    "triangles": 19832,
+    "dimensions": [
+      0.837,
+      0.902,
+      0.785
+    ]
+  },
+  {
+    "id": "ref05_06",
+    "triangles": 15392,
+    "dimensions": [
+      0.782,
+      0.902,
+      0.785
+    ]
+  },
+  {
+    "id": "ref05_07",
+    "triangles": 9412,
+    "dimensions": [
+      0.92,
+      1.192,
+      0.815
+    ]
+  },
+  {
+    "id": "ref05_08",
+    "triangles": 6604,
+    "dimensions": [
+      0.768,
+      0.95,
+      0.725
+    ]
+  },
+  {
+    "id": "ref05_09",
+    "triangles": 7192,
+    "dimensions": [
+      0.92,
+      1.332,
+      0.815
+    ]
+  },
+  {
+    "id": "ref05_10",
+    "triangles": 14852,
+    "dimensions": [
+      0.646,
+      0.923,
+      0.759
+    ]
+  },
+  {
+    "id": "ref05_11",
+    "triangles": 24000,
+    "dimensions": [
+      0.795,
+      0.776,
+      0.86
+    ]
+  },
+  {
+    "id": "ref05_12",
+    "triangles": 24000,
+    "dimensions": [
+      0.945,
+      0.934,
+      0.813
+    ]
+  },
+  {
+    "id": "ref05_13",
+    "triangles": 9128,
+    "dimensions": [
+      0.92,
+      0.775,
+      0.783
+    ]
+  },
+  {
+    "id": "ref06_01",
+    "triangles": 3384,
+    "dimensions": [
+      0.921,
+      0.778,
+      0.82
+    ]
+  },
+  {
+    "id": "ref06_02",
+    "triangles": 24000,
+    "dimensions": [
+      0.945,
+      0.934,
+      0.813
+    ]
+  },
+  {
+    "id": "ref06_03",
+    "triangles": 15392,
+    "dimensions": [
+      0.782,
+      0.902,
+      0.785
+    ]
+  },
+  {
+    "id": "ref06_04",
+    "triangles": 7208,
+    "dimensions": [
+      0.92,
+      0.775,
+      0.783
+    ]
+  },
+  {
+    "id": "ref06_05",
+    "triangles": 3404,
+    "dimensions": [
+      0.956,
+      1.014,
+      0.665
+    ]
+  },
+  {
+    "id": "ref06_06",
+    "triangles": 15392,
+    "dimensions": [
+      0.782,
+      0.902,
+      0.785
+    ]
+  },
+  {
+    "id": "ref06_07",
+    "triangles": 17376,
+    "dimensions": [
+      0.795,
+      0.776,
+      0.86
+    ]
+  },
+  {
+    "id": "ref06_08",
+    "triangles": 15392,
+    "dimensions": [
+      0.782,
+      0.902,
+      0.785
+    ]
+  },
+  {
+    "id": "ref06_09",
+    "triangles": 19384,
+    "dimensions": [
+      0.945,
+      0.934,
+      0.813
+    ]
+  },
+  {
+    "id": "ref06_10",
+    "triangles": 24000,
+    "dimensions": [
+      0.945,
+      0.934,
+      0.813
+    ]
+  },
+  {
+    "id": "ref06_11",
+    "triangles": 7192,
+    "dimensions": [
+      0.92,
+      1.192,
+      0.815
+    ]
+  },
+  {
+    "id": "ref06_12",
+    "triangles": 656,
+    "dimensions": [
+      0.5,
+      0.981,
+      0.706
+    ]
+  },
+  {
+    "id": "ref06_13",
+    "triangles": 900,
+    "dimensions": [
+      0.448,
+      0.489,
+      0.4
+    ]
+  },
+  {
+    "id": "ref06_14",
+    "triangles": 1880,
+    "dimensions": [
+      0.5,
+      0.52,
+      0.5
+    ]
+  },
+  {
+    "id": "ref06_15",
+    "triangles": 900,
+    "dimensions": [
+      0.48,
+      0.49,
+      0.44
+    ]
+  },
+  {
+    "id": "ref06_16",
+    "triangles": 1200,
+    "dimensions": [
+      0.48,
+      0.49,
+      0.44
+    ]
+  },
+  {
+    "id": "ref06_17",
+    "triangles": 8732,
+    "dimensions": [
+      0.448,
+      0.555,
+      0.448
+    ]
+  },
+  {
+    "id": "ref06_18",
+    "triangles": 376,
+    "dimensions": [
+      0.5,
+      0.52,
+      0.5
+    ]
+  },
+  {
+    "id": "ref06_19",
+    "triangles": 376,
+    "dimensions": [
+      0.5,
+      0.52,
+      0.5
+    ]
+  },
+  {
+    "id": "ref06_20",
+    "triangles": 376,
+    "dimensions": [
+      0.5,
+      0.52,
+      0.5
+    ]
+  },
+  {
+    "id": "ref06_21",
+    "triangles": 1200,
+    "dimensions": [
+      0.448,
+      0.489,
+      0.4
+    ]
+  },
+  {
+    "id": "ref06_22",
+    "triangles": 24000,
+    "dimensions": [
+      0.31,
+      0.472,
+      0.31
+    ]
+  },
+  {
+    "id": "ref06_23",
+    "triangles": 376,
+    "dimensions": [
+      0.5,
+      0.52,
+      0.5
+    ]
+  },
+  {
+    "id": "ref06_24",
+    "triangles": 376,
+    "dimensions": [
+      0.5,
+      0.52,
+      0.5
+    ]
+  },
+  {
+    "id": "ref06_25",
+    "triangles": 376,
+    "dimensions": [
+      0.5,
+      0.4,
+      0.5
+    ]
+  },
+  {
+    "id": "ref07_01",
+    "triangles": 19832,
+    "dimensions": [
+      0.837,
+      0.902,
+      0.785
+    ]
+  },
+  {
+    "id": "ref07_02",
+    "triangles": 24000,
+    "dimensions": [
+      0.945,
+      0.934,
+      0.813
+    ]
+  },
+  {
+    "id": "ref07_03",
+    "triangles": 24000,
+    "dimensions": [
+      0.795,
+      0.776,
+      0.86
+    ]
+  },
+  {
+    "id": "ref07_04",
+    "triangles": 24000,
+    "dimensions": [
+      0.945,
+      0.934,
+      0.813
+    ]
+  },
+  {
+    "id": "ref07_05",
+    "triangles": 24000,
+    "dimensions": [
+      0.945,
+      0.934,
+      0.813
+    ]
+  },
+  {
+    "id": "ref07_06",
+    "triangles": 15392,
+    "dimensions": [
+      0.782,
+      0.902,
+      0.785
+    ]
+  },
+  {
+    "id": "ref07_07",
+    "triangles": 7208,
+    "dimensions": [
+      0.92,
+      0.775,
+      0.783
+    ]
+  },
+  {
+    "id": "ref07_08",
+    "triangles": 15392,
+    "dimensions": [
+      0.782,
+      0.942,
+      0.72
+    ]
+  },
+  {
+    "id": "ref07_09",
+    "triangles": 19832,
+    "dimensions": [
+      0.837,
+      0.902,
+      0.785
+    ]
+  },
+  {
+    "id": "ref07_10",
+    "triangles": 17376,
+    "dimensions": [
+      0.795,
+      0.776,
+      0.86
+    ]
+  },
+  {
+    "id": "ref07_11",
+    "triangles": 3384,
+    "dimensions": [
+      0.921,
+      0.778,
+      0.82
+    ]
+  },
+  {
+    "id": "ref07_12",
+    "triangles": 19832,
+    "dimensions": [
+      0.837,
+      0.902,
+      0.785
+    ]
+  },
+  {
+    "id": "ref08_01",
+    "triangles": 1632,
+    "dimensions": [
+      0.44,
+      0.53,
+      0.402
+    ]
+  },
+  {
+    "id": "ref08_02",
+    "triangles": 4044,
+    "dimensions": [
+      0.464,
+      0.53,
+      0.447
+    ]
+  },
+  {
+    "id": "ref08_03",
+    "triangles": 1632,
+    "dimensions": [
+      0.44,
+      0.53,
+      0.402
+    ]
+  },
+  {
+    "id": "ref08_04",
+    "triangles": 1644,
+    "dimensions": [
+      0.44,
+      0.42,
+      0.402
+    ]
+  },
+  {
+    "id": "ref08_05",
+    "triangles": 1452,
+    "dimensions": [
+      0.47,
+      0.505,
+      0.46
+    ]
+  },
+  {
+    "id": "ref08_06",
+    "triangles": 2792,
+    "dimensions": [
+      0.42,
+      0.505,
+      0.382
+    ]
+  },
+  {
+    "id": "ref08_07",
+    "triangles": 1644,
+    "dimensions": [
+      0.44,
+      0.46,
+      0.402
+    ]
+  },
+  {
+    "id": "ref08_08",
+    "triangles": 4472,
+    "dimensions": [
+      0.443,
+      0.53,
+      0.405
+    ]
+  },
+  {
+    "id": "ref08_09",
+    "triangles": 5672,
+    "dimensions": [
+      0.48,
+      0.555,
+      0.48
+    ]
+  },
+  {
+    "id": "ref08_10",
+    "triangles": 1444,
+    "dimensions": [
+      0.44,
+      0.53,
+      0.402
+    ]
+  },
+  {
+    "id": "ref08_11",
+    "triangles": 24000,
+    "dimensions": [
+      0.474,
+      0.505,
+      0.467
+    ]
+  },
+  {
+    "id": "ref08_12",
+    "triangles": 2792,
+    "dimensions": [
+      0.42,
+      0.505,
+      0.382
+    ]
+  }
+]

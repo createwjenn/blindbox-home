@@ -28,7 +28,7 @@ class RoomFloorTest {
     }
 
     @Test fun doorReachesShelfMachineAndPreciseTap() {
-        val targets = listOf(FloorPoint(-.6143f, -3.4012f), FloorPoint(-2.96f, -2.89f))
+        val targets = listOf(FloorPoint(-.6143f, -3.4012f), FloorPoint(-2.65f, -2.60f))
         for (target in targets) {
             val path = RoomFloor.route(door, target)
             assertEquals(target, path.last())
@@ -71,8 +71,20 @@ class RoomFloorTest {
             assertFalse("Obstruction accepted: $invalid", RoomFloor.isWalkable(invalid))
             assertTrue(RoomFloor.route(door, invalid).isEmpty())
         }
-        assertEquals(FloorPoint(-1.88f, 4.04f), RoomFloor.step(door, 0f, 40f))
+        assertEquals(FloorPoint(-1.88f, 3.98f), RoomFloor.step(door, 0f, 40f))
         assertTrue(RoomFloor.route(door, door).isEmpty())
+    }
+
+    @Test fun sustainedMovementMaintainsFurnitureAndWallClearance() {
+        RoomFloor.setFurnishings(listOf(FloorObstacle(0f,0f,1f,1f)))
+        try {
+            var at=FloorPoint(0f,2f)
+            repeat(300) { at=RoomFloor.step(at,0f,-.05f) }
+            assertTrue("Stop at least 30 cm before the object", at.z >= .80f)
+            at=FloorPoint(-2f,0f)
+            repeat(300) { at=RoomFloor.step(at,-.05f,0f) }
+            assertEquals(-3.90f,at.x,.001f)
+        } finally { RoomFloor.setFurnishings(null) }
     }
 
     @Test fun legacySeatedSpawnCanLeaveFurniture() {

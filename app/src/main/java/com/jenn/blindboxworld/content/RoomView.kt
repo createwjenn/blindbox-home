@@ -16,10 +16,6 @@ import com.pico.spatial.tracking.hmd.HMDPose
 import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.hypot
-import kotlin.math.asin
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.floor
 import kotlin.math.sign
 
 internal data class LoftView(val x: Float, val y: Float, val z: Float, val heading: Float)
@@ -143,6 +139,7 @@ internal class RoomMotion {
     private var stepTurn = 0f
     private var replanned = false
     private var analogMoving = false
+    val isNavigating: Boolean get() = analogMoving || goal != null
     private var reportManualStop = false
 
     private fun describe(point: FloorPoint) = String.format(Locale.ROOT, "%.2f, %.2f", point.x, point.z)
@@ -205,8 +202,8 @@ internal class RoomMotion {
         val x = axis(axes.x)
         val forward = axis(axes.forward)
         val turn = if (enableTurn) (axis(axes.turn) + axes.pan).coerceIn(-1f, 1f) else 0f
-        val tilt = if (enableTurn) axes.tilt else 0f
-        val zoom = axis(input.zoomAxis)
+        val tilt = if (enableTurn) (axes.tilt + axis(input.zoomAxis)).coerceIn(-1f,1f) else 0f
+        val zoom = 0f // The right stick controls view pitch in the room, not forward motion.
         val wheel = ViewZoom.advance(dt)
         val walking = x != 0f || forward != 0f || turn != 0f || tilt != 0f || zoom != 0f || wheel != 0f
         if (walking) {
@@ -355,66 +352,31 @@ internal suspend fun navigateInterior(
     }
 }
 
-/** Sample the space between the target and the eye, stopping before a raised bank or wall. */
-internal class WorldCameraClearance(private val terrain: WorldTerrain) {
-    private fun key(x: Int, z: Int) = (x.toLong() shl 32) or (z.toLong() and 0xffffffffL)
-    private val columns = terrain.cells.indices.groupBy { index ->
-        val cell = terrain.cells[index]
-        key(cell.ix, cell.iz)
-    }
-
-    fun available(focus: Vector3, direction: Vector3, requested: Float): Float {
-        val stride = terrain.cell * WORLD_SCALE * .4f
-        var distance = stride
-        while (distance < requested) {
-            val sample = focus + direction * distance
-            val x = (sample.x - terrain.origin.x) / WORLD_SCALE
-            val z = (sample.z - terrain.origin.z) / WORLD_SCALE
-            val column = columns[key(floor(x / terrain.cell).toInt(), floor(z / terrain.cell).toInt())]
-            if (column == null || column.all { terrain.origin.y + terrain.bedAt(it, x, z) * WORLD_SCALE + .09f > sample.y })
-                return (distance - stride).coerceAtLeast(0f)
-            distance += stride
-        }
-        return requested
-    }
-}
-
-/** Orbit the optical center of the character, including while the tracked head itself pans. */
+/** Follow translation from a fixed tracking-space anchor. Head motion never orbits the world.
+ * Navigation cells constrain the character only, never the spectator camera. */
 internal suspend fun followWorldActor(root: Entity, garden: Entity, actor: Entity, pose: () -> HMDPose?,
-                                      input: CourtyardInput, terrain: WorldTerrain, wake: SwimWake) {
-    val visibility = WorldCameraClearance(terrain)
+                                      input: CourtyardInput) {
     val gardenTransform = garden.components[TransformComponent::class.java] ?: return
     ViewZoom.clear()
-    var requested = 2.35f
-    var distance = requested
+    var anchor: Vector3? = null
+    var entryYaw = 0f
+    var distance = 2.35f
     var previous = withFrameNanos { it }
     while (true) {
         val now = withFrameNanos { it }
         val dt = ((now - previous) * 1e-9f).coerceIn(0f, .05f)
         previous = now
-        val head = pose() ?: continue
-        val forward = head.rotation.rotateVector(Vector3(0f, 0f, -1f))
-        val headPitch = Math.toDegrees(asin(forward.y.coerceIn(-1f, 1f)).toDouble()).toFloat()
-        val headYaw = head.headingDegrees() - root.heading()
-        requested = (requested - axis(input.zoomAxis) * 2f * dt - ViewZoom.advance(dt)).coerceIn(1.25f, 3.5f)
-        val focus = actor.pos() + Vector3(0f, ACTOR_HEIGHT * (.50f + .29f * wake.immersion), 0f)
-        var elevation = (16f - headPitch - input.orbitPitch).coerceIn(4f, 72f)
-        val (bx, bz) = rotY(0f, 1f, headYaw - input.orbitYaw)
-        fun openDistance(): Float {
-            val radians = Math.toRadians(elevation.toDouble()).toFloat()
-            return visibility.available(focus, Vector3(bx * cos(radians), sin(radians), bz * cos(radians)), requested)
+        if (anchor == null) {
+            val entry = pose() ?: continue
+            anchor = entry.position
+            entryYaw = entry.headingDegrees()
         }
-        var available = openDistance()
-        // A close wall can require looking down from above the actor's own cell.
-        while (available < 1.2f && elevation < 88f) {
-            elevation = (elevation + 8f).coerceAtMost(88f)
-            available = openDistance()
-        }
-        val limit = available.coerceAtLeast(.85f)
-        distance = (distance + (limit - distance) * (dt * 7f).coerceAtMost(1f)).coerceAtMost(limit)
-        gardenTransform.setQuaternion(viewRotation(input.orbitYaw, headYaw, headPitch + elevation))
+        distance = (distance - axis(input.zoomAxis) * 2f * dt - ViewZoom.advance(dt)).coerceIn(1.25f, 3.5f)
+        val focus = WorldVerification.focus ?: (actor.pos() + Vector3(0f, ACTOR_HEIGHT * .5f, 0f))
+        gardenTransform.setQuaternion(EulerAngles(16f - input.orbitPitch, input.orbitYaw, 0f).toQuat())
         val target = garden.convertPositionTo(focus, root)
-        val desired = root.convertPositionFrom(head.position + forward * distance, null)
+        val (dx, dz) = rotY(0f, -distance, entryYaw)
+        val desired = root.convertPositionFrom(anchor + Vector3(dx, 0f, dz), null)
         moveViewer(root, desired, target)
     }
 }

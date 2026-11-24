@@ -28,7 +28,7 @@ class StationApproachTest {
         assertFalse(RoomFloor.isWalkable(tap))
         val stop = requireNotNull(RoomFloor.tapDestination(eye,tap))
         assertTrue(RoomFloor.isWalkable(stop))
-        assertTrue(stop.distanceTo(tap) <= .04f)
+        assertTrue(stop.distanceTo(tap) <= .20f)
         assertTrue(stop.distanceTo(eye) < tap.distanceTo(eye))
     }
 

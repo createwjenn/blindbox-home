@@ -103,8 +103,20 @@ internal class WorldTerrain(
                 }
             }
             val picks = json.getJSONArray("pickups")
-            require(picks.length() == WORLD_PICKUPS)
-            WorldTerrain(json.getDouble("cell").toFloat(), cells, List(WORLD_PICKUPS) { picks.getInt(it) },
+            require(picks.length() == WORLD_PICKUPS) { "$slug must contain $WORLD_PICKUPS pickups" }
+            val pickupCells = List(WORLD_PICKUPS) { picks.getInt(it) }
+            require(pickupCells.distinct().size == WORLD_PICKUPS) { "$slug has overlapping pickup cells" }
+            require(pickupCells.all { it in cells.indices }) { "$slug has an invalid pickup cell" }
+            val reachable = mutableSetOf(0)
+            val pending = ArrayDeque<Int>(); pending.add(0)
+            while (pending.isNotEmpty()) {
+                for (next in cells[pending.removeFirst()].links) {
+                    require(next == -1 || next in cells.indices) { "$slug has an invalid navigation link" }
+                    if (next >= 0 && reachable.add(next)) pending.add(next)
+                }
+            }
+            require(pickupCells.all { it in reachable }) { "$slug has a pickup disconnected from the spawn" }
+            WorldTerrain(json.getDouble("cell").toFloat(), cells, pickupCells,
                 json.getDouble("runSpeed").toFloat())
         }
     }

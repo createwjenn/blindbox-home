@@ -42,8 +42,16 @@ trim=mat('Door moulding','CE3B2B',.12,.75);shadow=mat('Ebony','342720')
 walnut=mat('Oiled walnut','63402B')
 brass=mat('Satin brass','CDAB67',.52,.48)
 D=0
-box('Outer frame',(0,D+.04,1.25),(1.42,.20,2.52),walnut,.018)
-box('Door reveal',(0,D-.025,1.21),(1.27,.12,2.43),shadow,.008)
+# Open jamb: the doorway must remain hollow when the leaf swings inward.
+for x in [-.665,.665]:
+    box('Door jamb',(x,D+.04,1.25),(.09,.20,2.52),walnut,.018)
+box('Door lintel',(0,D+.04,2.465),(1.42,.20,.09),walnut,.018)
+# A deep, dark recess occludes the sky, with enough depth for the inward leaf.
+interior=mat('Unlit dark doorway','080706',0,0)
+box('Dark rear of doorway',(0,D+1.45,1.25),(1.42,.06,2.52),interior,0)
+for x in [-.70,.70]:box('Dark doorway side',(x,D+.74,1.25),(.05,1.45,2.52),interior,0)
+for z in [0,2.50]:box('Dark doorway soffit',(0,D+.74,z),(1.42,1.45,.05),interior,0)
+fixed=list(bpy.context.scene.objects)
 box('Front door',(0,D-.063,1.21),(1.19,.068,2.38),red,.008)
 def panel(x,z,w,h):
     box('Field',(x,D-.102,z),(w,.012,h),inset)
@@ -60,15 +68,18 @@ for x in [-.168,.168]:ellipsoid('Plaque screw',(x,D-.161,1.87),(.005,.003,.005),
 rod('Rosette',(.457,D-.095,1.02),(.457,D-.126,1.02),.065,brass)
 rod('Spindle',(.457,D-.126,1.02),(.457,D-.178,1.02),.022,brass)
 ellipsoid('Round knob',(.457,D-.197,1.02),(.059,.057,.059),brass)
-# Collapse the frame, slab, fixed hardware and 404 plaque to a single
-# named, metre-scaled node. Its origin sits at floor level beneath the knob.
-bpy.ops.object.select_all(action='SELECT')
-bpy.ops.object.convert(target='MESH')
-bpy.ops.object.join()
-door=bpy.context.object
-bpy.ops.object.transform_apply(location=True,rotation=True,scale=True)
-door.name='Entry door'
-door.location=(0,4.12,0.86)
+# Keep the fixed jamb and hinged leaf separate, with the original entry anchor.
+leaf=[o for o in bpy.context.scene.objects if o not in fixed]
+bpy.ops.object.select_all(action='DESELECT')
+for o in leaf:o.select_set(True)
+bpy.context.view_layer.objects.active=leaf[0]
+bpy.ops.object.convert(target='MESH');bpy.ops.object.join()
+leaf=bpy.context.object
+bpy.context.scene.cursor.location=(-.595,0,0)
+bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
+leaf.name='Door leaf'
+bpy.ops.object.empty_add(location=(0,4.12,.86));door=bpy.context.object;door.name='Entry door'
+for o in fixed+[leaf]:o.parent=door
 
 # Unboxing blue is visible immediately while the live cirrus shader attaches.
 bpy.ops.mesh.primitive_uv_sphere_add(segments=64, ring_count=48, radius=48, location=(0, 0, 1.55))
@@ -95,6 +106,11 @@ doc=json.loads(raw[20:20+size])
 material=next(m for m in doc['materials'] if m['name']=='Atmospheric gradient')
 material['extensions']={'KHR_materials_unlit':{}}
 material['doubleSided']=True
+for m in doc['materials']:
+    if m['name']=='Unlit dark doorway':
+        m['extensions']={'KHR_materials_unlit':{}}
+        m['doubleSided']=True
+
 doc['extensionsUsed']=sorted(set(doc.get('extensionsUsed',[]))|{'KHR_materials_unlit'})
 header=json.dumps(doc,separators=(',',':')).encode()
 header+=b' '*(-len(header)%4)

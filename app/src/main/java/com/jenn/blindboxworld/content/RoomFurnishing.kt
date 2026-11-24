@@ -16,7 +16,7 @@ internal data class Furnishing(
     val price: Int = 0, val thumbnail: Int = 0, val category: String = "", val baseYaw: Float = 0f,
 ) {
     val swappableArt get() = category in setOf("frame", "art") || id in setOf("ochre-canvas", "unboxing-print", "slop-print", "capybara-print")
-    val blocksWalk get() = !wall && id != "wool-rug"
+    val blocksWalk get() = !wall && id != "wool-rug" && category != "rug"
     val asset get() = if (id.startsWith("art:")) "furniture/painting_${id.removePrefix("art:").replace('-', '_')}.glb"
                       else "furniture/$id.glb"
 }
@@ -28,7 +28,7 @@ private fun built(id: String, title: String, x: Float, y: Float, z: Float, w: Fl
 internal val loftPieces = listOf(
     built("stand","Display stand",0f,0f,-1.7f,.56f,1.21f,.56f),
     built("machine","Gumball machine",GACHA_X,0f,GACHA_Z,1.12f,1.83f,1.12f),
-    built("record-player","Record player",-.55f,.905f,-4.12f,.46f,.2f,.36f,tabletop=true),
+    built("record-player","Record player",-.55f,.905f,-4.12f,.46f,.40f,.37f,tabletop=true),
     built("console","Listening shelf",0f,0f,-4.12f,3f,.905f,.44f),
     built("vinyl-rack","Record rack",.65f,.905f,-4.12f,1.17f,.32f,.31f,tabletop=true),
     built("mushroom","Mushroom lamp",-1.18f,.905f,-4.12f,.21f,.38f,.21f,tabletop=true),
@@ -290,12 +290,12 @@ internal fun RoomFurnishing.facingItem(eye:RoomSpot, dx:Float, dy:Float, dz:Floa
     var best:String?=null
     var distance=Float.POSITIVE_INFINITY
     for (id in placedIds) {
-        if(id=="machine" || id=="stand" || id=="wool-rug") continue
+        if(id=="machine" || id=="stand") continue
         val item=pieces.getValue(id)
         val p=spot(id)
         val vx=p.x-eye.x;val vy=p.y+(if(item.wall)0f else item.height*.6f)-eye.y;val vz=p.z-eye.z
         val depth=vx*dx+vy*dy+vz*dz
-        if(depth !in .14f..1.75f || depth>distance) continue
+        if(depth !in .14f..2.4f || depth>distance) continue
         val reach=when {item.wall->.22f; id=="record-player"->.29f; else->max(.16f,item.width.coerceAtMost(item.depth)*.42f)}
         val x=vx-depth*dx;val y=vy-depth*dy;val z=vz-depth*dz
         if(x*x+y*y+z*z<reach*reach) {best=id;distance=depth}
@@ -313,4 +313,13 @@ internal fun lookingAtListeningArea(eye: RoomSpot, dx: Float, dy: Float, dz: Flo
     val horizontal = hypot(dx, dz)
     return range in .15f..1.85f && dy in -.85f.. .12f && abs(eye.y - deck.y) < 1.35f &&
         horizontal > .1f && x * dx + z * dz >= .76f * range * horizontal
+}
+
+/** One-time user-requested restoration; subsequent furniture moves remain persistent. */
+internal fun restoreUnboxPoster(prefs: SharedPreferences) {
+    if (!prefs.getBoolean("restoredUnboxPoster20261124",false)) {
+        prefs.edit().remove("decor.unboxing-print")
+            .putStringSet("storedRoomArt",prefs.getStringSet("storedRoomArt",emptySet()).orEmpty()-"unboxing-print")
+            .putBoolean("restoredUnboxPoster20261124",true).apply()
+    }
 }

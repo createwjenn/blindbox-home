@@ -156,5 +156,7 @@ def setup(key,typ,k,tint):
 if __name__=='__main__':
  meta=[]
  setup('shop','shop',0,'DEBC65')
- for i,(key,title,typ,tint,price) in enumerate(CAT):meta.append((key,title,typ,tint,price,*setup(key,typ,i%3,tint)))
+ from shop_pricing import shop_price
+ for i,(key,title,typ,tint,price) in enumerate(CAT):
+  dims=setup(key,typ,i%3,tint);meta.append((key,title,typ,tint,shop_price(typ,*dims),*dims))
  (MODELS/'catalogue.json').write_text(json.dumps(meta,indent=1)+'\n')

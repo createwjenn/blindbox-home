@@ -6,6 +6,7 @@ import json
 import random
 import struct
 from PIL import Image, ImageDraw, ImageFilter
+from skyline_textures import water_image, facade_image, atmosphere_image
 
 ASSETS = Path(__file__).resolve().parents[1] / 'app/src/main/assets'
 PHASES = {
@@ -95,9 +96,28 @@ def write_look(source, bin_length, phase, cloudy):
     for mat in doc['materials']:
         name = mat['name']
         if name == 'Evening sky':
-            texture(mat, sky_texture(phase, cloudy))
-        elif name.startswith('City facade ') and phase != 'day':
-            texture(mat, skyline(phase, int(name[-1])))
+            texture(mat, atmosphere_image(phase, cloudy))
+        elif name == 'SF bay water':
+            texture(mat, water_image(phase))
+        elif name.startswith('SF '):
+            colors = {
+                'SF bridge steel': ('718490','2C3B4C'), 'SF bridge cables': ('B4C6CC','65829B'),
+                'SF roadway': ('485661','101B2C'), 'SF bridge lights': ('FFE4A3','FFDF99'),
+                'SF island': ('526E69','1A2A35'), 'SF shoreline': ('798A84','253443'),
+                'SF city streets': ('66727A','18212B'), 'SF city blocks': ('93928A','27313B'),
+                'SF parks': ('3D5547','101F1C'), 'SF rooftop equipment': ('515B61','17232C'),
+                'SF crown': ('BACBD0','607E9A'), 'SF rooftop': ('59646D','263445'),
+            }
+            if name in colors:
+                day, night = colors[name]
+                color = rgb(night if phase == 'night' else day)
+                if phase in ('sunrise','sunset'):
+                    color = mix(color, (244,170,119), .18 if phase == 'sunrise' else .30)
+                values=[round(c/255,4) for c in color]
+                mat['pbrMetallicRoughness']['baseColorFactor']=[*values,1]
+                mat['emissiveFactor']=[v*(1 if name=='SF bridge lights' else .65) for v in values]
+        elif name.startswith('City facade '):
+            texture(mat, facade_image(phase, int(name[-1])))
         elif name == 'Baked loft illumination':
             mat['emissiveFactor'] = [round(v*(.81 if cloudy else 1),3) for v in PHASES[phase][1]]
         elif name == 'Zinc roof' and phase=='night':

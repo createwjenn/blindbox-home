@@ -32,3 +32,8 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+# Local Python caches and emulator verification captures
+__pycache__/
+*.pyc
+verification/

@@ -107,6 +107,19 @@ private class Refs {
     var settled = true
     var vitrine: Entity? = null
     var standMount: Entity? = null
+    var curtain: Entity? = null
+    private val travelMutex = kotlinx.coroutines.sync.Mutex()
+    suspend fun blackTravel(move: () -> Unit) {
+        travelMutex.lock()
+        val mask = curtain
+        try {
+            mask?.enabled = true
+            for (f in 0..8) { mask?.setOpacity(f/8f); delay(20) }
+            move()
+            delay(40)
+            for (f in 8 downTo 0) { mask?.setOpacity(f/8f); delay(20) }
+        } finally { mask?.takeIf { it.valid }?.enabled = false; travelMutex.unlock() }
+    }
     var presentationHead: Entity? = null
     var libraryPanel: Entity? = null
     var libraryCenter: Vector3? = null
@@ -142,7 +155,7 @@ private class Refs {
         prizePreparation = null
         libraryPanel = null
         libraryCenter = null
-        presentationHead = null; machineMount = null; crankCue = null; trayCue = null; prizeGlow = null
+        curtain = null; presentationHead = null; machineMount = null; crankCue = null; trayCue = null; prizeGlow = null
         root = null; box = null; light = null; island = null; islandId = null; vitrine = null; standMount = null; machine = null
         crank = null; crankGlow = null; slot = null; chute = null; coin = null; stock = null; plus = null
         sparks.fill(null); holding = false; dropping = false; coinDrag = false; settled = true
@@ -157,9 +170,9 @@ internal val Cream = Color(0xFFFFF4E6) // design-style: fixed-figma-color cream 
 internal val Gold = Color(0xFFFFD45C) // design-style: fixed-figma-color gold control accents in the room HUD
 
 @Composable
-fun HomeStage(hmd: HMDTrackingProvider?) {
+fun HomeStage(hmd: HMDTrackingProvider?, entryThreshold: Float = 0f, onExitDoor: () -> Unit = {}, onRoomReady: () -> Unit = {}) {
     val context = LocalContext.current
-    val prefs = context.getSharedPreferences("blindbox", Context.MODE_PRIVATE)
+    val prefs = context.getSharedPreferences("blindbox", Context.MODE_PRIVATE).also(::restoreUnboxPoster)
     val furnishing = remember(prefs) { RoomFurnishing(context,prefs) }
     val view = LocalView.current
     val density = LocalDensity.current
@@ -169,6 +182,8 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
     val scope = rememberCoroutineScope()
     val sfx = remember { Sfx() }
     DisposableEffect(sfx) { onDispose { sfx.release() } }
+    var entryMask by remember { mutableStateOf<Entity?>(null) }
+    LaunchedEffect(entryThreshold,entryMask) { entryMask?.enabled=entryThreshold>0f }
     var returnView by remember { mutableStateOf(doorwayView) }
 
     val unboxedAt = remember { androidx.compose.runtime.mutableStateMapOf<String, Long>().apply {
@@ -224,6 +239,7 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
     val meter: MutableFloatState = remember { mutableFloatStateOf(0f) }
     val refs = remember { Refs() }
     val roomMotion = remember { RoomMotion() }
+    var reducedMotion by remember { mutableStateOf(prefs.getBoolean("reducedMotion", true)) }
     val ownedIds by rememberUpdatedState(remember(owned) { FIGURE_IDS.filter { it in owned } })
     val roomNow by rememberUpdatedState(room)
     val stepNow by rememberUpdatedState(step)
@@ -313,28 +329,11 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
             val root = refs.root ?: return@launch
             if (toMachine || refs.rootAtMachine) {
                 sfx.play(root, "whoosh", 0.5f)
-                for (f in 10 downTo 0) { root.setOpacity(f / 10f); delay(18) }
-                setRootView(toMachine)
+                refs.blackTravel { setRootView(toMachine) }
             }
             room = if (toMachine) Room.MACHINE else if (roomNow == Room.MACHINE) Room.PLINTH else roomNow
-            for (f in 0..10) { root.setOpacity(f / 10f); delay(18) }
             if (toMachine) spawnCoin()
         }
-    }
-
-    fun stepAwayFromMachine() {
-        dismissedMachine = true
-        refs.rootAtMachine = false
-        room = Room.PLINTH
-        refs.coin?.enabled = false
-        val root = refs.root ?: return
-        val head = hmd?.latestData?.hmdPose?.position ?: return
-        val viewer = root.convertPositionFrom(head, null)
-        val spot = furnishing.spot("machine")
-        val dx = viewer.x - spot.x
-        val dz = viewer.z - spot.z
-        val distance = hypot(dx, dz).coerceAtLeast(.01f)
-        roomMotion.walkTo(viewer.x + .82f * dx / distance, viewer.z + .82f * dz / distance)
     }
 
     /** Whoosh + fade the current scene out, then switch scene. */
@@ -457,7 +456,9 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
         roomMotion.cancelWalk()
         try {
             sfx.play(fig, "whoosh", 0.56f)
-            frameCollectibleStand(root, stand, refs.rootYaw, hmd?.latestData?.hmdPose) { refs.rootYaw = it }
+            if (reducedMotion) {
+                refs.blackTravel { refs.rootYaw = root.alignView(stationView(stand, false), hmd?.latestData?.hmdPose) }
+            } else frameCollectibleStand(root, stand, refs.rootYaw, hmd?.latestData?.hmdPose) { refs.rootYaw = it }
             Log.i("BlindboxGacha", "Stand framed for $id")
             vitrine(true, 0.52f)
             flyFigureToStand(root, fig, foot, previous)
@@ -646,6 +647,12 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
             sfx.play(spark, "spark_catch")
             spark.enabled = false
         }
+        if (caught.size == WORLD_PICKUPS && WorldVerification.active) {
+            round.stop(RoundPhase.FINISHED)
+            round.preview = true
+            Log.i("WorldVerification", "complete $figure contacts=${caught.size}")
+            return
+        }
         if (caught.size == WORLD_PICKUPS) {
             stars = stars + figure; prefs.edit().putStringSet("stars", stars).apply()
             round.stop(RoundPhase.FINISHED)
@@ -661,9 +668,12 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
     val recordMusic = rememberRoomRecordPlayer(playingInRoom = scene == Scene.HOME)
     val sky = rememberLoftSky(scene != Scene.WORLD) ?: return
     val latestSky by rememberUpdatedState(sky)
-    key(scene) {
+    key(scene, if (scene == Scene.WORLD) figure else null) {
         val exhibit = displayed
         val placedModels = remember { mutableMapOf<String, Entity>() }
+        var sceneDisposed by remember { mutableStateOf(false) }
+        var ownedScene by remember { mutableStateOf<Entity?>(null) }
+        var exitDoorPanel by remember { mutableStateOf<Entity?>(null) }
         var card by remember { mutableStateOf(RoomCard.CLOCK) }
         var wardrobeId by remember { mutableStateOf<String?>(null) }
         var draftOutfit by remember { mutableStateOf(emptySet<String>()) }
@@ -679,6 +689,7 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
         } }
         var roomPads by remember { mutableStateOf<Entity?>(null) }
         var roomPanel by remember { mutableStateOf<Entity?>(null) }
+        val menuPointerHeld = remember { java.util.concurrent.atomic.AtomicBoolean(false) }
         val movingItem = placing != null || furnishing.carrying != null
         val placementPointer = rememberPlacementPointer(movingItem, roomMotion)
         var figureTarget by remember { mutableStateOf<RoomSpot?>(null) }
@@ -715,11 +726,23 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
         }
         var proximityItem by remember { mutableStateOf<String?>(null) }
         var ignoredItem by remember { mutableStateOf<String?>(null) }
+        var dismissedAt by remember { mutableStateOf<FloorPoint?>(null) }
+        var hudRestoreUntil by remember { mutableStateOf(0L) }
+        var targetPanel by remember { mutableStateOf<Entity?>(null) }
+        var focusedDecor by remember { mutableStateOf<String?>(null) }
+        fun showDecorTarget(id: String): Boolean {
+            if (id !in furnishing.placedIds || movingItem || (furnishing.shopOpen || wardrobeId != null || pickerPage >= 0)) return false
+            dismissedAt = null
+            ignoredItem = null
+            focusedDecor = id
+            return true
+        }
+
 
         fun selectDecor(id: String): Boolean {
             if (roomNow == Room.OPENING || placing != null || furnishing.carrying != null || furnishing.shopOpen || wardrobeId != null || pickerPage >= 0) return false
             if (id !in furnishing.placedIds) return false
-            inspecting=null; zoomMenu=false; ignoredItem=null
+            inspecting=null; zoomMenu=false; ignoredItem=null; dismissedAt=null
             furnishing.selected=id
             buzz()
             return true
@@ -742,24 +765,41 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
         fun canNavigate() = scene == Scene.HOME && !modalOpen() && roomNow != Room.OPENING &&
             !holdingUi && !refs.coinDrag
 
-        fun walkToFloor(x: Float, z: Float, eye: RoomSpot? = null): Boolean {
-            if (!canNavigate()) return false
-            val station = if (furnishing.carrying != null || placing != null) null else listOf("stand", "machine").filter {
-                val spot = furnishing.spot(it)
-                inStationApproach(x, z, spot, it == "machine") ||
-                    (eye != null && stationOccludesFloor(eye, FloorPoint(x,z), spot, it == "machine"))
-            }.minByOrNull { val spot = furnishing.spot(it); hypot((eye?.x ?: x) - spot.x, (eye?.z ?: z) - spot.z) }
-            val view = station?.let { stationView(furnishing.spot(it), it == "machine") }
-            val destination = when {
-                view != null -> FloorPoint(view.x, view.z)
-                eye != null -> RoomFloor.tapDestination(FloorPoint(eye.x, eye.z), FloorPoint(x,z)) ?: return false
-                else -> FloorPoint(x,z)
+        fun closeRoomMenu() {
+            val id = furnishing.selected ?: when (card) {
+                RoomCard.MACHINE -> "machine"
+                RoomCard.STAND -> "stand"
+                RoomCard.DECOR -> proximityItem
+                else -> null
             }
-            if (!roomMotion.walkTo(destination.x, destination.z, view?.heading)) return false
-            inspecting = null
-            furnishing.selected = null
-            zoomMenu = false
-            return true
+            val root = refs.root
+            val head = hmd?.latestData?.hmdPose
+            val eye = if (root != null && head != null) root.convertPositionFrom(head.position,null) else null
+            val from = eye?.let { FloorPoint(it.x,it.z) }
+            val objectAt = id?.let { furnishing.spot(it) }
+            val forward = head?.rotation?.rotateVector(Vector3(0f,0f,-1f))
+            val back = if (objectAt != null && from != null) FloorPoint(from.x-objectAt.x,from.z-objectAt.z)
+                else forward?.let { val d=toRoot(it.x,it.z); FloorPoint(-d.first,-d.second) } ?: FloorPoint(0f,1f)
+            val destination = from?.let { roomRetreat(it,back) }
+            roomMotion.cancelWalk()
+            furnishing.cancel(); furnishing.closeShop()
+            wardrobeId=null; pickerPage=-1; placing=null; figureTarget=null; inspecting=null; focusedDecor=null
+            zoomMenu=false; ignoredItem=id; dismissedMachine=true; refs.rootAtMachine=false
+            if (room == Room.MACHINE) room=Room.PLINTH
+            refs.coin?.enabled=false
+            card=RoomCard.CLOCK
+            dismissedAt=destination ?: from
+            hudRestoreUntil=SystemClock.uptimeMillis()+2500L
+            if (destination != null) roomMotion.walkTo(destination.x, destination.z)
+            buzz()
+        }
+
+        fun returnToEntrance() {
+            closeRoomMenu()
+            roomMotion.cancelWalk()
+            dismissedAt=FloorPoint(doorwayView.x,doorwayView.z)
+            hudRestoreUntil=SystemClock.uptimeMillis()+2500L
+            roomMotion.walkTo(doorwayView.x,doorwayView.z)
         }
 
         fun closePicker() {
@@ -823,6 +863,7 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
 
         fun backToRoom(): Boolean {
             if (room != Room.WORLD) return false
+            WorldVerification.reset()
             round.stop(RoundPhase.PAUSED)
             go(Room.PLINTH)
             return true
@@ -848,9 +889,9 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
         var worldSkyEntity by remember { mutableStateOf<Entity?>(null) }
         val sticks = remember { CourtyardInput() }
         val keyInput = when {
+            scene == Scene.WORLD -> sticks
             !ready.value -> null
             canNavigate() -> roomMotion.input
-            scene == Scene.WORLD && round.phase == RoundPhase.PLAYING -> sticks
             else -> null
         }
         val currentKeys by rememberUpdatedState(keyInput?.keys)
@@ -866,6 +907,14 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
         var hud by remember { mutableStateOf<Entity?>(null) }
         var nearMachine by remember { mutableStateOf(false) }
         val hudPanels = remember { mutableMapOf<String, Entity>() }
+        val pickupHints = remember { mutableListOf<Entity>() }
+        DisposableEffect(currentKeys, scene) {
+            if (scene == Scene.WORLD) {
+                currentKeys?.onExit = { backToRoom() }
+                currentKeys?.onJump = { sticks.requestJump() }
+            }
+            onDispose { currentKeys?.onExit = null; currentKeys?.onJump = null }
+        }
         fun restart() {
             sticks.clear()
             round.reset()
@@ -879,20 +928,43 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
             round.play()
         }
         DisposableEffect(Unit) { onDispose {
+            sceneDisposed = true
             roomMotion.cancelWalk()
             sfx.stopAmbient()
             worldSkyEntity?.releaseScene()
             hud?.releaseScene()
-            refs.root?.releaseScene()
+            ownedScene?.releaseScene()
+            ownedScene = null
             refs.reset()
         } }
 
         // Debug hook (debuggable builds only) to drive the flow on the emulator:
         // adb shell am broadcast -a com.jenn.blindboxworld.DEBUG -p com.jenn.blindboxworld --es cmd machine|coin|crank|lift|shake|open|plinth
-        if (scene == Scene.HOME && (context.applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE) != 0) DisposableEffect(Unit) {
+        if ((context.applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE) != 0) DisposableEffect(Unit) {
             val receiver = object : android.content.BroadcastReceiver() {
                 override fun onReceive(c: Context, i: android.content.Intent) {
                     when (i.getStringExtra("cmd")) {
+                        "verify-curtain" -> { refs.curtain?.let { it.setOpacity(1f); it.enabled=i.getBooleanExtra("visible",true) } }
+                        "verify-world" -> {
+                            val id = i.getStringExtra("figure") ?: return
+                            if (id !in FIGURE_IDS) return
+                            WorldVerification.reset()
+                            go(Room.WORLD) { figure = id; caught = emptySet(); round.reset(); WorldVerification.active = true }
+                        }
+                        "inspect-pickup" -> {
+                            if (scene != Scene.WORLD) return
+                            val index = i.getIntExtra("index", -1)
+                            WorldVerification.focus = terrain?.pickupPositions?.getOrNull(index)
+                            Log.i("WorldVerification", "inspect $figure index=$index position=${WorldVerification.focus}")
+                        }
+                        "verify-route" -> {
+                            if (scene != Scene.WORLD) return
+                            WorldVerification.focus = null
+                            WorldVerification.route = true
+                            restart()
+                        }
+                        "verify-exit" -> backToRoom()
+
                         "machine" -> travel(true)
                         "plinth" -> travel(false)
                         "coin" -> insertCoin()
@@ -944,7 +1016,9 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
         // Look + pinch taps on 3D entities.
         val tap = Modifier.pointerInput(scene, movingItem) {
             detectSpatialTapGesture(context, targetedToEntity = TargetEntity.any { e ->
-                listOf("placementWalls", "loftFloor", "stationFloor:", "box", "decor:", "placed:", "placementPreview", "coin", "slot", "crank", "machine").any { e.tagged(it) != null }
+                val placementSurface = listOf("placementWalls", "loftFloor", "stationFloor:").any { e.tagged(it) != null }
+                if (placementSurface) placing != null || furnishing.carrying != null
+                else listOf("box", "decor:", "placed:", "placementPreview", "coin", "slot", "crank", "machine").any { e.tagged(it) != null }
             }) { v ->
                 if (modalOpen()) return@detectSpatialTapGesture
                 val hit = v.targetEntity ?: return@detectSpatialTapGesture
@@ -959,25 +1033,12 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                         if (!pointingAtPreview) aimPlacement(Vector3(v.position.x, v.position.y, v.position.z))
                         if (placing != null) figureTarget?.let(::finishPlacement) else finishDecor()
                     }
-                    station != null && placing == null && furnishing.carrying == null -> {
-                        val spot = furnishing.spot(station)
-                        walkToFloor(spot.x, spot.z)
-                    }
-                    hit.tagged("loftFloor") != null || station != null -> {
-                        val content = roomContent ?: return@detectSpatialTapGesture
-                        val root = refs.root ?: return@detectSpatialTapGesture
-                        val p = v.position
-                        val local = content.localHitPosition(Vector3(p.x, p.y, p.z), root) ?: return@detectSpatialTapGesture
-                        val point = floorContact(RoomSpot(local.x, local.y, local.z)) ?: return@detectSpatialTapGesture
-                        val eye = hmd?.latestData?.hmdPose?.position?.let { root.convertPositionFrom(it, null) }
-                        walkToFloor(point.x, point.z, eye?.let { RoomSpot(it.x, it.y, it.z) })
-                    }
+                    hit.tagged("loftFloor") != null || station != null -> Unit
                     hit.tagged("decor:") != null -> {
                         val id = hit.tagged("decor:")!!.getName().removePrefix("decor:")
                         if (id == "stand") {
-                            val spot = furnishing.spot(id)
-                            walkToFloor(spot.x, spot.z)
-                        } else selectDecor(id)
+                            selectDecor(id)
+                        } else showDecorTarget(id)
                     }
                     hit.tagged("placed:") != null -> selectPlaced(hit.tagged("placed:")!!.getName().removePrefix("placed:"))
                     hit.tagged("coin") != null || hit.tagged("slot") != null -> if (roomNow == Room.MACHINE) insertCoin() else travel(true)
@@ -1074,26 +1135,29 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                 if (!modalOpen() && event.scaleValue > 0f) ViewZoom.scroll(6f * kotlin.math.ln(event.scaleValue))
             }
         }
-        val worldControls = worldHud.gestures(context, scene == Scene.WORLD && ready.value && round.phase == RoundPhase.PLAYING)
-        SpatialView(modifier = mouseHover.then(surfacePointer).then(tap).then(drag).then(pinchZoom).then(worldControls), attachments = {
+        SpatialView(modifier = mouseHover.then(surfacePointer).then(tap).then(drag).then(pinchZoom), attachments = {
             // Every attachment has its own OS window and can own physical keyboard focus.
             fun keyPanel(id: String, content: @Composable () -> Unit) = AttachmentPanel(id) {
-                NavigationKeyTarget(currentKeys, content)
+                NavigationKeyTarget(currentKeys) {
+                    Box(Modifier.pointerInput(Unit) {
+                        try {
+                            awaitPointerEventScope {
+                                while (true) {
+                                    val event = awaitPointerEvent(androidx.compose.ui.input.pointer.PointerEventPass.Initial)
+                                    menuPointerHeld.set(event.changes.any { it.pressed })
+                                }
+                            }
+                        } finally { menuPointerHeld.set(false) }
+                    }) { content() }
+                }
             }
             if (scene == Scene.WORLD) {
-                keyPanel("roomBack") { GlassPill("Back to my room") { backToRoom() } }
                 keyPanel("gameMenu") {
                     ActionCard(280) {
                         GameClock(round, caught.size, WORLD_PICKUPS)
+                        CardAction("Return to room") { backToRoom() }
                         CardAction("Restart", action = ::restart)
-                        CardAction("Complete (Test)") {
-                            if (round.phase == RoundPhase.PLAYING) {
-                                caught = (0 until WORLD_PICKUPS).toSet()
-                                refs.sparks.filterNotNull().forEach { it.enabled = false }
-                                round.stop(RoundPhase.FINISHED)
-                                round.preview = true
-                            }
-                        }
+
                     }
                 }
                 keyPanel("worldModal") {
@@ -1105,24 +1169,34 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                                     prefs.edit().putStringSet("worldPaintings", worldPaintings).apply()
                                     buzz()
                                 }
-                            }, restart = ::restart)
+                            }, restart = ::restart, back = { backToRoom() })
                         else -> Unit
                     }
                 }
             } else keyPanel("roomInterface") {
+                Column(horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally) {
+                    if (card != RoomCard.CLOCK && card != RoomCard.HIDDEN) RoomMenuClose(::closeRoomMenu)
                 when (card) {
-                    RoomCard.CLOCK -> GlassPill("${latestSky.clock}   ·   ${latestSky.city}", music = recordMusic) { zoomMenu = true }
+                    RoomCard.CLOCK -> {
+                        GlassPill("${latestSky.clock}   ·   ${latestSky.city}", music = recordMusic,
+                            onHome = ::returnToEntrance) { zoomMenu = true }
+
+                    }
                     RoomCard.ZOOM -> ActionCard(320) {
                         ZoomActions()
-                        CardAction("Done") { zoomMenu = false }
+                        CardAction(if (reducedMotion) "Comfort motion: on" else "Comfort motion: off") {
+                            reducedMotion = !reducedMotion
+                            prefs.edit().putBoolean("reducedMotion", reducedMotion).apply()
+                        }
+                        CardAction("Done", action = ::closeRoomMenu)
                     }
                     RoomCard.MACHINE -> MachinePanel(step, coins, freeCoinReady, pendingPrize, lastAccessoryMessage,
                         onCoin = ::insertCoin, onFreeCoin = ::grantFreeCoin, onCrank = ::stopCrank,
-                        onOpen = ::openBox, onBack = ::stepAwayFromMachine,
+                        onOpen = ::openBox, onBack = ::closeRoomMenu,
                         onMove = { furnishing.begin("machine"); dismissedMachine=true; room=Room.PLINTH; refs.rootAtMachine=false })
                     RoomCard.SHOP -> {
                         val fittingFigure = displayed ?: ownedIds.firstOrNull()
-                        RoomLibrary(furnishing, coins, unlockedAccessories, onTryAccessory = fittingFigure?.let { id ->
+                        RoomLibrary(furnishing, coins, unlockedAccessories, onClose = ::closeRoomMenu, onTryAccessory = fittingFigure?.let { id ->
                             { item ->
                                 val previous = equippedAccessories[id].orEmpty()
                                 draftOutfit = ACCESSORIES.filter { it.id in previous && it.slot != item.slot }
@@ -1146,7 +1220,7 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                             if(furnishing.target?.allowed==true) CardAction("Put down",primary=true,action=::finishDecor)
                             else Text("Choose a clear surface",color=Gold,fontSize=16.sp)
                             if (placementPointer.canEnableSensors) CardAction("Enable hand and eye tracking", action = placementPointer::enableSensors)
-                        CardAction("Cancel") { furnishing.cancel();ignoredItem=id }
+                        CardAction("Cancel", action = ::closeRoomMenu)
                         }
                     }
                     RoomCard.DECOR -> (furnishing.selected ?: proximityItem)?.let { id ->
@@ -1161,7 +1235,7 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                             if (furnishing.pieces.getValue(id).swappableArt)
                                 CardAction("Swap artwork") { furnishing.openArtSwap(id) }
                             CardAction("Move item") { furnishing.begin(id) }
-                            CardAction("Done") { ignoredItem=id;furnishing.selected=null }
+                            CardAction("Done", action = ::closeRoomMenu)
                         }
                     }
                     RoomCard.PLACING -> ActionCard {
@@ -1170,7 +1244,7 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                         val shelfSpot = furnishing.shelfSpot(placements.filterKeys { it != placing }.values)
                         if (shelfSpot != null) CardAction("Place on shelf") { finishPlacement(shelfSpot) }
                         if (placementPointer.canEnableSensors) CardAction("Enable hand and eye tracking", action = placementPointer::enableSensors)
-                        CardAction("Cancel") { placing = null; figureTarget = null }
+                        CardAction("Cancel", action = ::closeRoomMenu)
                     }
                     RoomCard.STAND, RoomCard.PLACED -> {
                         val id = if (card == RoomCard.PLACED) inspecting else displayed
@@ -1192,7 +1266,7 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                             }
                             if (card==RoomCard.STAND) CardAction("Move item") { furnishing.begin("stand") }
                             if (card==RoomCard.PLACED || furnishing.selected=="stand")
-                                CardAction("Done") { inspecting=null;furnishing.selected=null;ignoredItem="stand" }
+                                CardAction("Done", action = ::closeRoomMenu)
                         }
                     }
                     RoomCard.ACCESSORIES -> wardrobeId?.let { id ->
@@ -1205,18 +1279,27 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                                     buzz()
                                 }
                             },
-                            onCancel = { wardrobeId = null },
-                            onSave = { saveAccessories(id, draftOutfit); wardrobeId = null; buzz() })
+                            onCancel = ::closeRoomMenu,
+                            onSave = { saveAccessories(id, draftOutfit); closeRoomMenu() })
                     }
                     RoomCard.PICKER -> if (pickerPage >= 0) {
                         CollectiblePicker(ownedIds, displayed, pickerPage,
                             onPage = { pickerPage = it.coerceIn(0, ownedIds.lastIndex / 4) },
-                            onSelect = ::selectCollectible, onClose = ::closePicker)
+                            onSelect = ::selectCollectible, onClose = ::closeRoomMenu)
                     }
                     RoomCard.HIDDEN -> Unit
                 }
+                }
             }
             if (scene != Scene.WORLD) {
+                keyPanel("exitDoor") {
+                    Box(Modifier.width(160.dp)) {
+                        CardAction("Exit door") {
+                            roomMotion.cancelWalk()
+                            onExitDoor()
+                        }
+                    }
+                }
                 keyPanel("crankCue") {
                     if (card == RoomCard.MACHINE && room == Room.MACHINE && step == Step.CRANK)
                         Box(Modifier.clickable(onClick = ::stopCrank)) { Chip("Press to stop", Gold, 22) }
@@ -1225,7 +1308,12 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                     if (card == RoomCard.MACHINE && room == Room.MACHINE && step == Step.BOX)
                         Box(Modifier.clickable(onClick = ::openBox)) { Chip("Tap to open", Gold, 22) }
                 }
-                keyPanel("roomSticks") { RoomStickPanel(roomMotion) }
+                keyPanel("entryDither") { EntranceDither(entryThreshold) }
+                keyPanel("travelCurtain") { TravelCurtain() }
+                keyPanel("objectTarget") {
+                    val id = focusedDecor ?: proximityItem
+                    if (id != null) ObjectTarget(furnishing.pieces.getValue(id).title) { selectDecor(id) }
+                }
                 keyPanel("museumLabel") {
                     Column(Modifier.width(320.dp)) {
                         Text(exhibit?.let(::nameOf) ?: "Blindbox World", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color(0xFF171A1C)) // design-style: fixed-figma-color dark title ink on the display stand plaque
@@ -1249,11 +1337,13 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
             }
             keyPanel("plus") { Chip(plusText, Gold, 30) }
         }, initial = { content, panels ->
+            if (sceneDisposed || ownedScene != null) return@SpatialView
             sfx.preload()
             val root = Entity().apply { components.set(TransformComponent()); setName("sceneRoot") }
             if (scene != Scene.WORLD) root.setOpacity(0f)
             content.addEntity(root)
             refs.root = root
+            ownedScene = root
             refs.plus = panels.entity("plus")?.also { it.enabled = false }
             when (scene) {
                 Scene.WORLD -> {
@@ -1291,15 +1381,30 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                     scenery.addChild(toy)
                     worldActor = toy
                     val pickupAsset = if (isTung) "asset://tung-wood.glb" else "asset://$folder/pickup.glb"
-                    val pickup = Entity.loadSuspend(pickupAsset)
+                    val pickup = loadProp(pickupAsset)
                     floor.pickupPositions.forEachIndexed { i, p ->
                         val item = if (i == 0) pickup else pickup.clone(Entity.CloneOptions(true, true))
-                            ?: Entity.loadSuspend(pickupAsset)
+                            ?: loadProp(pickupAsset)
                         item.setName("pickup$i")
                         item.place(p.x, p.y, p.z)
                         scenery.addChild(item)
                         item.enabled = i !in caught
                         refs.sparks[i] = item
+
+                    }
+                    check(refs.sparks.count { it?.valid == true } == WORLD_PICKUPS) { "World must load all 30 pickups before play" }
+                    refs.sparks.filterNotNull().forEach { item ->
+                        val hint = Entity().apply { components.set(TransformComponent()); enabled = false }
+                        hint.addChild(glowSphere(.025f, Color4(1f, .83f, .28f, 1f)).apply { place(0f, .34f, 0f) })
+                        hint.addChild(Entity().apply {
+                            components.set(TransformComponent())
+                            components.set(com.pico.spatial.core.ecs.ModelComponent(
+                                com.pico.spatial.core.ecs.resource.MeshResource.createBox(Vector3(.009f, .22f, .009f), 0f),
+                                glowMaterial(Color4(1f, .83f, .28f, 1f))))
+                            place(0f, .21f, 0f)
+                        })
+                        item.addChild(hint)
+                        pickupHints.add(hint)
                     }
                     hmd?.latestData?.hmdPose?.let { pose ->
                         root.place(pose.position.x, pose.position.y - 1.55f, pose.position.z, yaw = pose.headingDegrees())
@@ -1307,16 +1412,8 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                     fun mount(id: String, x: Float, y: Float, scale: Float): Entity? =
                         panels.entity(id)?.also { it.place(x, y, -1.65f, scale); overlay.addChild(it); hudPanels[id] = it; it.enabled = false }
                     val panelWidth = converter.dpToLength(WORLD_PANEL_DP.dp, LengthUnit.Meters)
-                    mount("worldModal", 0f, .025f, 1.85f / panelWidth)
-                    panels.entity("roomBack")?.let { back ->
-                        back.place(-1f, .73f, -1.65f, 1.7f)
-                        overlay.addChild(back)
-                        back.components.set(AccessibilityComponent("Return to room", "").apply {
-                            isAccessibilityElement = true
-                        })
-                        content.setAccessibilityActions(back, "world.back-to-room") { }
-                    }
-                    val gameMenu = mount("gameMenu", .63f, .52f, 1.55f)
+                    mount("worldModal", 0f, .025f, 1.45f / panelWidth)
+                    val gameMenu = mount("gameMenu", .46f, .12f, 1.35f)
                     worldHud.mount(content, overlay, figure, gameMenu)
                 }
                 else -> {
@@ -1328,20 +1425,23 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                     val foreground = RoomHudForeground(overlay,root)
                     roomForeground = foreground
                     roomContent = content
-                    floorTarget = roomFloorTarget(content, { x, z -> walkToFloor(x, z) }, furnishing::spot).also { root.addChild(it) }
-                    destinationMarker = roomDestinationMarker().also { root.addChild(it) }
-                    panels.entity("roomSticks")?.let { pads ->
-                        pads.place(-.70f, -.56f, -1.65f, 1.55f)
-                        foreground.layer.addChild(pads)
-                        roomPads = pads
+                    floorTarget = roomFloorTarget(content).also { root.addChild(it) }
+                    panels.entity("exitDoor")?.let {
+                        // collection_room.py: walnut leaf center (-1.88, 1.11, 4.28),
+                        // 6 cm thick. Mount 1.5 cm in front of its room-facing surface.
+                        root.addChild(it)
+                        it.place(-1.88f, 1.35f, 4.235f,
+                            .42f / converter.dpToLength(160.dp, LengthUnit.Meters), yaw = 180f)
+                        it.enabled = false
+                        exitDoorPanel = it
                     }
                     panels.entity("roomInterface")?.let {
                         it.components.set(AccessibilityComponent("Room controls", "Time and place").apply {
                             isAccessibilityElement = true
                         })
                         content.setAccessibilityActions(it, "room.controls") { }
-                        it.place(0f,.73f,-1.65f,2.18f)
-                        foreground.actionAnchor.place(0f,.73f,-1.65f,2.18f)
+                        it.place(0f,.38f,-1.65f,2.18f)
+                        foreground.actionAnchor.place(0f,.38f,-1.65f,2.18f)
                         foreground.layer.addChild(it)
                         roomPanel = it
                     }
@@ -1351,6 +1451,18 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                     root.addChild(ambient)
                     sfx.startAmbient(ambient)
                     refs.presentationHead = overlay
+                    panels.entity("entryDither")?.let {
+                        it.place(0f,0f,-.4f,3f/converter.dpToLength(1024.dp,LengthUnit.Meters))
+                        overlay.addChild(it);it.enabled=entryThreshold>0f;entryMask=it
+                    }
+                    panels.entity("travelCurtain")?.let {
+                        val width=converter.dpToLength(1024.dp,LengthUnit.Meters)
+                        it.place(0f,0f,-.5f,3f/width)
+                        overlay.addChild(it); it.enabled=false; refs.curtain=it
+                    }
+                    panels.entity("objectTarget")?.let {
+                        overlay.addChild(it); it.enabled=false; targetPanel=it
+                    }
                     val mount = Entity().apply { components.set(TransformComponent()) }
                     val station = furnishing.visualSpot("machine")
                     mount.place(station.x, station.y, station.z)
@@ -1438,8 +1550,8 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
             }
             hud?.let { overlay ->
                 panels.entity("wallet")?.let { panel ->
-                    if (scene == Scene.HOME) panel.place(.66f, -.54f, -1.65f, 1.60f)
-                    else panel.place(.87f, -.62f, -1.65f, 1.60f)
+                    if (scene == Scene.HOME) panel.place(.43f, -.32f, -1.65f, 1.60f)
+                    else panel.place(.43f, -.32f, -1.65f, 1.60f)
                     (roomForeground?.layer ?: overlay).addChild(panel)
                     panel.enabled = scene == Scene.HOME
                     walletPanel = panel
@@ -1447,6 +1559,8 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                 }
             }
             ready.value = true
+            if (scene == Scene.HOME) onRoomReady()
+            if (scene == Scene.WORLD) Log.i("WorldVerification", "ready $figure pickups=${refs.sparks.count { it != null }}")
         })
 
         LaunchedEffect(walletPanel, scene, room, round.phase, round.preview, furnishing.shopOpen, card, accessoryFlying) {
@@ -1467,7 +1581,7 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                 val current=shell ?: return@LaunchedEffect
                 val root=refs.root ?: return@LaunchedEffect
                 val content=roomContent ?: return@LaunchedEffect
-                decorateRoom(current,root,content,furnishing,recordMusic,::selectDecor)
+                decorateRoom(current,root,content,furnishing,recordMusic,::showDecorTarget)
             }
             LaunchedEffect(ready.value, placing, furnishing.carrying) {
                 if (!ready.value || !movingItem) return@LaunchedEffect
@@ -1511,6 +1625,9 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                         roomMotion, { refs.rootYaw = it })
                 }
             }
+            LaunchedEffect(ready.value, placing, furnishing.carrying, floorTarget) {
+                floorTarget?.enabled = ready.value && (placing != null || furnishing.carrying != null)
+            }
             LaunchedEffect(ready.value, canNavigate()) {
                 val active = ready.value && canNavigate()
                 roomPads?.enabled = active
@@ -1534,7 +1651,7 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                 }
             }
             LaunchedEffect(ready.value) {
-                if (ready.value) refs.root?.let { animateWindows(it) { latestSky } }
+                if (ready.value) refs.root?.let { animateWindows(context, it) { latestSky } }
             }
         }
         // The machine controls are only visible while interacting with the machine.
@@ -1548,7 +1665,7 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
             if (room == Room.MACHINE) spawnCoin()
         }
         if (scene == Scene.HOME) {
-            GaussianSceneBackdrop(refs.root, hud, ready.value && openingBackdrop)
+            // Keep the room world-anchored during unboxing, preserving free head tracking.
             LaunchedEffect(ready.value, room, card, step) {
                 val crankCue = refs.crankCue ?: return@LaunchedEffect
                 val trayCue = refs.trayCue ?: return@LaunchedEffect
@@ -1707,6 +1824,8 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                 while (true) {
                     val pose=hmd?.latestData?.hmdPose
                     val head=pose?.position?.let { root.convertPositionFrom(it, null) }
+                    exitDoorPanel?.enabled = head != null &&
+                        hypot(head.x + 1.88f, head.z - 4.28f) < 1.65f && !modalOpen()
                     val fwd=pose?.rotation?.rotateVector(Vector3(0f,0f,-1f))
                     val direction=fwd?.let { toRoot(it.x,it.z) }
                     val stand=furnishing.spot("stand")
@@ -1714,6 +1833,13 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                     val range=hypot(sx,sz)
                     val nearStand=head!=null && range<=2.72f && direction!=null && (sx*direction.first+sz*direction.second)>.62f*range
                     proximityItem=if (head!=null && direction!=null) furnishing.facingItem(RoomSpot(head.x,head.y,head.z),direction.first,fwd.y,direction.second) else null
+                    dismissedAt?.let { at ->
+                        if (SystemClock.uptimeMillis()>hudRestoreUntil && head != null && hypot(head.x-at.x,head.z-at.z)>.75f) dismissedAt=null
+                    }
+                    focusedDecor?.let { id ->
+                        val p=furnishing.spot(id)
+                        if (head == null || hypot(head.x-p.x,head.z-p.z)>2.5f) focusedDecor=null
+                    }
                     val record=furnishing.spot("record-player")
                     val listening=furnishing.hasRecordControls(ignoredItem) && recordMusic.hasStarted && head!=null &&
                         (hypot(head.x-record.x,head.z-record.z)<1.95f || ignoredItem==proximityItem)
@@ -1729,11 +1855,25 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                         inspecting != null && inspecting in placements -> RoomCard.PLACED
                         furnishing.selected=="stand" -> RoomCard.STAND
                         furnishing.selected!=null -> RoomCard.DECOR
+                        dismissedAt != null -> RoomCard.CLOCK
                         listening -> RoomCard.CLOCK
                         room == Room.MACHINE && nearMachine -> RoomCard.MACHINE
-                        proximityItem!=null && ignoredItem!=proximityItem -> RoomCard.DECOR
+                        proximityItem=="record-player" && ignoredItem!=proximityItem -> RoomCard.DECOR
                         nearStand && ignoredItem!="stand" && room != Room.MACHINE -> RoomCard.STAND
                         else -> RoomCard.CLOCK
+                    }
+                    val targetId=focusedDecor ?: proximityItem
+                    targetPanel?.let { target ->
+                        val overlay=hud
+                        val eligible=targetId != null && targetId !in setOf("stand","machine","record-player") &&
+                            dismissedAt == null && targetId != ignoredItem &&
+                            card==RoomCard.CLOCK && !movingItem && overlay != null
+                        target.enabled=eligible
+                        if (eligible) {
+                            val point=roomObjectTarget(furnishing,targetId,root,overlay)
+                            target.enabled=point != null
+                            point?.let { target.place(it.x,it.y,it.z,.10f/converter.dpToLength(56.dp,LengthUnit.Meters)) }
+                        }
                     }
                     delay(40)
                 }
@@ -1762,7 +1902,7 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                     RoomCard.CLOCK -> "Time and place"
                     RoomCard.CARRY -> "Place room item"
                     RoomCard.DECOR -> "Room item actions"
-                    RoomCard.SHOP -> "Room library"
+                    RoomCard.SHOP -> "Shop"
                     RoomCard.ZOOM -> "Room zoom"
                     RoomCard.MACHINE -> "Gumball machine"
                     RoomCard.STAND -> "Display stand"
@@ -1773,8 +1913,8 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                     RoomCard.HIDDEN -> ""
                 }
                 when (card) {
-                    RoomCard.CLOCK -> panel.place(0f,.73f,-1.65f,2.18f)
-                    RoomCard.ZOOM -> panel.place(0f,.52f,-1.65f,1.7f)
+                    RoomCard.CLOCK -> panel.place(0f,.38f,-1.65f,2.18f)
+                    RoomCard.ZOOM -> panel.place(0f,.18f,-1.65f,1.7f)
                     RoomCard.PLACING, RoomCard.PLACED, RoomCard.CARRY, RoomCard.DECOR -> panel.place(-.50f,.12f,-1.65f,1.45f)
                     RoomCard.STAND -> furnishing.spot("stand").let { panel.place(it.x+.62f,it.y+1.16f,it.z+.08f,1.59f,yaw=-15f) }
                     RoomCard.ACCESSORIES -> {
@@ -1821,7 +1961,7 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                 val range = if (nearMachine) 2.88f else 2.67f
                 nearMachine = localHead != null && hypot(localHead.x-spot.x, localHead.z-spot.z) <= range
                 if (!nearMachine && room != Room.MACHINE) dismissedMachine = false
-                if (!dismissedMachine && nearMachine && !modalOpen() && furnishing.carrying == null && placing == null && inspecting == null && (room == Room.PLINTH || room == Room.REVEAL)) room = Room.MACHINE
+                if (dismissedAt == null && !dismissedMachine && nearMachine && !modalOpen() && furnishing.carrying == null && placing == null && inspecting == null && (room == Room.PLINTH || room == Room.REVEAL)) room = Room.MACHINE
                 if (step == Step.CRANK) {
                     refs.crankAngle = (refs.crankAngle + .18f) % (2f * Math.PI.toFloat())
                     placeCrank()
@@ -1843,6 +1983,10 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                 if (!nearMachine && !refs.rootAtMachine && room == Room.MACHINE) room = Room.PLINTH
                 delay(40)
             }
+        }
+        LaunchedEffect(ready.value, caught.size, round.phase) {
+            val show = round.phase == RoundPhase.PLAYING && caught.size in 25 until WORLD_PICKUPS
+            pickupHints.forEachIndexed { index, hint -> hint.enabled = show && index !in caught }
         }
         if (scene == Scene.WORLD) LaunchedEffect(ready.value, round.phase) {
             if (!ready.value) return@LaunchedEffect
@@ -1869,8 +2013,7 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                 delay(33)
             }
         }
-        if (scene == Scene.WORLD) GaussianSceneBackdrop(background = refs.root, head = hud,
-            visible = ready.value && round.phase == RoundPhase.FINISHED, sky = worldSkyEntity, world = figure)
+
         LaunchedEffect(rippleWorld) {
             rippleWorld?.let { animateWorldWater(it, context, figure, swimWake) }
         }
@@ -1881,7 +2024,14 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
                 hmd?.latestData?.hmdPose?.let {
                     transform.setPosition(it.position)
                     transform.setQuaternion(it.rotation)
-                    roomForeground?.update(frame, hudOccluders, walletPanel, roomPads, roomPanel, modalOpen())
+                    if (!menuPointerHeld.get()) roomForeground?.update(frame, hudOccluders, walletPanel, roomPads, roomPanel, modalOpen())
+                    roomForeground?.quietHud(frame, walletPanel, roomPads, roomPanel,
+                        padsAllowed = ready.value && canNavigate(),
+                        walletAllowed = (room != Room.OPENING || accessoryFlying) && !furnishing.shopOpen &&
+                            card !in listOf(RoomCard.ACCESSORIES, RoomCard.PICKER),
+                        clock = card == RoomCard.CLOCK, panelAllowed = card != RoomCard.HIDDEN,
+                        navigating = roomMotion.isNavigating,
+                        interacting = SystemClock.uptimeMillis()<hudRestoreUntil || roomMotion.input.padHeld || modalOpen() || card !in listOf(RoomCard.CLOCK, RoomCard.HIDDEN))
                     worldSkyEntity?.components?.get(TransformComponent::class.java)?.apply {
                         setPosition(it.position)
                         courtyard?.let { world -> setQuaternion(world.convertRotationTo(com.pico.spatial.core.math.Quat.identity(), null)) }
@@ -1894,14 +2044,14 @@ fun HomeStage(hmd: HMDTrackingProvider?) {
             val garden = courtyard ?: return@LaunchedEffect
             val floor = terrain ?: return@LaunchedEffect
             if (ready.value) driveWorldActor(sticks, actor, floor, infoOf(figure), garden, worldWearables, swimWake,
-                { hmd?.latestData?.hmdPose }, { round.phase == RoundPhase.PLAYING }, ::catchSpark)
+                { hmd?.latestData?.hmdPose }, { round.phase == RoundPhase.PLAYING && (!WorldVerification.active || WorldVerification.route) }, ::catchSpark, { backToRoom() })
         }
         LaunchedEffect(ready.value, worldActor, roundId) {
             val root = refs.root ?: return@LaunchedEffect
             val garden = courtyard ?: return@LaunchedEffect
             val actor = worldActor ?: return@LaunchedEffect
             if (ready.value) followWorldActor(root, garden, actor, { hmd?.latestData?.hmdPose },
-                sticks, terrain ?: return@LaunchedEffect, swimWake)
+                sticks)
         }
         if (scene == Scene.WORLD) LaunchedEffect(ready.value) {
             if (!ready.value) return@LaunchedEffect

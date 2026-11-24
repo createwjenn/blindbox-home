@@ -10,7 +10,7 @@ OUT.mkdir(exist_ok=True)
 font_file = "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
 white = (.98, .97, .89)
 shadow = (.028, .014, .018)
-items = {"ballerina-capuccina":"coffee beans", "bananito":"bananas", "chill-guy":"leaves",
+items = {"ballerina-capuccina":"coffee beans", "bananito":"bananas", "chill-guy":"lotus flowers",
          "niu-lai":"pink flowers", "secret-capybara-toilet":"little poops", "strawberlina":"strawberries",
          "tralalero-tralala":"fish", "tung-tung-tung":"wood chunks"}
 

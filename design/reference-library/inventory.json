@@ -1,0 +1,862 @@
+{
+  "items": [
+    {
+      "id": "ref01_01",
+      "title": "Burgundy tapered mushroom desk lamp",
+      "source": "sources/reference-01.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref01_01.glb"
+    },
+    {
+      "id": "ref01_02",
+      "title": "Red laminated serpentine side table",
+      "source": "sources/reference-01.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref01_02.glb"
+    },
+    {
+      "id": "ref01_03",
+      "title": "Multicolor contour wool rug",
+      "source": "sources/reference-01.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref01_03.glb"
+    },
+    {
+      "id": "ref01_04",
+      "title": "Walnut panel black leather armchair",
+      "source": "sources/reference-01.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref01_04.glb"
+    },
+    {
+      "id": "ref01_05",
+      "title": "Burgundy velvet chrome sled armchair",
+      "source": "sources/reference-01.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref01_05.glb"
+    },
+    {
+      "id": "ref01_06",
+      "title": "Chrome stacked spindle floor lamp",
+      "source": "sources/reference-01.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref01_06.glb"
+    },
+    {
+      "id": "ref01_07",
+      "title": "Cognac leather cantilever chair",
+      "source": "sources/reference-01.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref01_07.glb"
+    },
+    {
+      "id": "ref01_08",
+      "title": "Burgundy cream checkerboard side table",
+      "source": "sources/reference-01.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref01_08.glb"
+    },
+    {
+      "id": "ref01_09",
+      "title": "Burgundy ribbon wall shelf",
+      "source": "sources/reference-01.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref01_09.glb"
+    },
+    {
+      "id": "ref01_10",
+      "title": "Gray curved-stem globe lamp",
+      "source": "sources/reference-01.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref01_10.glb"
+    },
+    {
+      "id": "ref02_01",
+      "title": "Rust boucle ball cushion",
+      "source": "sources/reference-02.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref02_01.glb"
+    },
+    {
+      "id": "ref02_02",
+      "title": "Sage rippled frame mirror",
+      "source": "sources/reference-02.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref02_02.glb"
+    },
+    {
+      "id": "ref02_03",
+      "title": "Burgundy stacked sphere pedestal table",
+      "source": "sources/reference-02.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref02_03.glb"
+    },
+    {
+      "id": "ref02_04",
+      "title": "Burgundy dome ivory orb lamp",
+      "source": "sources/reference-02.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref02_04.glb"
+    },
+    {
+      "id": "ref02_05",
+      "title": "Teal cylindrical bolster armchair",
+      "source": "sources/reference-02.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref02_05.glb"
+    },
+    {
+      "id": "ref02_06",
+      "title": "Ivory arch vase tall",
+      "source": "sources/reference-02.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref02_06.glb"
+    },
+    {
+      "id": "ref02_07",
+      "title": "Ivory arch vase medium",
+      "source": "sources/reference-02.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref02_07.glb"
+    },
+    {
+      "id": "ref02_08",
+      "title": "Ivory arch vase small",
+      "source": "sources/reference-02.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref02_08.glb"
+    },
+    {
+      "id": "ref02_09",
+      "title": "Navy multiloop lounge chair",
+      "source": "sources/reference-02.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref02_09.glb"
+    },
+    {
+      "id": "ref02_10",
+      "title": "Ivory spiral vase",
+      "source": "sources/reference-02.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref02_10.glb"
+    },
+    {
+      "id": "ref03_01",
+      "title": "Brown cowhide butterfly chair",
+      "source": "sources/reference-03.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref03_01.glb"
+    },
+    {
+      "id": "ref03_02",
+      "title": "Black cowhide butterfly chair",
+      "source": "sources/reference-03.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref03_02.glb"
+    },
+    {
+      "id": "ref03_03",
+      "title": "Orange double-ring chrome lamp",
+      "source": "sources/reference-03.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref03_03.glb"
+    },
+    {
+      "id": "ref03_04",
+      "title": "Triple-lobe rice paper lamp",
+      "source": "sources/reference-03.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref03_04.glb"
+    },
+    {
+      "id": "ref03_05",
+      "title": "Clear acrylic waterfall coffee table",
+      "source": "sources/reference-03.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref03_05.glb"
+    },
+    {
+      "id": "ref03_06",
+      "title": "Clear acrylic two-tier side table",
+      "source": "sources/reference-03.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref03_06.glb"
+    },
+    {
+      "id": "ref03_07",
+      "title": "Clear acrylic waterfall stool",
+      "source": "sources/reference-03.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref03_07.glb"
+    },
+    {
+      "id": "ref03_08",
+      "title": "Ivory stacked pebble vase",
+      "source": "sources/reference-03.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref03_08.glb"
+    },
+    {
+      "id": "ref04_01",
+      "title": "Cobalt loop-back pillar chair",
+      "source": "sources/reference-04.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref04_01.glb"
+    },
+    {
+      "id": "ref04_02",
+      "title": "Royal blue globe-seat chrome chair",
+      "source": "sources/reference-04.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref04_02.glb"
+    },
+    {
+      "id": "ref04_03",
+      "title": "Sky blue tufted swivel chair",
+      "source": "sources/reference-04.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref04_03.glb"
+    },
+    {
+      "id": "ref04_04",
+      "title": "Petrol blue stacked-disc lounge",
+      "source": "sources/reference-04.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref04_04.glb"
+    },
+    {
+      "id": "ref04_05",
+      "title": "Cobalt tubular dining chair",
+      "source": "sources/reference-04.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref04_05.glb"
+    },
+    {
+      "id": "ref04_06",
+      "title": "Navy twin-pillar chair",
+      "source": "sources/reference-04.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref04_06.glb"
+    },
+    {
+      "id": "ref04_07",
+      "title": "Pale blue sculpted barrel chair",
+      "source": "sources/reference-04.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref04_07.glb"
+    },
+    {
+      "id": "ref04_08",
+      "title": "Cobalt knitted armchair",
+      "source": "sources/reference-04.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref04_08.glb"
+    },
+    {
+      "id": "ref04_09",
+      "title": "Blue lacquer S chair",
+      "source": "sources/reference-04.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref04_09.glb"
+    },
+    {
+      "id": "ref04_10",
+      "title": "Blue cone swivel chair",
+      "source": "sources/reference-04.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref04_10.glb"
+    },
+    {
+      "id": "ref04_11",
+      "title": "Blue white ball chair",
+      "source": "sources/reference-04.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref04_11.glb"
+    },
+    {
+      "id": "ref04_12",
+      "title": "Cobalt hand chair",
+      "source": "sources/reference-04.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref04_12.glb"
+    },
+    {
+      "id": "ref04_13",
+      "title": "Navy velvet chrome sled armchair",
+      "source": "sources/reference-04.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref04_13.glb"
+    },
+    {
+      "id": "ref04_14",
+      "title": "Blue translucent roller lounge",
+      "source": "sources/reference-04.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref04_14.glb"
+    },
+    {
+      "id": "ref05_01",
+      "title": "Olive chunky pillar chair",
+      "source": "sources/reference-05.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref05_01.glb"
+    },
+    {
+      "id": "ref05_02",
+      "title": "Brown leather chrome cube armchair",
+      "source": "sources/reference-05.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref05_02.glb"
+    },
+    {
+      "id": "ref05_03",
+      "title": "Orange high-back swivel chair",
+      "source": "sources/reference-05.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref05_03.glb"
+    },
+    {
+      "id": "ref05_04",
+      "title": "Cognac ribbed low lounge",
+      "source": "sources/reference-05.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref05_04.glb"
+    },
+    {
+      "id": "ref05_05",
+      "title": "Cognac leather tubular sling lounge",
+      "source": "sources/reference-05.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref05_05.glb"
+    },
+    {
+      "id": "ref05_06",
+      "title": "Taupe velvet tubular lounge",
+      "source": "sources/reference-05.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref05_06.glb"
+    },
+    {
+      "id": "ref05_07",
+      "title": "Orange white ball chair",
+      "source": "sources/reference-05.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref05_07.glb"
+    },
+    {
+      "id": "ref05_08",
+      "title": "Orange folded-shell chair",
+      "source": "sources/reference-05.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref05_08.glb"
+    },
+    {
+      "id": "ref05_09",
+      "title": "Cognac wingback egg chair",
+      "source": "sources/reference-05.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref05_09.glb"
+    },
+    {
+      "id": "ref05_10",
+      "title": "Orange wire sling chair",
+      "source": "sources/reference-05.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref05_10.glb"
+    },
+    {
+      "id": "ref05_11",
+      "title": "Orange pleated floor lounge",
+      "source": "sources/reference-05.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref05_11.glb"
+    },
+    {
+      "id": "ref05_12",
+      "title": "Distressed brown club chair",
+      "source": "sources/reference-05.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref05_12.glb"
+    },
+    {
+      "id": "ref05_13",
+      "title": "Ivory segmented pumpkin lounge",
+      "source": "sources/reference-05.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref05_13.glb"
+    },
+    {
+      "id": "ref06_01",
+      "title": "Black leather disc pedestal lounge",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_01.glb"
+    },
+    {
+      "id": "ref06_02",
+      "title": "Burgundy lacquer tub chair",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_02.glb"
+    },
+    {
+      "id": "ref06_03",
+      "title": "Burgundy leather cantilever lounge",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_03.glb"
+    },
+    {
+      "id": "ref06_04",
+      "title": "Olive flower cantilever chair",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_04.glb"
+    },
+    {
+      "id": "ref06_05",
+      "title": "Amber transparent butterfly chair",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_05.glb"
+    },
+    {
+      "id": "ref06_06",
+      "title": "Chartreuse velvet chrome sled armchair",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_06.glb"
+    },
+    {
+      "id": "ref06_07",
+      "title": "Caramel leather padded floor lounge",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_07.glb"
+    },
+    {
+      "id": "ref06_08",
+      "title": "Petrol velvet chrome sled armchair",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_08.glb"
+    },
+    {
+      "id": "ref06_09",
+      "title": "Walnut sculptural leather lounge",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_09.glb"
+    },
+    {
+      "id": "ref06_10",
+      "title": "Red translucent block armchair",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_10.glb"
+    },
+    {
+      "id": "ref06_11",
+      "title": "Ivory sculpted swivel shell chair",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_11.glb"
+    },
+    {
+      "id": "ref06_12",
+      "title": "Red lacquer S chair",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_12.glb"
+    },
+    {
+      "id": "ref06_13",
+      "title": "Amber acrylic cross-base side table",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_13.glb"
+    },
+    {
+      "id": "ref06_14",
+      "title": "Terracotta fluted pedestal table",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_14.glb"
+    },
+    {
+      "id": "ref06_15",
+      "title": "Walnut four-slab side table",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_15.glb"
+    },
+    {
+      "id": "ref06_16",
+      "title": "Walnut two-tier corner table",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_16.glb"
+    },
+    {
+      "id": "ref06_17",
+      "title": "Orange cylindrical rolling cabinet",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_17.glb"
+    },
+    {
+      "id": "ref06_18",
+      "title": "Red mushroom coffee table",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_18.glb"
+    },
+    {
+      "id": "ref06_19",
+      "title": "Burnt orange open-cylinder side table",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_19.glb"
+    },
+    {
+      "id": "ref06_20",
+      "title": "Navy ceramic pedestal table",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_20.glb"
+    },
+    {
+      "id": "ref06_21",
+      "title": "Rose glass three-drawer side table",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_21.glb"
+    },
+    {
+      "id": "ref06_22",
+      "title": "Cobalt twisted glass stool",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_22.glb"
+    },
+    {
+      "id": "ref06_23",
+      "title": "Walnut curved pedestal table",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_23.glb"
+    },
+    {
+      "id": "ref06_24",
+      "title": "Natural oak pedestal table tall",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_24.glb"
+    },
+    {
+      "id": "ref06_25",
+      "title": "Natural oak pedestal table short",
+      "source": "sources/reference-06.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref06_25.glb"
+    },
+    {
+      "id": "ref07_01",
+      "title": "Brown patterned wood sling lounge",
+      "source": "sources/reference-07.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref07_01.glb"
+    },
+    {
+      "id": "ref07_02",
+      "title": "Zebra upholstered armchair",
+      "source": "sources/reference-07.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref07_02.glb"
+    },
+    {
+      "id": "ref07_03",
+      "title": "Dark brown pleated floor lounge",
+      "source": "sources/reference-07.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref07_03.glb"
+    },
+    {
+      "id": "ref07_04",
+      "title": "Ivory slipcovered armchair",
+      "source": "sources/reference-07.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref07_04.glb"
+    },
+    {
+      "id": "ref07_05",
+      "title": "Ochre striped tub chair",
+      "source": "sources/reference-07.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref07_05.glb"
+    },
+    {
+      "id": "ref07_06",
+      "title": "Olive chrome cantilever lounge",
+      "source": "sources/reference-07.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref07_06.glb"
+    },
+    {
+      "id": "ref07_07",
+      "title": "Burgundy leather oak-legged lounge",
+      "source": "sources/reference-07.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref07_07.glb"
+    },
+    {
+      "id": "ref07_08",
+      "title": "Brown velvet zigzag-frame lounge",
+      "source": "sources/reference-07.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref07_08.glb"
+    },
+    {
+      "id": "ref07_09",
+      "title": "Brown corduroy sling chair with pocket",
+      "source": "sources/reference-07.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref07_09.glb"
+    },
+    {
+      "id": "ref07_10",
+      "title": "Dark charcoal channel floor lounge",
+      "source": "sources/reference-07.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref07_10.glb"
+    },
+    {
+      "id": "ref07_11",
+      "title": "Dusty rose bolster armchair",
+      "source": "sources/reference-07.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref07_11.glb"
+    },
+    {
+      "id": "ref07_12",
+      "title": "Taupe tufted chrome sling lounge",
+      "source": "sources/reference-07.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref07_12.glb"
+    },
+    {
+      "id": "ref08_01",
+      "title": "Amber glass black-stem lamp \u2014 Sanae",
+      "source": "sources/reference-08.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref08_01.glb"
+    },
+    {
+      "id": "ref08_02",
+      "title": "Red scalloped shade lamp \u2014 Renja",
+      "source": "sources/reference-08.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref08_02.glb"
+    },
+    {
+      "id": "ref08_03",
+      "title": "Mustard dome lamp \u2014 Soteria",
+      "source": "sources/reference-08.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref08_03.glb"
+    },
+    {
+      "id": "ref08_04",
+      "title": "White dome stone-base lamp \u2014 Marcel",
+      "source": "sources/reference-08.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref08_04.glb"
+    },
+    {
+      "id": "ref08_05",
+      "title": "Travertine mushroom lamp \u2014 Glynnis",
+      "source": "sources/reference-08.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref08_05.glb"
+    },
+    {
+      "id": "ref08_06",
+      "title": "Pink double-ring chrome lamp \u2014 Marta",
+      "source": "sources/reference-08.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref08_06.glb"
+    },
+    {
+      "id": "ref08_07",
+      "title": "Amber bowl travertine lamp \u2014 Caelan",
+      "source": "sources/reference-08.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref08_07.glb"
+    },
+    {
+      "id": "ref08_08",
+      "title": "Lavender stained-glass moon lamp \u2014 Fiorella",
+      "source": "sources/reference-08.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref08_08.glb"
+    },
+    {
+      "id": "ref08_09",
+      "title": "Orange tiered chrome lamp \u2014 Koros",
+      "source": "sources/reference-08.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref08_09.glb"
+    },
+    {
+      "id": "ref08_10",
+      "title": "Clear dome travertine lamp \u2014 Ryn",
+      "source": "sources/reference-08.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref08_10.glb"
+    },
+    {
+      "id": "ref08_11",
+      "title": "Woven rattan mushroom lamp \u2014 Alora",
+      "source": "sources/reference-08.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref08_11.glb"
+    },
+    {
+      "id": "ref08_12",
+      "title": "Pink double-ring ceramic lamp \u2014 Rynvel",
+      "source": "sources/reference-08.png",
+      "status": "locally modeled; reference-inspired approximation",
+      "independent_placeable": true,
+      "asset": "app/src/main/assets/furniture/ref08_12.glb"
+    }
+  ],
+  "repeats": [
+    {
+      "source": 7,
+      "item": "Chartreuse velvet chrome sled armchair",
+      "reuse": "ref06_06"
+    },
+    {
+      "source": 2,
+      "item": "Sage mirror repeated photo",
+      "reuse": "ref02_02"
+    },
+    {
+      "source": 3,
+      "item": "Repeated lamp and cowhide-chair photos",
+      "reuse": [
+        "ref03_01",
+        "ref03_03",
+        "ref03_04"
+      ]
+    }
+  ],
+  "cropped_unresolved": [
+    "Reference 1 right-edge lamp: incomplete silhouette; possible mushroom-lamp repeat",
+    "Reference 2 top-edge sculpture and red object: too little visible for reliable reconstruction",
+    "Reference 6 upper-left cropped mid-century chair: legs and seat edge only"
+  ]
+}

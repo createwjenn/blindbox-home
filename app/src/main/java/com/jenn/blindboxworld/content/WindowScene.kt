@@ -40,12 +40,11 @@ internal suspend fun loadLoft(context: Context, look: String): Entity {
 
 private fun group() = Entity().apply { components.set(TransformComponent()) }
 
-internal suspend fun animateWindows(root: Entity, currentSky: () -> LoftSky) {
+internal suspend fun animateWindows(context: Context, root: Entity, currentSky: () -> LoftSky) {
     // All coordinates are local to the loft so the weather follows the room when approaching the machine.
     val effects = group()
     root.addChild(effects)
     fun add(e: Entity): Entity { effects.addChild(e); return e }
-    val sun = add(glowSphere(.35f, Color4(1f,.87f,.58f,1f)))
     val windowLight = add(group().apply {
         components.set(PointLightComponent(Color4(1f,.80f,.57f,1f),0f,8.5f))
     })
@@ -63,15 +62,17 @@ internal suspend fun animateWindows(root: Entity, currentSky: () -> LoftSky) {
     val start = SystemClock.elapsedRealtime()
     var previous: LoftSky? = null
     var activeWeather: List<Entity> = emptyList()
+    val gpu = GpuAtmosphere(context, root)
+    try {
+    gpu.start(currentSky())
     while (true) {
         val t = (SystemClock.elapsedRealtime()-start)/1000f
         val sky = currentSky()
         val night = sky.phase == SkyPhase.NIGHT
         if (previous != sky) {
+            gpu.update(sky)
             val p = sky.sunProgress
             val elevation = sin(PI*p).toFloat()
-            sun.enabled = !night && !sky.weather.overcast
-            sun.place(-25f, 3f+8.4f*elevation, 19f-38f*p)
             val warm = sky.phase == SkyPhase.SUNRISE || sky.phase == SkyPhase.SUNSET
             windowLight.place(-3.55f,1.75f+1.25f*elevation,3.6f-7.2f*p)
             windowLight.setLight(when {
@@ -128,5 +129,9 @@ internal suspend fun animateWindows(root: Entity, currentSky: () -> LoftSky) {
             }
         }
         delay(if (showBirds || showJet || activeWeather.isNotEmpty() || (shower.enabled && (t+1f)%51f<4f)) 45L else 180L)
+    }
+    } finally {
+        gpu.close()
+        if (effects.valid) { effects.removeFromParent(); effects.destroy() }
     }
 }
