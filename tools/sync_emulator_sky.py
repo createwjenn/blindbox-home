@@ -12,19 +12,10 @@ def fetch(url):
     return json.loads(reply.stdout)
 
 def sample():
-    location = fetch('https://ipwho.is/?fields=success,city,latitude,longitude,timezone.id')
-    if not location.get('success') or not location.get('city'):
-        raise ValueError('City lookup unavailable')
-    query = urlencode(dict(latitude=round(location['latitude'],2), longitude=round(location['longitude'],2),
-        current='weather_code,is_day',daily='sunrise,sunset',timezone='auto',timeformat='unixtime',forecast_days=2))
-    data = {'city':location['city'],'zone':location['timezone']['id'],'located':int(time.time())}
-    try:
-        forecast = fetch('https://api.open-meteo.com/v1/forecast?'+query)
-        data['current'] = forecast['current']
-        data['daily'] = forecast['daily']
-    except (subprocess.SubprocessError,ValueError,KeyError):
-        pass
-    return data
+    query = urlencode(dict(latitude=37.79, longitude=-122.39, current='weather_code,is_day,rain,showers',
+        daily='sunrise,sunset', timezone='America/Los_Angeles', timeformat='unixtime', forecast_days=2))
+    forecast = fetch('https://api.open-meteo.com/v1/forecast?'+query)
+    return {'city':'San Francisco','zone':'America/Los_Angeles','current':forecast['current'],'daily':forecast['daily']}
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
@@ -43,7 +34,12 @@ def main():
             try:
                 data=sample()
                 next_sample=time.monotonic()+(1200 if 'current' in data else 300)
-            except (subprocess.SubprocessError,ValueError,KeyError):
+            except (subprocess.SubprocessError,ValueError,KeyError) as exc:
+                if not args.watch:
+                    raise SystemExit(f'Rincon Hill forecast unavailable: {exc}')
+                if not data:
+                    time.sleep(60)
+                    continue
                 next_sample=time.monotonic()+300
         data['boot']=int(shell('settings','get','global','boot_count'))
         data['elapsed']=int(float(shell('cat','/proc/uptime').split()[0])*1000)

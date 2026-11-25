@@ -8,6 +8,7 @@ import org.json.JSONObject
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.floor
+import kotlin.math.hypot
 
 internal const val WORLD_PICKUPS = 30
 internal const val WORLD_SCALE = 2.4f
@@ -35,6 +36,105 @@ internal class WorldTerrain(
         val p = cells[i]
         val height = if (p.water.isFinite()) p.water + .11f else p.ground + .22f
         stage(center(p.ix), height, center(p.iz))
+    }
+
+    private fun columnKey(x: Int, z: Int) = (x.toLong() shl 32) or (z.toLong() and 0xffffffffL)
+    private val columns = cells.indices.groupBy { columnKey(cells[it].ix, cells[it].iz) }
+
+    fun hitCell(point: Vector3): Int? {
+        val ix = floor(point.x / cell).toInt()
+        val iz = floor(point.z / cell).toInt()
+        val tolerance = cell * .0002f
+        var best: Int? = null
+        var gap = Float.POSITIVE_INFINITY
+        for (z in iz-1..iz+1) for (x in ix-1..ix+1) {
+            if (point.x < x*cell-tolerance || point.x > (x+1)*cell+tolerance ||
+                point.z < z*cell-tolerance || point.z > (z+1)*cell+tolerance) continue
+            for (i in columns[columnKey(x,z)].orEmpty()) {
+                val vertical = abs(surfaceHeight(i,point.x,point.z)-point.y)
+                if (vertical < gap || (vertical == gap && x == ix && z == iz)) {
+                    best = i
+                    gap = vertical
+                }
+            }
+        }
+        return best
+    }
+
+    /** Project only the blocked component of a tap; preserve travel along the edge. */
+    fun legalPoint(i: Int, x: Float, z: Float): GroundPoint {
+        val p = cells[i]
+        val cx = center(p.ix)
+        val cz = center(p.iz)
+        val half = cell * .5f
+        val epsilon = cell * .0001f
+        val margin = cell * .43f + epsilon
+        fun extent(link: Int) = half - if (link < 0) margin else epsilon
+        var dx = (x-cx).coerceIn(-extent(p.links[1]),extent(p.links[0]))
+        var dz = (z-cz).coerceIn(-extent(p.links[3]),extent(p.links[2]))
+        if (!fitsFootprint(i,cx+dx,cz+dz)) {
+            val ex = half-abs(dx)
+            val ez = half-abs(dz)
+            val scale = margin / hypot(ex,ez).coerceAtLeast(epsilon)
+            dx = kotlin.math.sign(dx) * (half-ex*scale)
+            dz = kotlin.math.sign(dz) * (half-ez*scale)
+        }
+        return GroundPoint(i,cx+dx,cz+dz)
+    }
+
+    /** Sweep the camera boom through the actor's connected deck in capture coordinates.
+     * An endpoint alone can be inside the map on the far side of a wall or a gap. */
+    fun cameraEye(eye: Vector3, feet: Vector3, actorCell: Int? = null): Vector3 {
+        val x = (feet.x - origin.x) / WORLD_SCALE
+        val z = (feet.z - origin.z) / WORLD_SCALE
+        val ground = (feet.y - origin.y) / WORLD_SCALE
+        val dx = (eye.x - feet.x) / WORLD_SCALE
+        val dz = (eye.z - feet.z) / WORLD_SCALE
+        val column = columns[columnKey(floor(x / cell).toInt(), floor(z / cell).toInt())]
+        var index = actorCell?.takeIf { column?.contains(it) == true }
+            ?: column?.minByOrNull { abs(surfaceHeight(it, x, z) - ground) }
+        var fraction = 0f
+        if (index != null) {
+            var deck: Int = index
+            val steps = ceil(maxOf(abs(dx), abs(dz)) / (cell * .25f)).toInt().coerceAtLeast(1)
+            for (step in 1..steps) {
+                val end = step.toFloat() / steps
+                val lastZ = z + dz * fraction
+                fun reachable(t: Float): Int {
+                    val px = x + dx * t
+                    val pz = z + dz * t
+                    val across = nextCell(deck, px, lastZ)
+                    if (across < 0) return -1
+                    val next = nextCell(across, px, pz)
+                    return if (next >= 0 && fitsFootprint(next, px, pz)) next else -1
+                }
+                val next = reachable(end)
+                if (next < 0) {
+                    var blocked = end
+                    repeat(6) {
+                        val mid = (fraction + blocked) * .5f
+                        if (reachable(mid) >= 0) fraction = mid else blocked = mid
+                    }
+                    deck = reachable(fraction)
+                    break
+                }
+                fraction = end
+                deck = next
+            }
+            index = deck.takeIf { it >= 0 }
+        }
+        val px = x + dx * fraction
+        val pz = z + dz * fraction
+        val floorY = index?.let { surfaceHeight(it, px, pz) } ?: ground
+        val low = origin.y + floorY * WORLD_SCALE + .24f
+        var high = Float.POSITIVE_INFINITY
+        for (other in columns[columnKey(floor(px / cell).toInt(), floor(pz / cell).toInt())].orEmpty()) {
+            if (other == index) continue
+            val ceiling = origin.y + surfaceHeight(other, px, pz) * WORLD_SCALE - .24f
+            if (ceiling >= low) high = minOf(high, ceiling)
+        }
+        return Vector3(feet.x + (eye.x-feet.x)*fraction, eye.y.coerceIn(low, high),
+            feet.z + (eye.z-feet.z)*fraction)
     }
 
     /** A frame advances less than one cell per axis. A missing edge is a wall, cliff, or map boundary. */

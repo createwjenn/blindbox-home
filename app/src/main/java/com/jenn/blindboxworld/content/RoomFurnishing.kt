@@ -15,6 +15,7 @@ internal data class Furnishing(
     val origin: RoomSpot? = null, val wall: Boolean = false, val tabletop: Boolean = false,
     val price: Int = 0, val thumbnail: Int = 0, val category: String = "", val baseYaw: Float = 0f,
 ) {
+    val movable get() = id != "machine"
     val swappableArt get() = category in setOf("frame", "art") || id in setOf("ochre-canvas", "unboxing-print", "slop-print", "capybara-print")
     val blocksWalk get() = !wall && id != "wool-rug" && category != "rug"
     val asset get() = if (id.startsWith("art:")) "furniture/painting_${id.removePrefix("art:").replace('-', '_')}.glb"
@@ -161,7 +162,7 @@ internal class RoomFurnishing(val catalogue: List<Furnishing>, private val prefs
         begin(id)
     }
     fun begin(id: String) {
-        if (!own(id) || carrying != null) return
+        if (pieces[id]?.movable != true || !own(id) || carrying != null) return
         selected=null;shopOpen=false;target=null;carrying=id
     }
     fun cancel() { carrying=null;target=null;selected=null }
@@ -276,6 +277,7 @@ internal class RoomFurnishing(val catalogue: List<Furnishing>, private val prefs
         val a=p.at;val side=p.yaw== -90f;val along=if(side)a.z else a.x
         val limit=if(side)4.24f else 4.19f
         return a.y-i.height/2 >= .02f && a.y+i.height/2 < 4.06f && abs(along)+i.width/2<limit && !(p.yaw==0f && a.x-i.width/2< -2.85f) &&
+            !(p.yaw==180f && CornerShop.coversDisplay(a.x,a.y,i.width,i.height)) &&
             !(p.yaw==180f && abs(a.x+1.88f)<.61f+i.width/2 && a.y-i.height/2<2.28f) &&
             placedIds.none { other ->
                 val o=pieces.getValue(other);val q=pose(other)

@@ -15,24 +15,17 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.pico.spatial.ui.design.Button
-import com.pico.spatial.ui.design.Text
 import com.pico.spatial.ui.foundation.hover.spatialHoverEffect
-import com.pico.spatial.core.ecs.Entity
-import com.pico.spatial.core.math.Vector3
 import kotlin.math.*
+
+internal const val MENU_CLOSE_SIZE = 64
+internal const val MENU_CLOSE_GAP = 12
 
 @Composable
 internal fun RoomMenuClose(close: () -> Unit) {
     Button(onClick=close, shape=CircleShape, contentPadding=PaddingValues(0.dp),
-        modifier=Modifier.padding(bottom=12.dp).size(64.dp).spatialHoverEffect()
+        modifier=Modifier.padding(bottom=MENU_CLOSE_GAP.dp).size(MENU_CLOSE_SIZE.dp).spatialHoverEffect()
             .semantics { contentDescription="Close menu and step back" }) { Image(painterResource(R.drawable.room_close), null, Modifier.size(28.dp)) }
-}
-
-@Composable
-internal fun ObjectTarget(title: String, open: () -> Unit) {
-    Button(onClick=open, shape=CircleShape, contentPadding=PaddingValues(0.dp),
-        modifier=Modifier.size(56.dp).spatialHoverEffect()
-            .semantics { contentDescription="Object target: $title" }) { Text("◎") }
 }
 
 @Composable
@@ -53,41 +46,77 @@ internal fun roomRetreat(from: FloorPoint, away: FloorPoint): FloorPoint? {
     return null
 }
 
-internal data class TargetRect(val left: Float,val right: Float,val bottom: Float,val top: Float) {
-    fun overlap(x:Float,y:Float,r:Float): Float =
-        max(0f,min(right,x+r)-max(left,x-r))*max(0f,min(top,y+r)-max(bottom,y-r))
-}
-
-/** Score above/below/left/right in view space against all visible object silhouettes. */
-internal fun chooseTargetPosition(rect: TargetRect, blockers: List<TargetRect>): Pair<Float,Float> {
-    val x=(rect.left+rect.right)/2;val y=(rect.bottom+rect.top)/2
-    return listOf(x to rect.top+.085f, x to rect.bottom-.085f,
-        rect.left-.085f to y, rect.right+.085f to y)
-        .map { (a,b)->a.coerceIn(-.85f,.85f) to b.coerceIn(-.48f,.48f) }
-        .minBy { (a,b)->blockers.sumOf { it.overlap(a,b,.065f).toDouble() } }
-}
-
-internal fun roomObjectTarget(state: RoomFurnishing,id: String,root: Entity,head: Entity): Vector3? {
-    val rects=mutableMapOf<String,TargetRect>()
-    for (key in state.placedIds) {
-        val p=state.visualSpot(key);val item=state.pieces.getValue(key)
-        val center=root.convertPositionTo(Vector3(p.x,p.y+(if(item.wall) 0f else item.height*.5f),p.z),head)
-        if (center.z>=-.15f) continue
-        val points=buildList {
-            for (x in listOf(-.5f,.5f)) for(y in listOf(-.5f,.5f)) for(z in listOf(-.5f,.5f)) {
-                val side=abs(state.pose(key).yaw)%180f==90f
-                val point=root.convertPositionTo(Vector3(p.x+x*(if(side)item.depth else item.width),
-                    p.y+(if(item.wall)0f else item.height*.5f)+y*item.height,
-                    p.z+z*(if(side)item.width else item.depth)),head)
-                if(point.z<-.1f) add(point)
-            }
-        }
-        if(points.isEmpty()) continue
-        rects[key]=TargetRect(points.minOf { it.x*1.35f/-it.z },points.maxOf { it.x*1.35f/-it.z },
-            points.minOf { it.y*1.35f/-it.z },points.maxOf { it.y*1.35f/-it.z })
+/** Rendered bounds in the furniture holder's local axes, before its saved room rotation. */
+internal data class DecorBounds(val center: RoomSpot, val half: RoomSpot) {
+    fun nearby(eye: RoomSpot, pose: DecorPose, rotation: Float): Boolean {
+        val (x,z) = rotY(eye.x-pose.at.x, eye.z-pose.at.z, -rotation)
+        val dx = (abs(x-center.x)-half.x).coerceAtLeast(0f)
+        val dy = (abs(eye.y-pose.at.y-center.y)-half.y).coerceAtLeast(0f)
+        val dz = (abs(z-center.z)-half.z).coerceAtLeast(0f)
+        return dx*dx + dy*dy + dz*dz <= 2.4f*2.4f
     }
-    val rect=rects[id] ?: return null
-    if (rect.left>.95f || rect.right<-.95f || rect.bottom>.65f || rect.top<-.65f) return null
-    val (x,y)=chooseTargetPosition(rect,rects.values.toList())
-    return Vector3(x,y,-1.35f)
+
+    fun viewingSpot(eye: RoomSpot, pose: DecorPose, rotation: Float, wall: Boolean,
+                    visibleFrom: (FloorPoint, RoomSpot) -> Boolean): LoftView? {
+        val (cx,cz) = rotY(center.x, center.z, rotation)
+        val at = RoomSpot(pose.at.x+cx, pose.at.y+center.y, pose.at.z+cz)
+        val from = FloorPoint(eye.x,eye.z)
+        val facing = if (wall) pose.yaw else Math.toDegrees(atan2(eye.x-at.x, eye.z-at.z).toDouble()).toFloat()
+        for (offset in listOf(0f, 20f, -20f, 45f, -45f, 70f, -70f, 95f, -95f, 135f, -135f, 180f)) {
+            if (wall && abs(offset)>45f) continue
+            val yaw = facing+offset
+            val (s,c) = rotY(0f,1f,yaw-rotation)
+            val width = abs(c)*half.x+abs(s)*half.z
+            val depth = abs(s)*half.x+abs(c)*half.z
+            // Fit both edges and the top/bottom inside a comfortable central viewing angle.
+            val radius = depth+maxOf(1.12f, (width+.46f)*1.28f, (abs(eye.y-at.y)+half.y)*1.55f)
+            val (dx,dz) = rotY(0f,radius,yaw)
+            val to = FloorPoint(at.x+dx,at.z+dz)
+            if (RoomFloor.isWalkable(to) && visibleFrom(to,at) &&
+                (from.distanceTo(to)<.015f || RoomFloor.route(from,to).isNotEmpty()))
+                return LoftView(to.x,eye.y,to.z,yaw)
+        }
+        return null
+    }
+}
+
+internal const val DECOR_MENU_WIDTH = .48f
+
+/** Project the four footprint corners from the arrival viewpoint, then clear the
+ * outermost edge by the full angular half-width of the viewer-facing card. */
+internal fun decorMenuView(eye: RoomSpot, center: RoomSpot, half: RoomSpot, rotation: Float): LoftView {
+    val dx = center.x - eye.x
+    val dz = center.z - eye.z
+    val distance = hypot(dx, dz).coerceAtLeast(.001f)
+    val forwardX = dx / distance
+    val forwardZ = dz / distance
+    val radius = (distance * .68f).coerceIn(.55f, 1.35f)
+    var left = 0f
+    var right = 0f
+    var top = Float.NEGATIVE_INFINITY
+    for (x in listOf(-half.x, half.x)) for (z in listOf(-half.z, half.z)) {
+        val (ox, oz) = rotY(x, z, rotation)
+        val depth = (distance + ox * forwardX + oz * forwardZ).coerceAtLeast(.01f)
+        val angle = atan2(-ox * forwardZ + oz * forwardX, depth)
+        left = minOf(left, angle)
+        right = maxOf(right, angle)
+        top = maxOf(top, (center.y + half.y - eye.y) / depth)
+    }
+    val margin = atan2(DECOR_MENU_WIDTH / 2, radius) + .055f
+    val candidates = listOf(right + margin, left - margin)
+    val angle = candidates.sortedBy { abs(it) }.firstOrNull {
+        val x = eye.x + radius * (forwardX * cos(it) - forwardZ * sin(it))
+        val z = eye.z + radius * (forwardZ * cos(it) + forwardX * sin(it))
+        abs(x) < 4.1f && abs(z) < 4.2f
+    } ?: candidates.minBy { abs(it) }
+    // A very wide, close piece can occupy both sides of the field of view.
+    // Keep the controls visible in the clear space above it in that case.
+    val above = abs(angle) + atan2(DECOR_MENU_WIDTH / 2, radius) > .64f && top < .3f
+    val bearing = if (above) angle.coerceIn(-.36f,.36f) else angle
+    val x = eye.x + radius * (forwardX * cos(bearing) - forwardZ * sin(bearing))
+    val z = eye.z + radius * (forwardZ * cos(bearing) + forwardX * sin(bearing))
+    val defaultY = eye.y + ((center.y - eye.y) * .35f).coerceIn(-.22f,.18f)
+    val y = if (above) maxOf(defaultY, eye.y + radius * top + .32f) else defaultY
+    val yaw = Math.toDegrees(atan2(eye.x-x,eye.z-z).toDouble()).toFloat()
+    return LoftView(x,y,z,yaw)
 }

@@ -70,7 +70,10 @@ for i in range(36):
         length=min(length,4.5-y)
         if length<=0:break
         block('Oak plank',(x,y+length/2,-.014),(.241,length-.006,.028),rng.choice(floor),.001);y+=length
-block('Entrance wall',(0,-4.45,2.12),(8.8,.12,4.24),cream)
+# Leave the shop window open on both faces of the wall. The separate shop asset supplies the reveals.
+for left, right, bottom, top in ((-4.40,2.31,0,4.24), (3.91,4.40,0,4.24),
+                                  (2.31,3.91,0,.98), (2.31,3.91,1.90,4.24)):
+    block('Entrance wall',((left+right)/2,-4.45,(bottom+top)/2),(right-left,.12,top-bottom),cream)
 
 block('Lounge wall',(4.34,0,2.12),(.12,9,4.24),cream)
 smoked = material('Smoked chestnut beams', '463027', .68)

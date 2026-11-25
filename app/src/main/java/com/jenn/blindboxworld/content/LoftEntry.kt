@@ -50,39 +50,34 @@ import kotlinx.coroutines.withContext
 @Composable
 fun BlindboxExperience() {
     var entered by remember { mutableStateOf(false) }
-    var threshold by remember { mutableFloatStateOf(0f) }
-    var roomReady by remember { mutableStateOf(false) }
+    val entry = remember { EntryLoad() }
     val scope = rememberCoroutineScope()
     val tracking = remember { runCatching { HMDTrackingProvider() }.getOrNull() }
     DisposableEffect(tracking) {
         runCatching { tracking?.start() }
         onDispose { runCatching { tracking?.stop() } }
     }
-    if (entered) HomeStage(tracking, threshold, onExitDoor = {
-        roomReady=false
-        threshold=0f
-        entered=false
-    }) { roomReady = true } else DoorLanding(tracking, threshold) {
+    if (entered) HomeStage(tracking, entry) {
+        entry.clear()
+        entered = false
+    } else DoorLanding(tracking, entry) {
         scope.launch {
-            for (step in 1..40) { threshold = step / 40f; delay(16) }
-            delay(80) // Present a fully covered frame before replacing the landing.
+            entry.begin()
+            delay(220) // Present the black loader before replacing the landing's spatial scene.
             entered = true
         }
     }
-    LaunchedEffect(roomReady) {
-        if (roomReady) {
-            delay(160)
-            for (step in 48 downTo 0) { threshold = step / 48f; delay(16) }
-        }
+    LaunchedEffect(entry.percent == 100) {
+        if (entry.percent == 100) { delay(250); entry.clear() }
     }
 }
 
 @Composable
-private fun DoorLanding(tracking: HMDTrackingProvider?, threshold: Float, enter: () -> Unit) {
+private fun DoorLanding(tracking: HMDTrackingProvider?, entry: EntryLoad, enter: () -> Unit) {
     val scope = rememberCoroutineScope()
     var transitionAnchor by remember { mutableStateOf<Entity?>(null) }
     var transitionPanel by remember { mutableStateOf<Entity?>(null) }
-    val maskScale=3f/LocalPhysicalLengthConverter.current.dpToLength(1024.dp,LengthUnit.Meters)
+    val maskScale=3.5f/LocalPhysicalLengthConverter.current.dpToLength(1024.dp,LengthUnit.Meters)
     LaunchedEffect(transitionAnchor) {
         while(true) {
             withFrameNanos { }
@@ -93,10 +88,11 @@ private fun DoorLanding(tracking: HMDTrackingProvider?, threshold: Float, enter:
             }
         }
     }
-    LaunchedEffect(threshold,transitionPanel) { transitionPanel?.enabled=threshold>0f }
+    LaunchedEffect(entry.active,transitionPanel) { transitionPanel?.enabled=entry.active }
     var doorLeaf by remember { mutableStateOf<Entity?>(null) }
     var doorButton by remember { mutableStateOf<Entity?>(null) }
     var landingRoot by remember { mutableStateOf<Entity?>(null) }
+    RenderHands(landingRoot, tracking)
     var ready by remember { mutableStateOf(false) }
     var disposed by remember { mutableStateOf(false) }
     DisposableEffect(Unit) {
@@ -143,7 +139,7 @@ private fun DoorLanding(tracking: HMDTrackingProvider?, threshold: Float, enter:
         }
     }
     SpatialView(modifier = tapDoor, attachments = {
-        AttachmentPanel("entryDither") { EntranceDither(threshold) }
+        AttachmentPanel("entryLoading") { EntranceLoading(entry) }
         AttachmentPanel("doorButton") {
             Box(Modifier.width(buttonWidth)) {
                 CardAction("Enter room", primary = true) { enterDoor() }
@@ -158,8 +154,8 @@ private fun DoorLanding(tracking: HMDTrackingProvider?, threshold: Float, enter:
             content.addEntity(landing)
             val mask=Entity().apply { components.set(TransformComponent()) }
             content.addEntity(mask);transitionAnchor=mask
-            panels.entity("entryDither")?.let {
-                mask.addChild(it);it.place(0f,0f,-.4f,maskScale);it.enabled=false;transitionPanel=it
+            panels.entity("entryLoading")?.let {
+                mask.addChild(it);it.place(0f,0f,-1.2f,maskScale);it.enabled=false;transitionPanel=it
             }
             fun ownsLanding() = initContext.isActive && !disposed && landingRoot === landing && landing.valid
             if (!ownsLanding()) return@SpatialView

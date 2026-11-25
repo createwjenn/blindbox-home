@@ -1,5 +1,8 @@
 package com.jenn.blindboxworld.content
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.ui.graphics.Brush
@@ -67,14 +70,28 @@ internal fun ActionCard(width: Int = 320, content: @Composable ColumnScope.() ->
 }
 
 @Composable
-internal fun CardAction(label: String, primary: Boolean = false, action: () -> Unit) {
+internal fun CardAction(label: String, primary: Boolean = false, enabled: Boolean = true, action: () -> Unit) {
     val shape = RoundedCornerShape(with(LocalDensity.current) { 100f.toDp() })
+    val interactions = remember { MutableInteractionSource() }
+    val hovered by interactions.collectIsHoveredAsState()
+    val pressed by interactions.collectIsPressedAsState()
+    val background = when {
+        pressed -> Color(0xFF566468)
+        hovered -> Color(0xFF394749)
+        else -> Color.Black
+    }
     Button(
         onClick = action,
+        enabled = enabled,
+        interactionSource = interactions,
         shape = shape,
-        modifier = Modifier.fillMaxWidth()
-            .then(if (primary) Modifier.border(1.dp, Color(0xFF879091), shape) else Modifier),
-        colors = ButtonDefaults.buttonColors(containerColor = Color.Black, contentColor = Color.White),
+        modifier = Modifier.fillMaxWidth().clip(shape)
+            .then(when {
+                hovered -> Modifier.border(2.dp, Color.White, shape)
+                primary -> Modifier.border(1.dp, Color(0xFF879091), shape)
+                else -> Modifier
+            }),
+        colors = ButtonDefaults.buttonColors(containerColor = background, contentColor = Color.White),
     ) {
         Text(label, fontSize = 20.sp, fontWeight = FontWeight.Bold, maxLines = 1)
     }
@@ -148,7 +165,7 @@ internal fun WorldResult(round: WorldRound, figure: String, eligible: Boolean, c
                         }
                     }
                 }
-                Text("To unlock the painting, retrieve all items within 60s.", color = dark,
+                Text("To unlock the painting, collect all $WORLD_PICKUPS items in ${PAINTING_TIME_MS / 1000} seconds or less.", color = dark,
                     textAlign = TextAlign.Center, fontSize = 18.sp, lineHeight = 21.sp)
                 ResultButton(if (collected) "Painting collected" else "Collect painting", true,
                     enabled = eligible && !collected && !round.preview, onClick = claim)

@@ -5,6 +5,27 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class DrawPrizeTest {
+    @Test fun legacyDrawUsesLatestKnownFigureDateInLocalTime() {
+        val zone = java.time.ZoneId.of("America/Los_Angeles")
+        val stamp = java.time.Instant.parse("2026-11-25T02:15:00Z").toEpochMilli()
+        val day = legacyFigureDrawDay(listOf(stamp, stamp - 86_400_000L), zone)
+        assertEquals("2026-11-24", day)
+        assertNull(drawCost(day, "2026-11-24", false, 9))
+        assertEquals(1, drawCost(day, "2026-11-25", false, 9))
+        assertNull(legacyFigureDrawDay(emptyList(), zone))
+    }
+
+    @Test fun dailySlotAndPaidExchangeAreMutuallyExclusive() {
+        val day = "2026-11-24"
+        assertEquals(1, drawCost(null, day, false, 1))
+        assertNull(drawCost(null, day, false, 0))
+        assertNull(drawCost(day, day, false, 100))
+        assertNull(drawCost(day, day, true, 19))
+        assertEquals(20, drawCost(day, day, true, 20))
+        assertNull(drawCost(day, "2026-11-25", true, 20))
+        assertEquals(1, drawCost(day, "2026-11-25", false, 20))
+    }
+
     @Test fun drawSplitsAccessoryAndFigureOddsFromTheFirstCoin() {
         val starters = libraryUnlocks(emptySet())
         assertEquals(ACCESSORIES.take(3).map { it.id }.toSet(), starters)

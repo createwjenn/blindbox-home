@@ -1,18 +1,14 @@
 package com.jenn.blindboxworld.content
 
-import androidx.compose.ui.semantics.CustomAccessibilityAction
 import com.pico.spatial.core.container.SpatialViewContent
 import com.pico.spatial.core.ecs.AccessibilityComponent
 import com.pico.spatial.core.ecs.CollisionComponent
 import com.pico.spatial.core.ecs.InteractableComponent
 import com.pico.spatial.core.ecs.Entity
-import com.pico.spatial.core.ecs.ModelComponent
 import com.pico.spatial.core.ecs.TransformComponent
-import com.pico.spatial.core.ecs.resource.MeshResource
 import com.pico.spatial.core.ecs.resource.ShapeResource
 import com.pico.spatial.core.ecs.resource.PhysicsMaterialResource
 import com.pico.spatial.core.math.Vector3
-import com.pico.spatial.core.math.Color4
 import com.pico.spatial.ui.foundation.content.setAccessibilityActions
 
 internal fun roomFloorTarget(content: SpatialViewContent): Entity {
@@ -25,22 +21,13 @@ internal fun roomFloorTarget(content: SpatialViewContent): Entity {
         ))
         components.set(InteractableComponent())
     }
-    // Hit surface is retained only for furniture placement, never for locomotion.
-    floor.components.set(AccessibilityComponent("Furniture placement surface", "").apply {
+    // Navigation and furniture placement use the same real floor intersection.
+    floor.components.set(AccessibilityComponent("Room floor", "").apply {
         isAccessibilityElement = false
     })
     content.setAccessibilityActions(floor, "room.placement-floor") { }
     floor.enabled = false
     return floor
-}
-
-internal fun roomDestinationMarker() = Entity().apply {
-    components.set(TransformComponent())
-    components.set(ModelComponent(
-        MeshResource.createTorus(0.105f, 0.008f),
-        glowMaterial(Color4(1f, 0.83f, 0.44f, 1f))
-    ))
-    enabled = false
 }
 
 /** Interaction-only wall planes expose precise mouse and pinch locations during placement. */

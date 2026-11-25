@@ -1,6 +1,6 @@
 """Build the daily-draw props from the supplied Tripo GLB and the game's box.glb.
 
-Run with Python, NumPy and Pillow: python gumball_machine.py <machine.glb> <font.ttf>
+Run with Python, NumPy and Pillow: python gumball_machine.py <machine.glb>
 Coordinates are glTF Y-up, with the outlet facing +Z. Lengths in exported assets are metres.
 """
 import argparse
@@ -10,7 +10,7 @@ import struct
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageFilter
 
 ASSETS = Path(__file__).resolve().parents[1] / "app/src/main/assets"
 SCALE = 1.8
@@ -124,7 +124,7 @@ def patch(latitudes, longitudes, radius, center):
     return normal * radius + center, normal, grid(len(longitudes), len(latitudes))
 
 
-def machine(path, font_path):
+def machine(path):
     source = Source(path)
     p = source.doc["meshes"][0]["primitives"][0]
     v = source.array(p["attributes"]["POSITION"]).copy()
@@ -179,8 +179,8 @@ def machine(path, font_path):
     elevation = np.arcsin(ny)
     def softbox(lon, lat, width, height):
         return np.exp(-((azimuth-lon)/width)**4-((elevation-lat)/height)**4)
-    reflect = .14*softbox(-.82,.44,.11,.27) + .07*softbox(.91,.04,.055,.32)
-    alpha = .038 + .34*grazing + reflect
+    reflect = .24*softbox(-.82,.42,.14,.31) + .12*softbox(.91,.05,.075,.35)
+    alpha = .045 + .46*grazing + reflect
     rgba = np.column_stack((np.ones((len(normal),3)),alpha))
     prop.surface(pos * SCALE, normal, idx, glass, COLOR_0=rgba)
     # Interior seat and underside of the lid close the clipped glass when seen from above or below.
@@ -190,30 +190,33 @@ def machine(path, font_path):
         pts = np.vstack(([0, height, 0], rim))
         fan = np.array([(0, i, i+1) for i in range(1,65)])
         prop.surface(pts*SCALE, np.tile([0,up,0],(len(pts),1)), fan if up==1 else fan[:,::-1], mat)
-    # Small curved ink transfer. Transparent pixels expose the glass, even in a side view.
-    font = ImageFont.truetype(str(font_path), 196)
-    bounds = font.getbbox("SLOP")
-    logo = Image.new("RGBA", (bounds[2]-bounds[0]+14, bounds[3]-bounds[1]+14))
-    draw = ImageDraw.Draw(logo)
-    draw.text((7-bounds[0], 7-bounds[1]), "SLOP", font=font, fill=(0,0,0,0),
-              stroke_width=6, stroke_fill=(228,214,209,255))
-    draw.text((7-bounds[0], 7-bounds[1]), "SLOP", font=font, fill=(0,0,0,0),
-              stroke_width=4, stroke_fill=(30,19,24,255))
-    buf = io.BytesIO()
-    logo.save(buf, format="PNG")
-    prop.doc["images"] = [dict(mimeType="image/png", bufferView=prop.view(buf.getvalue()))]
-    prop.doc["textures"] = [dict(source=0)]
-    ink = prop.material("SLOP screen print", [1,1,1], .4, ambient=.42)
-    prop.doc["materials"][ink]["emissiveTexture"] = {"index": 0}
-    prop.doc["materials"][ink].update(alphaMode="MASK", alphaCutoff=.30)
-    prop.doc["materials"][ink]["pbrMetallicRoughness"]["baseColorTexture"] = {"index": 0}
-    u, w = 33, 9
-    lon_span = .56
+    # Polished silver lettering follows the globe in both longitude and latitude.
+    logo = Image.open(Path(__file__).parent / "textures/slop-chrome.png").convert("RGBA")
+    matte = logo.getchannel("A")
+    # Roll the outer lip of each stroke and each interior counter into the glass.
+    height = np.asarray(matte.filter(ImageFilter.GaussianBlur(1.7)), dtype=float) / 255
+    dv, du = np.gradient(height)
+    bevel = np.stack((-2.6 * du, 2.6 * dv, np.ones_like(height)), axis=-1)
+    bevel /= np.linalg.norm(bevel, axis=-1, keepdims=True)
+    normal_map = Image.fromarray(np.uint8(np.rint((bevel + 1) * 127.5)))
+    prop.doc["images"], prop.doc["textures"] = [], []
+    for image in (logo, normal_map):
+        buf = io.BytesIO()
+        image.save(buf, format="PNG")
+        prop.doc["images"].append(dict(mimeType="image/png", bufferView=prop.view(buf.getvalue())))
+        prop.doc["textures"].append(dict(source=len(prop.doc["images"]) - 1))
+    chrome = prop.material("SLOP polished silver", [1,1,1], .22, .86, ambient=.40)
+    prop.doc["materials"][chrome].update(alphaMode="MASK", alphaCutoff=.48,
+        normalTexture={"index": 1}, emissiveTexture={"index": 0})
+    prop.doc["materials"][chrome]["pbrMetallicRoughness"]["baseColorTexture"] = {"index": 0}
+    # The decal grid is finer than the glass so its centre and ends both clear the bowl.
+    u, w = 49, 33
+    lon_span = .50
     lat_span = lon_span * logo.height/logo.width
     pos, normal, idx = patch(np.linspace(.015-lat_span, .015+lat_span, w),
-                             np.linspace(-lon_span, lon_span, u), radius+.0008, [0,cy,0])
+                             np.linspace(-lon_span, lon_span, u), radius+.0014, [0,cy,0])
     uv = np.stack(np.meshgrid(np.linspace(0,1,u),np.linspace(1,0,w)),axis=-1).reshape(-1,2)
-    prop.surface(pos*SCALE,normal,idx,ink,TEXCOORD_0=uv)
+    prop.surface(pos*SCALE,normal,idx,chrome,TEXCOORD_0=uv)
     # Coin slit above the axle, on the flattening of the original nickel mechanism.
     slit = np.array([[-.023,.402,.184],[.023,.402,.184],[-.023,.408,.184],[.023,.408,.184]])
     prop.surface(slit*SCALE,np.tile([0,0,1],(4,1)),grid(2,2),black)
@@ -326,9 +329,8 @@ def miniature():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("model",type=Path)
-    parser.add_argument("font",type=Path)
     args = parser.parse_args()
-    machine(args.model,args.font)
+    machine(args.model)
     capsule("gumball-red",[.98,.045,.062],[.62,.006,.015])
     capsule("gumball-pink",[1,.50,.60],[.97,.19,.31])
     miniature()

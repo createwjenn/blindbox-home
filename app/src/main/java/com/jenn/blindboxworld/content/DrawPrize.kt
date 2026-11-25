@@ -1,5 +1,7 @@
 package com.jenn.blindboxworld.content
 
+import java.time.Instant
+import java.time.ZoneId
 import kotlin.random.Random
 
 internal sealed interface DrawPrize {
@@ -43,3 +45,17 @@ internal fun libraryUnlocks(saved: Set<String>): Set<String> =
 internal fun wearableOutfit(requested: Set<String>, unlocked: Set<String>): Set<String> =
     ACCESSORIES.filter { it.id in requested && it.id in unlocked }
         .distinctBy { it.slot }.mapTo(mutableSetOf()) { it.id }
+
+
+/** Older saves timestamped figure reveals, but had no day field for machine purchases. */
+internal fun legacyFigureDrawDay(unboxed: Collection<Long>, zone: ZoneId = ZoneId.systemDefault()): String? =
+    unboxed.maxOrNull()?.takeIf { it > 0 }?.let { Instant.ofEpochMilli(it).atZone(zone).toLocalDate().toString() }
+
+internal const val EXTRA_DRAW_COST = 20
+
+/** Slot gestures can only pay for the daily draw. Additional draws require the exchange button. */
+internal fun drawCost(lastDay: String?, today: String, exchange: Boolean, balance: Int): Int? {
+    if ((lastDay == today) != exchange) return null
+    val price = if (exchange) EXTRA_DRAW_COST else 1
+    return price.takeIf { balance >= it }
+}

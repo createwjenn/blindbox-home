@@ -95,15 +95,14 @@ internal suspend fun presentPrize(head: Entity, prize: DrawPrize, prepared: Priz
     }
 }
 
-/** The destination is reprojected every frame as the user turns or the HUD clears nearby furniture. */
-internal suspend fun flyAccessoryToLibrary(reward: Entity, icon: () -> Vector3, sfx: Sfx) {
+/** Both endpoints are in loft coordinates once the display stand is in view. */
+internal suspend fun flyAccessoryToStand(reward: Entity, target: Vector3, sfx: Sfx) {
     val origin = reward.pos()
     val size = reward.components.get(TransformComponent::class.java)?.scaleVector?.x ?: .53f
-    val tilt = if (icon().x >= origin.x) -15f else 15f
+    val tilt = if (target.x >= origin.x) -15f else 15f
     sfx.play(reward,"whoosh",.65f)
     tween(.86f) { progress ->
         val t = easeInOut(progress)
-        val target = icon()
         val arc = 4f*t*(1f-t)
         reward.place(origin.x+(target.x-origin.x)*t,
             origin.y+(target.y-origin.y)*t+.12f*arc,

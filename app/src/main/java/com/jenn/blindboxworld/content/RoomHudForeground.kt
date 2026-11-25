@@ -65,7 +65,6 @@ internal class RoomHudForeground(private val head: Entity, private val room: Ent
     private var modalDepth = 0f
 
     private val stillness = HudStillness()
-    private val iconStillness = HudStillness()
     private var lastTrackedEye: Vector3? = null
     private var lastTrackedForward: Vector3? = null
     private var motionTime = 0L
@@ -74,8 +73,8 @@ internal class RoomHudForeground(private val head: Entity, private val room: Ent
     private var lastUp: Vector3? = null
 
     /** Room-space tracking also catches locomotion and snap turns, not just HMD movement. */
-    fun quietHud(frame: Long, wallet: Entity?, pads: Entity?, panel: Entity?,
-                 padsAllowed: Boolean, walletAllowed: Boolean, clock: Boolean,
+    fun quietHud(frame: Long, pads: Entity?, panel: Entity?,
+                 padsAllowed: Boolean, clock: Boolean,
                  panelAllowed: Boolean, interacting: Boolean, navigating: Boolean = false) {
         if (motionTime != 0L && frame-motionTime < 80_000_000L) return
         val dt = if (motionTime == 0L) .08f else ((frame-motionTime)*1e-9f).coerceAtMost(.25f)
@@ -98,7 +97,6 @@ internal class RoomHudForeground(private val head: Entity, private val room: Ent
             lastUp?.let { distance(up,it)/dt > .10f } == true
         lastEye=eye; lastForward=forward; lastUp=up
         val alpha = stillness.advance(dt,moving,interacting)
-        val iconAlpha = iconStillness.advance(dt,moving,false)
         fun apply(entity: Entity?, allowed: Boolean, fade: Boolean) {
             entity ?: return
             entity.setOpacity(if (fade) alpha else 1f)
@@ -106,12 +104,10 @@ internal class RoomHudForeground(private val head: Entity, private val room: Ent
             entity.enabled = allowed && (!fade || alpha > .01f)
         }
         apply(pads,padsAllowed,true)
-        wallet?.let {
-            it.setOpacity(iconAlpha)
-            it.enabled=walletAllowed && iconAlpha>.01f
-        }
         apply(panel,panelAllowed,clock)
     }
+
+    fun eyeIn(entity: Entity): Vector3 = head.convertPositionTo(zero, entity)
 
     fun fitModal(distance: Float) {
         modalDepth = distance
@@ -132,10 +128,11 @@ internal class RoomHudForeground(private val head: Entity, private val room: Ent
         model.getChildren().forEach(::sortPreview)
     }
 
-    fun update(frame: Long, blockers: List<HudOccluder>, wallet: Entity?, pads: Entity?, panel: Entity?,
+    fun update(frame: Long, blockers: List<HudOccluder>, pads: Entity?, panel: Entity?,
                modal: Boolean) {
         val anchorTransform = actionAnchor.components[TransformComponent::class.java] ?: return
-        val physical = panel?.components?.get(TransformComponent::class.java)
+        val physical = panel?.takeIf { it.getParent() == layer || it.getParent() == modalLayer }
+            ?.components?.get(TransformComponent::class.java)
         val parent = actionAnchor.getParent() ?: return
         if (panel?.enabled == true && physical != null) {
             physical.setPosition(parent.convertPositionTo(anchorTransform.position, head))
@@ -154,7 +151,6 @@ internal class RoomHudForeground(private val head: Entity, private val room: Ent
                 if (distance < 1f) scale = min(scale,(distance * .92f).coerceAtLeast(.055f))
             }
         }
-        if (wallet?.enabled == true) allow(wallet.pos(), .23f)
         if (pads?.enabled == true) allow(pads.pos(), .24f)
         if (panel?.enabled == true && physical != null) {
             val p = physical.position

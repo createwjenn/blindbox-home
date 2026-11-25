@@ -28,6 +28,7 @@ internal class CourtyardInput : ControllerTrackingProvider.ControllerActionListe
     private var aHeld = false
     private var bHeld = false
     private val exit = java.util.concurrent.atomic.AtomicBoolean(false)
+    fun requestExit() { exit.set(true) }
     fun takeExit() = exit.getAndSet(false)
     fun requestJump() { jump.set(true) }
     fun takeJump() = jump.getAndSet(false)
@@ -41,7 +42,7 @@ internal class CourtyardInput : ControllerTrackingProvider.ControllerActionListe
         if (a && !aHeld) requestJump()
         aHeld = a
         val b = data.right?.bButtonPressed == true
-        if (b && !bHeld) exit.set(true)
+        if (b && !bHeld) requestExit()
         bHeld = b
         zoomAxis = data.right?.thumbstickValue?.y ?: 0f
         val left = data.left?.thumbstickValue
@@ -69,7 +70,7 @@ private fun Quat.horizontalHeading(): Float {
 
 /** The character, scenery, pickups and water share the same capture frame. */
 internal suspend fun driveWorldActor(
-    input: CourtyardInput, actor: Entity, terrain: WorldTerrain, figure: FigureInfo,
+    input: CourtyardInput, actor: Entity, terrain: WorldTerrain, destination: WorldDestination?, figure: FigureInfo,
     garden: Entity, wearables: WorldWearables?, wake: SwimWake, headPose: () -> HMDPose?, canDrive: () -> Boolean,
     onPickup: (Int) -> Unit, onExit: () -> Unit,
 ) {
@@ -78,6 +79,7 @@ internal suspend fun driveWorldActor(
     val provider = ControllerTrackingProvider()
     val neckDepth = figure.swimNeckHeight?.let { it * ACTOR_HEIGHT / figure.actorRigHeight / WORLD_SCALE }
     val walker = WorldWalker(terrain, neckDepth)
+    destination?.walker = walker
     input.orbitYaw = 0f
     input.orbitPitch = 0f
     val replay = WorldRouteReplay(terrain)
@@ -126,27 +128,29 @@ internal suspend fun driveWorldActor(
             input.orbitPitch = (input.orbitPitch + axes.tilt * 55f * dt).coerceIn(-45f, 35f)
             val magnitude = hypot(axes.x, axes.forward)
             val strength = ((magnitude - .16f) / .84f).coerceIn(0f, 1f)
-            var speed = 0f
-            if (WorldVerification.route && canDrive()) {
-                val oldX = walker.x; val oldZ = walker.z
-                replay.advance(walker, dt) { index ->
-                    Log.i("WorldVerification", "contact ${figure.id} index=$index cell=${walker.cellIndex}")
-                    onPickup(index)
+            val frameX = walker.x
+            val frameZ = walker.z
+            if (dt > 0f && canDrive()) {
+                if (WorldVerification.route) {
+                    replay.advance(walker, dt) { index ->
+                        Log.i("WorldVerification", "contact ${figure.id} index=$index cell=${walker.cellIndex}")
+                        onPickup(index)
+                    }
+                } else if (strength > 0f) {
+                    destination?.cancel()
+                    val heading = if (head == null) -input.orbitYaw
+                        else garden.convertRotationFrom(head.rotation, null).horizontalHeading()
+                    val (dx, dz) = rotY(axes.x / magnitude, -axes.forward / magnitude, heading)
+                    walker.advance(dx, dz, strength, dt, lift, onPickup)
+                } else {
+                    destination?.advance(walker, dt, lift, onPickup)
                 }
-                speed = hypot(walker.x-oldX,walker.z-oldZ)*WORLD_SCALE/dt.coerceAtLeast(.001f)
-            } else if (strength > 0f && dt > 0f) {
-                val heading = if (head == null) -input.orbitYaw
-                    else garden.convertRotationFrom(head.rotation, null).horizontalHeading()
-                val (dx, dz) = rotY(axes.x / magnitude, -axes.forward / magnitude, heading)
-                val oldX = walker.x
-                val oldZ = walker.z
-                walker.advance(dx, dz, strength, dt, lift, onPickup)
-                speed = hypot(walker.x - oldX, walker.z - oldZ) * WORLD_SCALE / dt
-                if (speed > .01f) {
-                    val target = Math.toDegrees(atan2(walker.x - oldX, walker.z - oldZ).toDouble()).toFloat()
-                    val delta = ((target - facing + 540f) % 360f) - 180f
-                    facing = (facing + delta.coerceIn(-500f * dt, 500f * dt)) % 360f
-                }
+            }
+            val speed = if (dt > 0f) hypot(walker.x - frameX, walker.z - frameZ) * WORLD_SCALE / dt else 0f
+            if (speed > .01f) {
+                val target = Math.toDegrees(atan2(walker.x - frameX, walker.z - frameZ).toDouble()).toFloat()
+                val delta = ((target - facing + 540f) % 360f) - 180f
+                facing = (facing + delta.coerceIn(-500f * dt, 500f * dt)) % 360f
             }
             boundary.update(walker.cellIndex, walker.x, walker.z)
             val swimming = walker.swimming
@@ -179,8 +183,7 @@ internal suspend fun driveWorldActor(
             val motion = when {
                 swimming -> if (moving) "Swim" else "Float"
                 lift > 0f -> "Jump"
-                speed >= .80f -> "Run"
-                moving -> "Walk"
+                moving -> "Run"
                 else -> "Idle"
             }
             val motionChanged = motion != currentMotion
@@ -201,7 +204,7 @@ internal suspend fun driveWorldActor(
                 currentMotion = motion
             }
             val rate = if (moving && motion != "Jump") {
-                val cadence = when (motion) { "Swim" -> .55f; "Run" -> speed / 1.15f; else -> speed / .32f }
+                val cadence = if (motion == "Swim") .55f else speed / 1.15f
                 cadence.coerceIn(.45f, 2f)
             } else 1f
             if (moving && motion != "Jump") playback.forEach { it.setSpeed(rate) }

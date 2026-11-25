@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.pico.spatial.core.ecs.Entity
 import com.pico.spatial.core.ecs.PointLightComponent
 import com.pico.spatial.core.ecs.TransformComponent
+import com.pico.spatial.core.math.Vector3
 import com.pico.spatial.core.math.Color4
 import com.pico.spatial.ui.design.Button
 import com.pico.spatial.ui.design.ButtonDefaults
@@ -39,6 +40,12 @@ internal const val PICKER_WIDTH_METERS = 1.30f
 internal const val PICKER_DISTANCE = 1.36f
 private const val CARD_WIDTH = 189
 private const val CARD_GAP = 12
+private const val PANE_HEIGHT = 360
+private const val PANE_PADDING_Y = 18
+private const val HEADER_HEIGHT = 48
+private const val HEADER_GAP = 12
+private const val CARD_HEIGHT = 264
+private const val PODIUM_CENTER = .73f
 private val milk = Color(0xFFFFF8E7)
 private val glassTints = listOf(Color(0xFFC492A2), Color(0xFF94BEB5), Color(0xFFAAA7CD), Color(0xFFE6BA80))
 
@@ -53,11 +60,11 @@ internal fun CollectiblePicker(
     val pane = RoundedCornerShape(28.dp)
     Box(Modifier.width(PICKER_WIDTH_DP.dp), contentAlignment = Alignment.Center) {
         Column(Modifier.width((40 + across * CARD_WIDTH + (across - 1) * CARD_GAP).dp)
-            .height(360.dp).clip(pane)
+            .height(PANE_HEIGHT.dp).clip(pane)
             .background(Brush.verticalGradient(listOf(Color(0xCB364A4C), Color(0xB832333C))))
             .border(1.dp, Color.White.copy(alpha = .50f), pane)
-            .padding(horizontal = 20.dp, vertical = 18.dp)) {
-            Row(Modifier.fillMaxWidth().height(48.dp), verticalAlignment = Alignment.CenterVertically) {
+            .padding(horizontal = 20.dp, vertical = PANE_PADDING_Y.dp)) {
+            Row(Modifier.fillMaxWidth().height(HEADER_HEIGHT.dp), verticalAlignment = Alignment.CenterVertically) {
                 Text("Change collectible", fontSize = 25.sp, fontWeight = FontWeight.Bold, color = milk,
                     modifier = Modifier.weight(1f), maxLines = 1)
                 if (pageCount > 1) {
@@ -72,7 +79,7 @@ internal fun CollectiblePicker(
                     Text("Close", fontSize = 16.sp)
                 }
             }
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(HEADER_GAP.dp))
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(CARD_GAP.dp, Alignment.CenterHorizontally)) {
                 visible.forEachIndexed { index, id ->
                     key(id) { FigureCard(id, glassTints[index], id == displayed) { onSelect(id) } }
@@ -101,7 +108,7 @@ private fun PageArrow(forward: Boolean, enabled: Boolean, onClick: () -> Unit) {
 @Composable
 private fun FigureCard(id: String, tint: Color, active: Boolean, select: () -> Unit) {
     val shape = RoundedCornerShape(19.dp)
-    Box(Modifier.size(CARD_WIDTH.dp, 264.dp).clip(shape)
+    Box(Modifier.size(CARD_WIDTH.dp, CARD_HEIGHT.dp).clip(shape)
         .background(Brush.verticalGradient(listOf(tint.copy(alpha = .65f), tint.copy(alpha = .26f), Color(0xBF252C35))))
         .border(if (active) 2.5.dp else 1.dp, if (active) Color(0xFFE0EFB2) else milk.copy(alpha = .61f), shape)
         .spatialHoverEffect()
@@ -113,7 +120,7 @@ private fun FigureCard(id: String, tint: Color, active: Boolean, select: () -> U
         Canvas(Modifier.fillMaxSize()) {
             drawOval(tint.copy(alpha = .50f), Offset(size.width * .11f, size.height * .703f),
                 Size(size.width * .78f, size.height * .078f))
-            drawOval(milk.copy(alpha = .35f), Offset(size.width * .14f, size.height * .696f),
+            drawOval(milk.copy(alpha = .35f), Offset(size.width * .14f, size.height * (PODIUM_CENTER - .034f)),
                 Size(size.width * .72f, size.height * .068f))
         }
         Row(Modifier.align(Alignment.TopCenter).padding(top = 11.dp),
@@ -138,9 +145,11 @@ internal fun CollectiblePickerPreview(foreground: RoomHudForeground?, ids: List<
         val group = Entity().apply { components.set(TransformComponent()) }
         var previewLight: Entity? = null
         try {
-            val depth = PICKER_DISTANCE - .22f
-            val units = PICKER_WIDTH_METERS / PICKER_WIDTH_DP * depth / PICKER_DISTANCE
-            group.place(0f, 0f, -depth)
+            val units = PICKER_WIDTH_METERS / PICKER_WIDTH_DP
+            val panelCenter = (PANE_HEIGHT + MENU_CLOSE_SIZE + MENU_CLOSE_GAP) * .5f
+            val podiumY = panelCenter - MENU_CLOSE_SIZE - MENU_CLOSE_GAP - PANE_PADDING_Y -
+                HEADER_HEIGHT - HEADER_GAP - CARD_HEIGHT * PODIUM_CENTER
+            group.place(0f, 0f, -PICKER_DISTANCE)
             val lamp = Entity().apply {
                 components.set(TransformComponent())
                 components.set(PointLightComponent(Color4(1f, .95f, .88f, 1f), 30f, 1.25f))
@@ -152,11 +161,27 @@ internal fun CollectiblePickerPreview(foreground: RoomHudForeground?, ids: List<
             foreground.modalLayer.addChild(group)
             ids.forEachIndexed { index, id ->
                 val x = (index - (ids.size - 1) / 2f) * (CARD_WIDTH + CARD_GAP) * units
-                val yaw = Math.toDegrees(atan2(-x, depth).toDouble()).toFloat()
                 val model = loadDressedFigure(id, outfits[id].orEmpty())
                 foreground.sortPreview(model)
-                group.addChild(model)
-                model.place(x, -91f * units, 0f, 139f * units, yaw = yaw)
+                val podium = Vector3(x, podiumY * units, 0f)
+                val eye = foreground.eyeIn(group)
+                val yaw = Math.toDegrees(atan2(eye.x - x, eye.z).toDouble()).toFloat()
+                val slot = wearableHolder()
+                group.addChild(slot)
+                slot.addChild(model)
+                model.place(0f, 0f, 0f, yaw = yaw)
+                val bounds = model.getVisualBounds(slot, recursive = true, enabledOnly = false)
+                if (!bounds.isEmpty()) {
+                    val size = bounds.size
+                    val scale = minOf(146f * units / size.y, (CARD_WIDTH - 28) * units / size.x)
+                    // Bring the whole mesh in front of the panel along the eye-to-podium ray.
+                    val offset = size.z * scale * .5f + .004f
+                    val t = eye.z / (eye.z + offset)
+                    val foot = Vector3.lerp(eye, podium, t)
+                    val fit = scale * t
+                    slot.place(foot.x - bounds.center.x * fit, foot.y - (bounds.center.y - size.y * .5f) * fit,
+                        foot.z - bounds.center.z * fit, fit)
+                } else slot.place(x, podium.y, .08f, 139f * units)
             }
             awaitCancellation()
         } finally {

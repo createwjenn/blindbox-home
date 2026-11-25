@@ -12,6 +12,7 @@ internal fun registerFurnitureAction(content: SpatialViewContent, target: Entity
         isAccessibilityElement = true
     })
     when (piece.id) {
+        "machine" -> content.setAccessibilityActions(target, "room.gumball-machine") { onClick("Inspect machine", inspect) }
         "stand" -> content.setAccessibilityActions(target, "room.display-stand") { onClick("Inspect item", inspect) }
         "record-player" -> content.setAccessibilityActions(target, "room.record-player") { onClick("Inspect item", inspect) }
         "console" -> content.setAccessibilityActions(target, "room.listening-shelf") { onClick("Inspect item", inspect) }

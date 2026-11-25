@@ -87,6 +87,12 @@ class RoomPlacementTest {
             }
         } as SharedPreferences
         val room = RoomFurnishing(emptyList(), preferences)
+        val machinePose = room.pose("machine")
+        room.begin("machine")
+        assertNull(room.carrying)
+        room.buyOrCarry("machine", 9) { fail("The fixed machine must never cost coins to inspect") }
+        assertNull(room.carrying)
+        assertEquals(machinePose, room.pose("machine"))
         val eye = RoomSpot(0f,1.8f,0f)
         fun place(id: String, dx: Float, dy: Float, dz: Float): DecorPose {
             room.begin(id)

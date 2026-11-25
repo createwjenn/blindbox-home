@@ -22,16 +22,14 @@ import com.pico.spatial.tracking.hand.HandTrackingProvider
 import com.pico.spatial.tracking.hmd.HMDPose
 import kotlin.math.sqrt
 
-/** Read transient tracking poses only while the player is positioning an item. */
-internal class PlacementPointer(private val motion: RoomMotion) {
-    private val hand = HandTrackingProvider()
+/** Tracks the active pointing hand or gaze for placement and ground navigation. */
+internal class PlacementPointer(private val motion: RoomMotion, private val hand: HandTrackingProvider?) {
     private val eyes = EyeTrackingProvider()
     private val body = BodyTrackingProvider
     private val sessions = mutableListOf<DataProvider<*>>()
     private val forward = Vector3(0f, 0f, -1f)
 
     private val optionalSensors = mapOf<DataProvider<*>, String>(
-        hand to "com.picovr.permission.HAND_TRACKING",
         eyes to "com.picovr.permission.EYE_TRACKING",
     )
     private var activity: Activity? = null
@@ -42,7 +40,7 @@ internal class PlacementPointer(private val motion: RoomMotion) {
         if (provider !in sessions && runCatching { provider.start() }.isSuccess) sessions.add(provider)
     }
 
-    fun refresh(host: Activity?) {
+    fun refresh(host: Activity?, placing: Boolean) {
         activity = host
         var canEnable = false
         for ((provider, permission) in optionalSensors) {
@@ -51,7 +49,8 @@ internal class PlacementPointer(private val motion: RoomMotion) {
             else if (host != null) canEnable = true
         }
         canEnableSensors = canEnable
-        if (body.supportState == DataProvider.SupportState.SUPPORTED) startOnce(body)
+        if (placing && body.supportState == DataProvider.SupportState.SUPPORTED) startOnce(body)
+        else if (!placing && sessions.remove(body)) runCatching { body.stop() }
     }
 
     fun enableSensors() {
@@ -81,11 +80,16 @@ internal class PlacementPointer(private val motion: RoomMotion) {
         return position to d
     }
 
-    fun ray(head: HMDPose): Pair<Vector3, Vector3> {
-        hand.latestData?.let { h ->
+    val hasTrackedAim: Boolean get() = hand?.latestData?.let {
+        it.rightAim?.isReady == true || it.leftAim?.isReady == true
+    } == true || eyes.latestData?.eyePose != null
+
+    fun ray(head: HMDPose, ground: Boolean = false): Pair<Vector3, Vector3> {
+        hand?.latestData?.let { h ->
             val pointing = listOfNotNull(h.rightAim, h.leftAim).filter { it.isReady }.maxByOrNull { it.aimValue }
             pointing?.aimPose?.let { aim(it.position, it.rotation) }?.let { return it }
         }
+        if (ground) eyes.latestData?.eyePose?.let { aim(it.position, it.rotation) }?.let { return it }
         motion.trackedController?.latestData?.let { c ->
             (c.right ?: c.left)?.let { aim(it.position, it.rotation) }?.let { return it }
         }
@@ -110,20 +114,21 @@ internal class PlacementPointer(private val motion: RoomMotion) {
 }
 
 @Composable
-internal fun rememberPlacementPointer(active: Boolean, motion: RoomMotion): PlacementPointer {
+internal fun rememberPlacementPointer(placing: Boolean, motion: RoomMotion): PlacementPointer {
     val context = LocalContext.current
     val activity = remember(context) {
         generateSequence(context) { (it as? ContextWrapper)?.baseContext }.filterIsInstance<Activity>().firstOrNull()
     }
-    val pointer = remember(motion) { PlacementPointer(motion) }
-    LaunchedEffect(pointer, active, activity) {
-        while (active) {
-            pointer.refresh(activity)
+    val hands = LocalHands.current
+    val pointer = remember(motion, hands) { PlacementPointer(motion, hands) }
+    LaunchedEffect(pointer, placing, activity) {
+        while (true) {
+            pointer.refresh(activity, placing)
             delay(750)
         }
     }
-    DisposableEffect(pointer, active) {
-        onDispose { if (active) pointer.stop() }
+    DisposableEffect(pointer) {
+        onDispose { pointer.stop() }
     }
     return pointer
 }

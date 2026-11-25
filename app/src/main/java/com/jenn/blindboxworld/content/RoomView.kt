@@ -59,9 +59,33 @@ internal fun stationOccludesFloor(eye: RoomSpot, floor: FloorPoint, station: Roo
     return cross <= (if (machine) .51f else .31f) && height in 0f..(if (machine) 1.83f else 1.21f)
 }
 
-internal fun stationView(spot: RoomSpot, machine: Boolean): LoftView {
-    val heading = if (machine) GACHA_YAW else 0f
-    val distance = if (machine) 2.56f else 2.42f
+/** Put the shortcut on clear floor beside the station, including after furniture is moved. */
+internal fun stationPad(spot: RoomSpot, machine: Boolean, yaw: Float): LoftView? {
+    val clearance = if (machine) 1.12f else .90f
+    for (radius in listOf(clearance, clearance + .4f, clearance + .8f)) {
+        for (offset in listOf(0f, 35f, -35f, 70f, -70f, 110f, -110f, 180f)) {
+            val heading = yaw + offset
+            val (dx, dz) = rotY(0f, radius, heading)
+            val x = spot.x + dx
+            val z = spot.z + dz
+            if (RoomFloor.isWalkable(FloorPoint(x,z))) return LoftView(x, 1.55f, z, heading)
+        }
+    }
+    return null
+}
+
+internal fun stationView(spot: RoomSpot, machine: Boolean): LoftView =
+    shortcutView(if (machine) "machine" else "stand", DecorPose(spot)) ?: doorwayView
+
+internal fun shortcutView(id: String, pose: DecorPose): LoftView? = when (id) {
+    "shop" -> stationViewingSpot(pose.at, pose.yaw, 1.85f)
+    "machine" -> stationViewingSpot(pose.at, GACHA_YAW + pose.yaw, 2.56f)
+    "stand" -> stationViewingSpot(pose.at, pose.yaw, 2.42f)
+    "record-player" -> stationViewingSpot(pose.at, pose.yaw, 1.80f)
+    else -> null
+}
+
+private fun stationViewingSpot(spot: RoomSpot, heading: Float, distance: Float): LoftView? {
     // Prefer the original front. A relocated object near a wall may need an angled approach.
     for (radius in listOf(distance, distance - .18f, distance - .35f)) {
         for (offset in listOf(0f, -15f, 15f, -30f, 30f, -50f, 50f, -75f, 75f, -100f, 100f, -145f, 145f, 180f)) {
@@ -71,7 +95,7 @@ internal fun stationView(spot: RoomSpot, machine: Boolean): LoftView {
             if (RoomFloor.isWalkable(point)) return LoftView(point.x, 1.55f, point.z, angle)
         }
     }
-    return doorwayView
+    return null
 }
 
 internal fun Entity.alignView(view: LoftView, pose: HMDPose?): Float {
@@ -144,9 +168,22 @@ internal class RoomMotion {
 
     private fun describe(point: FloorPoint) = String.format(Locale.ROOT, "%.2f, %.2f", point.x, point.z)
 
-    private var desiredHeading: Float? = null
+    // Station framing has a finite turn budget. Sampling the live view as an error
+    // every frame would rotate the loft against someone looking over their shoulder.
+    private var stationTurnRemaining = 0f
+    val framingTurnComplete get() = stationTurnRemaining == 0f
+    private var stationHeadYaw: Float? = null
+    var homeFraming = false
+        private set
+
+    fun returnHome() {
+        homeFraming = walkTo(doorwayView.x, doorwayView.z, doorwayView.heading)
+    }
+
+    fun finishHomeFraming() { homeFraming = false }
 
     fun walkTo(x: Float, z: Float, facing: Float? = null): Boolean {
+        homeFraming = false
         val from = position ?: return false
         val target = FloorPoint(x, z)
         if (!x.isFinite() || !z.isFinite() || !RoomFloor.isWalkable(target)) return false
@@ -159,7 +196,8 @@ internal class RoomMotion {
         path.clear()
         path.addAll(waypoints)
         goal = target
-        desiredHeading = facing
+        stationTurnRemaining = facing?.let { signedAngle(heading - it) } ?: 0f
+        stationHeadYaw = null
         ViewZoom.clear()
         replanned = false
         if (distance <= .015f) arrived(from) else status = "Walking to ${describe(target)}"
@@ -167,7 +205,9 @@ internal class RoomMotion {
     }
 
     fun cancelWalk() {
-        desiredHeading = null
+        homeFraming = false
+        stationTurnRemaining = 0f
+        stationHeadYaw = null
         if (goal != null) status = "Walk canceled"
         path.clear()
         goal = null
@@ -175,12 +215,18 @@ internal class RoomMotion {
         clearSteps()
     }
 
-    fun steerTowardStation(current: Float, dt: Float): Float {
-        val desired = desiredHeading ?: return 0f
-        val delta = (((current - desired + 180f) % 360f + 360f) % 360f) - 180f
-        val change = delta.coerceIn(-TURN_SPEED * dt, TURN_SPEED * dt)
-        if (abs(delta) < .12f && goal == null) desiredHeading = null
-        return change
+    private fun signedAngle(degrees: Float) = ((degrees % 360f + 540f) % 360f) - 180f
+
+    fun steerTowardStation(trackedHeadYaw: Float, dt: Float): Float {
+        if (stationTurnRemaining == 0f) return 0f
+        val initialYaw = stationHeadYaw ?: trackedHeadYaw.also { stationHeadYaw = it }
+        if (abs(signedAngle(trackedHeadYaw - initialYaw)) >= 4f) {
+            stationTurnRemaining = 0f
+            return 0f
+        }
+        val step = stationTurnRemaining.coerceIn(-TURN_SPEED * dt, TURN_SPEED * dt)
+        stationTurnRemaining -= step
+        return step
     }
 
     /** Discrete equivalents for accessible clicks and directional pad taps. */
@@ -274,7 +320,7 @@ internal class RoomMotion {
 
 internal suspend fun navigateInterior(
     root: Entity, interior: Interior, rootYaw: () -> Float, pose: () -> HMDPose?,
-    motion: RoomMotion = RoomMotion(), onYawChanged: (Float) -> Unit = {},
+    motion: RoomMotion = RoomMotion(), onYawChanged: (Float) -> Unit = {}, onStepBack: () -> Unit = {},
 ) {
     val provider = runCatching { ControllerTrackingProvider() }.getOrNull()
     ViewZoom.clear()
@@ -295,6 +341,7 @@ internal suspend fun navigateInterior(
             previous = now
             if (!root.valid) break
             val head = pose()
+            if (motion.input.takeExit() && head != null) onStepBack()
             if (head == null) {
                 motion.position = null
                 motion.cancelWalk()
@@ -320,11 +367,12 @@ internal suspend fun navigateInterior(
                 RoomFloor.step(current, 0f, 0f)
             }
             val controls = motion.controls(dt, inLoft)
-            val turn = controls.turn + motion.steerTowardStation(head.headingDegrees() - yaw, dt)
-            if (turn != 0f || controls.tilt != 0f) {
+            val turn = controls.turn + motion.steerTowardStation(head.headingDegrees(), dt)
+            val level = if (motion.homeFraming) pitch.coerceIn(-55f * dt, 55f * dt) else 0f
+            if (turn != 0f || controls.tilt != 0f || level != 0f) {
                 // Turn the room around the tracked eyes, preserving the viewer's local position.
                 yaw = (yaw + turn) % 360f
-                pitch = (pitch - controls.tilt).coerceIn(-55f, 65f)
+                pitch = (pitch - controls.tilt - level).coerceIn(-55f, 65f)
                 root.components[TransformComponent::class.java]?.setQuaternion(viewRotation(yaw, head.headingDegrees(), pitch))
                 moveViewer(root, root.convertPositionFrom(head.position, null), local)
                 onYawChanged(yaw)
@@ -336,7 +384,11 @@ internal suspend fun navigateInterior(
                 dx != 0f || dz != 0f -> RoomFloor.step(from, dx, dz)
                 else -> from
             }
-            moveViewer(root, local, Vector3(next.x, local.y.coerceIn(interior.y), next.z))
+            val height = if (motion.homeFraming)
+                local.y + (doorwayView.y - local.y).coerceIn(-dt, dt) else local.y
+            moveViewer(root, local, Vector3(next.x, height.coerceIn(interior.y), next.z))
+            if (motion.homeFraming && motion.goal == null && pitch == 0f && abs(height - doorwayView.y) < .001f)
+                motion.finishHomeFraming()
             motion.observe(next, head.headingDegrees() - yaw)
             lastYaw = yaw
             lastRoot = root.pos()
@@ -353,30 +405,62 @@ internal suspend fun navigateInterior(
 }
 
 /** Follow translation from a fixed tracking-space anchor. Head motion never orbits the world.
- * Navigation cells constrain the character only, never the spectator camera. */
-internal suspend fun followWorldActor(root: Entity, garden: Entity, actor: Entity, pose: () -> HMDPose?,
-                                      input: CourtyardInput) {
+ * Shorten the camera boom at capture boundaries while preserving tracked head rotation. */
+internal suspend fun followWorldActor(root: Entity, garden: Entity, actor: Entity, terrain: WorldTerrain, pose: () -> HMDPose?,
+                                      input: CourtyardInput, actorCell: () -> Int?) {
     val gardenTransform = garden.components[TransformComponent::class.java] ?: return
     ViewZoom.clear()
     var anchor: Vector3? = null
     var entryYaw = 0f
+    var cameraYaw = input.orbitYaw
     var distance = 2.35f
     var previous = withFrameNanos { it }
     while (true) {
         val now = withFrameNanos { it }
         val dt = ((now - previous) * 1e-9f).coerceIn(0f, .05f)
         previous = now
+        val entry = pose() ?: continue
         if (anchor == null) {
-            val entry = pose() ?: continue
             anchor = entry.position
             entryYaw = entry.headingDegrees()
         }
         distance = (distance - axis(input.zoomAxis) * 2f * dt - ViewZoom.advance(dt)).coerceIn(1.25f, 3.5f)
-        val focus = WorldVerification.focus ?: (actor.pos() + Vector3(0f, ACTOR_HEIGHT * .5f, 0f))
-        gardenTransform.setQuaternion(EulerAngles(16f - input.orbitPitch, input.orbitYaw, 0f).toQuat())
-        val target = garden.convertPositionTo(focus, root)
+        val inspected = WorldVerification.focus
+        val feet = inspected ?: actor.pos()
+        val focus = inspected ?: (feet + Vector3(0f, ACTOR_HEIGHT * .5f, 0f))
+        val deck = if (inspected == null) actorCell() else null
         val (dx, dz) = rotY(0f, -distance, entryYaw)
         val desired = root.convertPositionFrom(anchor + Vector3(dx, 0f, dz), null)
-        moveViewer(root, desired, target)
+        // The tracked offset includes physical leaning and zoom, even with a stationary actor.
+        val offset = root.convertPositionFrom(entry.position, null) - desired
+        val pitch = 16f - input.orbitPitch
+        fun rotation(yaw: Float) = EulerAngles(pitch, yaw, 0f).toQuat()
+        fun clearance(yaw: Float): Float {
+            val eye = focus + rotation(yaw).conjugate().rotateVector(offset)
+            return (terrain.cameraEye(eye, feet, deck) - focus).length()
+        }
+        // When a wall would push the lens into the actor, favour the closest
+        // open orbit angle. Retain the previous side around symmetrical corners.
+        fun angleDelta(to: Float, from: Float) = ((to - from + 180f).mod(360f)) - 180f
+        val preferred = input.orbitYaw
+        val minimum = minOf(1.55f, offset.length() * .9f)
+        var aim = preferred
+        var best = clearance(preferred)
+        if (best < minimum) {
+            for (step in 1..12) {
+                for (side in listOf(-1, 1)) {
+                    val candidate = preferred + side * step * 15f
+                    val score = minOf(minimum, clearance(candidate)) -
+                        (.001f * step * 15f + .0015f * abs(angleDelta(candidate,cameraYaw)))
+                    if (score > best) { best = score; aim = candidate }
+                }
+            }
+        }
+        cameraYaw = (cameraYaw + angleDelta(aim,cameraYaw).coerceIn(-85f*dt,85f*dt)) % 360f
+        val orientation = rotation(cameraYaw)
+        gardenTransform.setQuaternion(orientation)
+        val eye = focus + orientation.conjugate().rotateVector(offset)
+        val safe = terrain.cameraEye(eye, feet, deck)
+        moveViewer(root, desired, garden.convertPositionTo(focus + (safe - eye), root))
     }
 }
